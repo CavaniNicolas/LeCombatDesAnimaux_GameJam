@@ -7,10 +7,10 @@
 #define LFEN 1400
 #define HFEN 800
 
-typedef enum NumPlan {
+enum NumPlan {
 	PlanDecor = 10,
-	PlanCaracter = 0,
-}NumPlan;
+	PlanCharacter = 0,
+};
 
 
 #endif

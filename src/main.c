@@ -1,7 +1,7 @@
 
 #include <SANDAL2/SANDAL2.h>
 #include "structure.h"
-#include "caracter.h"
+#include "character.h"
 
 int main() {
 	int black[4] = {0,0,0,255};
@@ -12,11 +12,11 @@ int main() {
 	createImage(0,0,LFEN,HFEN,"assets/beach.jpg",0,PlanDecor);
 
 
-	Element * caracter1 = NULL;
-	Element * caracter2 = NULL;
+	Element * character1 = NULL;
+	Element * character2 = NULL;
 
-	initCaracter(0, caracter1);
-	initCaracter(1, caracter2);
+	initCharacter(0, character1);
+	initCharacter(1, character2);
 
 
 
