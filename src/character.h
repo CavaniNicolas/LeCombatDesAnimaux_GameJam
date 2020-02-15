@@ -2,21 +2,17 @@
 #define CARA_H
 #include <stdbool.h>
 
-typedef enum player {
-	JOUEUR_D = 0,
-	JOUEUR_G = 1
-}player;
-
 typedef struct DataCharacter {
 	int id;
 	int hp;
 	int strength;
+	int speed;
 
 	bool left;
 	bool right;
 	bool jump;
 	bool crouch;
-	
+
 	bool attack1;
 	bool attack2;
 	bool parry1;

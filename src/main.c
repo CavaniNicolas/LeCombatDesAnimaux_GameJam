@@ -9,16 +9,6 @@ int main() {
 	initAllSANDAL2(IMG_INIT_JPG);
 	createWindow(LFEN,HFEN,"Le Combat Des Animaux",0,black,ECRAN_TITRE);
 
-	createImage(0,0,LFEN,HFEN,"assets/beach.jpg",0,PlanDecor);
-
-
-	Element * character1 = NULL;
-	Element * character2 = NULL;
-
-	initCharacter(0, character1);
-	initCharacter(1, character2);
-
-
 
 	while (!PollEvent(NULL)) {
 		updateWindow();
