@@ -3,10 +3,12 @@
 #include <stdbool.h>
 
 typedef struct DataCharacter {
-	int id;
+	int idPerso;
 	int hp;
 	int strength;
-	int speed;
+	double speed;
+
+	int idPlayer;
 
 	bool left;
 	bool right;
@@ -20,7 +22,13 @@ typedef struct DataCharacter {
 
 }DataCharacter_t;
 
-void initDataCharacter(int, Element *);
-void initCharacter(int, Element *);
+DataCharacter_t * initDataCharacter(int, int);
+void initCharacter(int, int, Element *);
+
+
+void moveCharacterOn(Element *, SDL_Keycode);
+void moveCharacterOff(Element *, SDL_Keycode);
+void moveCharacter(Element *);
+
 
 #endif
