@@ -1,6 +1,6 @@
 #option
 CFLAGS = -Wall -Wextra -g -MMD
-LIB = -lm -lSANDAL2 -lSDL2 -lSDL2_ttf -lSDL2_image
+LIB = -lm -lSANDAL2 -lSDL2 -lSDL2_ttf -lSDL2_image -lSDL2_mixer
 
 SRC = $(wildcard src/*.c)
 OBJ = $(patsubst src/%.c,build/%.o,$(SRC))
