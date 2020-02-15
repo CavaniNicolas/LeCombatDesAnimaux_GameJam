@@ -1,5 +1,6 @@
 #ifndef CARA_H
 #define CARA_H
+#include <stdbool.h>
 
 typedef enum player {
 	JOUEUR_D = 0,
@@ -9,18 +10,17 @@ typedef enum player {
 typedef struct DataCaracter {
 	int id;
 	int hp;
-	int left;
-	int right;
-	int jump;
-	int attack1;
-	int attack2;
-	int parry1;
-	int parry2;
+	bool left;
+	bool right;
+	bool jump;
+	bool attack1;
+	bool attack2;
+	bool parry1;
+	bool parry2;
 
-	Element * caracter;
 }DataCaracter_t;
 
-DataCaracter_t * initDataCaracter(int, Element *);
-Element * initCaracter(int, Element *);
+void initDataCaracter(int, Element *);
+void initCaracter(int, Element *);
 
 #endif

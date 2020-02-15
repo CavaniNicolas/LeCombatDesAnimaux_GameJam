@@ -11,20 +11,19 @@ void initDataCaracter(int id, Element * caracter) {
 
 		d->id = id;
 		d->hp = 100;
-		d->left = 0;
-		d->right = 0;
-		d->jump = 0;
-		d->attack1 = 0;
-		d->attack2 = 0;
-		d->parry1 = 0;
-		d->parry2 = 0;
-
-		d->caracter = caracter;
+		d->left = false;
+		d->right = false;
+		d->jump = false;
+		d->attack1 = false;
+		d->attack2 = false;
+		d->parry1 = false;
+		d->parry2 = false;
 	}
+	caracter->data = d;
 }
 
 
-Element * initCaracter(int id, Element * caracter) {
+void initCaracter(int id, Element * caracter) {
 	DataCaracter_t * d = initDataCaracter(id, caracter);
 
 	if (d != NULL) {
@@ -42,34 +41,48 @@ Element * initCaracter(int id, Element * caracter) {
 			break;
 		}
 	}
-
-	return caracter;
 }
 
 
-void moveCaracter(Element * caracter, SDL_Keycode k) {
+void moveCaracterOn(Element * caracter, SDL_Keycode k) {
 	DataCaracter_t * d = caracter->data;
 	switch (k) {
 		case 'a': // 'q'
- 			
+ 			d->left = true;
 			break;
+
 		case 'd':
-
+			d->right = true;
 			break;
+
+		case 's':
+			d->jump = true;
+			break;
+
+
 		case 'j':
-
+ 			d->left = true;
 			break;
-		case 'l':
 
+		case 'l':
+			d->right = true;
+			break;
+
+		case 'k':
+			d->jump = true;
 			break;
 	}
 
 }
 
-void stopCaracter(Element * caracter, SDL_Keycode k) {
+void moveCaracterOff(Element * caracter, SDL_Keycode k) {
 	DataCaracter_t * d = caracter->data;
 }
 
-setKeyPressedElement(caracter,moveCaracter);
-setKeyReleasedElement(caracter,stopCaracter);
+void moveCaracter() {
+
+}
+
+setKeyPressedElement(caracter,moveCaracterOn);
+setKeyReleasedElement(caracter,moveCaracterOff);
 setActionElement(canon,moveCaracter);
