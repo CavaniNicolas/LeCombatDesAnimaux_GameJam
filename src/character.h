@@ -3,22 +3,27 @@
 #include <stdbool.h>
 
 typedef struct DataCharacter {
-	int idPerso;
-	int hp;
-	int strength;
+	int    idPerso;
+	int    hp;
+	int    strength;
 	double speed;
 
-	int idPlayer;
+	int    width;
+	int    height;
+	int    jumpForce;
+	int    jumpForceTmp;
 
-	bool left;
-	bool right;
-	bool jump;
-	bool crouch;
+	int    idPlayer;
 
-	bool attack1;
-	bool attack2;
-	bool parry1;
-	bool parry2;
+	bool   left;
+	bool   right;
+	bool   jump;
+	bool   crouch;
+
+	bool   attack1;
+	bool   attack2;
+	bool   parry1;
+	bool   parry2;
 
 }DataCharacter_t;
 

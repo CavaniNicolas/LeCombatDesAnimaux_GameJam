@@ -5,12 +5,12 @@
 #include "character.h"
 
 
-void initFight(int idCharacterG, int idCharacterD, ) {
+/*void initFight(int idCharacterG, int idCharacterD) {
 	createImage(0,0,LFEN,HFEN,"assets/beach.jpg",0,PlanDecor);
 
 	Element * character1 = NULL;
 	Element * character2 = NULL;
 
-	initCharacter(JOUEUR_G, character1);
-	initCharacter(JOUEUR_D, character2);
-}
+	initCharacter(JOUEUR_G, 0, character1);
+	initCharacter(JOUEUR_D, 0, character2);
+}*/

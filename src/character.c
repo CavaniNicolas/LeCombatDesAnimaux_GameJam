@@ -15,20 +15,20 @@ DataCharacter_t * initDataCharacter(int idPlayer, int idChosen) {
 
 		if (file != NULL) {
 
-			int idPerso;
+			int idPerso = -1;
 			char ligne[6];
 
 			d->idPlayer = idPlayer;
 
-			d->left = false;
-			d->right = false;
-			d->jump = false;
-			d->crouch = false;
+			d->left    = false;
+			d->right   = false;
+			d->jump    = false;
+			d->crouch  = false;
 
 			d->attack1 = false;
 			d->attack2 = false;
-			d->parry1 = false;
-			d->parry2 = false;
+			d->parry1  = false;
+			d->parry2  = false;
 
 			while (!feof(file) && idPerso != idChosen) {
 				fgets(ligne, 6, file);
@@ -44,6 +44,16 @@ DataCharacter_t * initDataCharacter(int idPlayer, int idChosen) {
 
 			fgets(ligne, 6, file);
 			d->speed = atoi(ligne);
+
+			fgets(ligne, 6, file);
+			d->width = atoi(ligne);
+
+			fgets(ligne, 6, file);
+			d->height = atoi(ligne);
+
+			fgets(ligne, 6, file);
+			d->jumpForce = atoi(ligne);
+			d->jumpForceTmp = d->jumpForce;
 		}
 
 		fclose(file);
@@ -59,11 +69,11 @@ void initCharacter(int idPlayer, int idPerso, Element * character) {
 	if (d != NULL) {
 		switch (idPlayer) {
 			case JOUEUR_G:
-				character = createImage(100,450,300,300,"assets/kingKrool.png",0,PlanCharacter);
+				character = createImage(100, HFEN-50-(d->height), d->width, d->height, "assets/kingKrool.png", 0, PlanCharacter);
 			break;
 
 			case JOUEUR_D:
-				character = createImage(1000,450,300,300,"assets/donkeyKong.png",0,PlanCharacter);
+				character = createImage(LFEN-100-(d->width), HFEN-50-(d->height), d->width, d->height, "assets/donkeyKong.png", 0, PlanCharacter);
 				character->flip = SANDAL2_FLIP_HOR;
 			break;
 
@@ -71,9 +81,10 @@ void initCharacter(int idPlayer, int idPerso, Element * character) {
 			break;
 		}
 		character->data = d;
-	setKeyPressedElement(character,moveCharacterOn);
-	setKeyReleasedElement(character,moveCharacterOff);
-	setActionElement(character,moveCharacter);
+
+		setKeyPressedElement(character,moveCharacterOn);
+		setKeyReleasedElement(character,moveCharacterOff);
+		setActionElement(character,moveCharacter);
 	}
 }
 
@@ -95,7 +106,9 @@ void moveCharacterOn(Element * character, SDL_Keycode k) {
 
 		case 's':
 			if (d->idPlayer == JOUEUR_G) {
-				d->jump = true;
+				if (d->jump == false) {
+					d->jump = true;
+				}
 			}
 			break;
 
@@ -114,7 +127,9 @@ void moveCharacterOn(Element * character, SDL_Keycode k) {
 
 		case 'k':
 			if (d->idPlayer == JOUEUR_D) {
-				d->jump = true;
+				if (d->jump == false) {
+					d->jump = true;
+				}
 			}
 			break;
 	}
@@ -135,12 +150,6 @@ void moveCharacterOff(Element * character, SDL_Keycode k) {
 			}
 			break;
 
-		case 's':
-			if (d->idPlayer == JOUEUR_G) {
-				d->jump = false;
-			}
-			break;
-
 
 		case 'j':
 			if (d->idPlayer == JOUEUR_D) {
@@ -153,12 +162,6 @@ void moveCharacterOff(Element * character, SDL_Keycode k) {
 				d->right = false;
 			}
 			break;
-
-		case 'k':
-			if (d->idPlayer == JOUEUR_D) {
-				d->jump = false;
-			}
-			break;
 	}
 
 }
@@ -166,7 +169,7 @@ void moveCharacterOff(Element * character, SDL_Keycode k) {
 
 void moveCharacter(Element * character) {
 	DataCharacter_t * d = character->data;
-	double speed = (d->speed)/100;
+	double speed = (d->speed);
 
 	if (d->left) {
 		moveElement(character, -speed, 0);
@@ -176,5 +179,65 @@ void moveCharacter(Element * character) {
 		moveElement(character, speed, 0);
 	}
 
-	
+
+	if (d->jump == true) {
+		if (character->y - d->jumpForceTmp + GRAVITY < HFEN-50-(d->height)) {
+			character->y -= d->jumpForceTmp + GRAVITY;
+			d->jumpForceTmp -= GRAVITY;
+			puts("jump");
+		}
+		else {
+			character->y = HFEN-50-(d->height);
+			d->jump = false;
+			d->jumpForceTmp = d->jumpForce;
+			puts("stopjump");
+		}
+
+	}
 }
+
+
+
+/*
+	if (d->jump == true) {
+		if (character->y == HFEN-50-(d->height)) {
+			d->jump = false;
+			d->jumpForceTmp = d->jumpForce;
+			character->y = HFEN-50-(d->height);
+			puts("stop jump");
+		}
+
+	// si on a appuyé et que le personnage n'est pas au sol
+		else {
+			if (character->y - d->jumpForceTmp + GRAVITY > HFEN-50-(d->height)) {
+				character->y = HFEN-50-(d->height);
+				d->jump = false;
+				d->jumpForceTmp = d->jumpForce;
+			}
+			else {
+				character->y -= d->jumpForceTmp + GRAVITY;
+				d->jumpForceTmp -= GRAVITY;
+			}
+			puts("jump");
+
+		}
+	}
+*/
+
+
+/*
+	if (d->jump == true) {
+		if (character->y > HFEN-50-(d->height)) {
+			d->jump = false;
+			d->jumpForceTmp = d->jumpForce;
+			character->y = HFEN-50-(d->height);
+			puts("stop jump");
+		}
+
+		else {
+			character->y -= d->jumpForceTmp + GRAVITY;
+			d->jumpForceTmp -= GRAVITY;
+			puts("jump");
+		}
+	}
+*/
