@@ -56,7 +56,7 @@ typedef struct DataStart {
 typedef struct DataValidate {
 	int verif;
 	int indiceJoueur;
-	int idJoueurG;
+	int sauvegarde;
 }DataValidate;
 
 typedef struct DataValidate2 {
