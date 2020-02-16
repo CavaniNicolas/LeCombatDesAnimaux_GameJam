@@ -59,11 +59,11 @@ void StartUp(Element * start, int i);
 * Fonction : initChoicePerso
 * Objectif : fonction de lancement du choix des perso
 */
-void initChoicePerso(int indiceJoueur, Element * valider);
+void initChoicePerso();
 
 void GenerateInfo(int idPerso, Element * txtinfo);
 
-DataValidate * initDataValidate(int indiceJoueur);
+DataValidate * initDataValidate();
 
 void ValiderDown(Element * valider, int i);
 
@@ -90,7 +90,7 @@ void PersoUp(Element * perso, int i);
 * Fonction : initChoiceMap
 * Objectif : fonction de lancement du choix de la map
 */
-void initChoiceMap(int indiceJoueur, int indiceJoueur2);
+void initChoiceMap(int indiceJoueur, int indiceJoueur2, Element * validerPerso);
 
 void RetourDown2(Element * retour, int i);
 

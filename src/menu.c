@@ -87,84 +87,62 @@ void StartUp(Element * start, int i) {
 	d->verif = 0;
 	clearPlanDisplayCode(ECRAN_TITRE,PlanStartDown);
 	setDisplayCodeWindow(ECRAN_CHOIX_PERSO);
-	initChoicePerso(JOUEUR_G, NULL);
+	initChoicePerso();
 }
 
 /******************* ECRAN_CHOIX_PERSO ***********************************/
 // init
 
-void initChoicePerso(int indiceJoueur, Element * valider) {
+void initChoicePerso() {
 	int white[4] = {255,255,255,255};
 	int red[4] = {255,0,0,255};
 	int black[4] = {0,0,0,255};
 	Element * Perso = NULL;
-	Element * txtinfo = NULL;
 	int positionContourBlanc = LFEN/2+100;
 	int largeurPerso = HFEN/6;
 	int nbPersoParLigne = 2;
 	int ecartPerso = (positionContourBlanc-nbPersoParLigne*largeurPerso)/(nbPersoParLigne+1);
 	int titrePosY = HFEN/30;
 	int titreHeight = 150;
-	char titre[20] = "Choix du perso J0";
-	titre[16] = indiceJoueur+49;
-	if(indiceJoueur == JOUEUR_G)
-	{
-		createImage(0,0,LFEN,HFEN,"assets/beach.jpg",ECRAN_CHOIX_PERSO,PlanDecor);
-		createText(LFEN/8,titrePosY,400,titreHeight,50,"fonts/arial.ttf",titre,white,SANDAL2_BLENDED,ECRAN_CHOIX_PERSO,PlanTitre);
-		txtinfo = createText(5*LFEN/8-20,HFEN/30,400,150,50,"fonts/arial.ttf","Infos Personnage",white,SANDAL2_BLENDED,ECRAN_CHOIX_PERSO,PlanInfo);
-		Element * txtpv = createText(LFEN/2+100,HFEN/30+170,150,80,40,"fonts/arial.ttf","Pv",white,SANDAL2_BLENDED,ECRAN_CHOIX_PERSO,PlanInfo);
-		Element * txtforce = createText(LFEN/2+115,txtpv->y+txtpv->height,150,80,50,"fonts/arial.ttf","Force",white,SANDAL2_BLENDED,ECRAN_CHOIX_PERSO,PlanInfo);
-		Element * txtvitesse = createText(LFEN/2+100,txtforce->y+txtforce->height,180,90,50,"fonts/arial.ttf","Vitesse",white,SANDAL2_BLENDED,ECRAN_CHOIX_PERSO,PlanInfo);
-		Element * txtattaque = createText(LFEN/2+80,txtvitesse->y+txtvitesse->height,320,110,50,"fonts/arial.ttf","Attaque Speciale",white,SANDAL2_BLENDED,ECRAN_CHOIX_PERSO,PlanInfo);
-		addElementToElement(txtinfo,txtpv);
-		addElementToElement(txtinfo,txtforce);
-		addElementToElement(txtinfo,txtvitesse);
-		addElementToElement(txtinfo,txtattaque);
-		GenerateInfo(0, txtinfo);
-		createBlock(positionContourBlanc,HFEN/23,LFEN/2-200,HFEN-2*HFEN/23,white,ECRAN_CHOIX_PERSO,PlanContourBlanc);
-		createBlock(positionContourBlanc+2,HFEN/23+2,LFEN/2-204,HFEN-2*HFEN/23-4,black,ECRAN_CHOIX_PERSO,PlanFondNoir);
-		valider = createButton(5*LFEN/8+80,HFEN/30+600,200,100,80,"fonts/arial.ttf","Valider",white,SANDAL2_BLENDED,red,ECRAN_CHOIX_PERSO,PlanBtnValiderUp);
-		DataValidate * d = initDataValidate(indiceJoueur);
-		valider->data = d;
-		addClickableElement(valider,rectangleClickable(0.f,0.f,1.f,1.f),0);
-		setOnClickElement(valider,ValiderDown);
-		setUnClickElement(valider,ValiderUp);
-		Element * retour = createButton(LFEN/30,HFEN/30,100,50,80,"fonts/arial.ttf","Retour",white,SANDAL2_BLENDED,red,ECRAN_CHOIX_PERSO,PlanBtnRetourUp);
-		DataRetour * d2 = initDataRetour();
-		retour->data = d2;
-		addClickableElement(retour,rectangleClickable(0.f,0.f,1.f,1.f),0);
-		setOnClickElement(retour,RetourDown);
-		setUnClickElement(retour,RetourUp);
-		for(int i = 0; i < NBPERSO; i ++) {
-			if(!i) Perso = createImage(ecartPerso+(i%nbPersoParLigne)*(largeurPerso+ecartPerso),titrePosY+titreHeight+(i/nbPersoParLigne)*(largeurPerso+ecartPerso),largeurPerso,largeurPerso,"assets/p9.png",ECRAN_CHOIX_PERSO,PlanPersoDown);
-			Perso = createImage(ecartPerso+(i%nbPersoParLigne)*(largeurPerso+ecartPerso),titrePosY+titreHeight+(i/nbPersoParLigne)*(largeurPerso+ecartPerso),largeurPerso,largeurPerso,"assets/p0.png",ECRAN_CHOIX_PERSO,PlanPersoUp);
-			addElementToElement(valider,Perso);
-			addElementToElement(Perso,valider);
-			addElementToElement(Perso,txtinfo);
-			DataPerso * d3 = initDataPerso(i);
-			Perso->data = d3;
-			addClickableElement(Perso,rectangleClickable(0.f,0.f,1.f,1.f),0);
-			setOnClickElement(Perso,PersoDown);
-			setUnClickElement(Perso,PersoUp);
-		}
-	}
-	else if(indiceJoueur == JOUEUR_D)
-	{
-		DataValidate * v2 = valider->data;
-		printf("indice joueur g = %d\n", v2->idJoueurG);
-		createText(LFEN/8,titrePosY,400,titreHeight,50,"fonts/arial.ttf",titre,white,SANDAL2_BLENDED,ECRAN_CHOIX_PERSO,PlanTitre);
-		initIteratorElement(valider);
-		Perso = nextIteratorElement(valider);
-		DataPerso * d = Perso->data;
-		initIteratorElement(Perso);
-		txtinfo = nextIteratorElement(Perso);
-		txtinfo = nextIteratorElement(Perso);
-		clearPlanDisplayCode(ECRAN_CHOIX_PERSO,PlanInfoModif);
-		GenerateInfo(0, txtinfo);
-		clearPlanDisplayCode(ECRAN_CHOIX_PERSO,PlanPersoDown);
-		createImage(ecartPerso,titrePosY+titreHeight,largeurPerso,largeurPerso,"assets/p9.png",ECRAN_CHOIX_PERSO,PlanPersoDown);
-		UnSelectPerso(valider);
-		d->isSelected = 1;
+
+	createImage(0,0,LFEN,HFEN,"assets/beach.jpg",ECRAN_CHOIX_PERSO,PlanDecor);
+	createText(LFEN/8,titrePosY,400,titreHeight,50,"fonts/arial.ttf","Choix du perso J1",white,SANDAL2_BLENDED,ECRAN_CHOIX_PERSO,PlanTitre);
+	Element * txtinfo = createText(5*LFEN/8-20,HFEN/30,400,150,50,"fonts/arial.ttf","Infos Personnage",white,SANDAL2_BLENDED,ECRAN_CHOIX_PERSO,PlanInfo);
+	Element * txtpv = createText(LFEN/2+100,HFEN/30+170,150,80,40,"fonts/arial.ttf","Pv",white,SANDAL2_BLENDED,ECRAN_CHOIX_PERSO,PlanInfo);
+	Element * txtforce = createText(LFEN/2+115,txtpv->y+txtpv->height,150,80,50,"fonts/arial.ttf","Force",white,SANDAL2_BLENDED,ECRAN_CHOIX_PERSO,PlanInfo);
+	Element * txtvitesse = createText(LFEN/2+100,txtforce->y+txtforce->height,180,90,50,"fonts/arial.ttf","Vitesse",white,SANDAL2_BLENDED,ECRAN_CHOIX_PERSO,PlanInfo);
+	Element * txtattaque = createText(LFEN/2+80,txtvitesse->y+txtvitesse->height,320,110,50,"fonts/arial.ttf","Attaque Speciale",white,SANDAL2_BLENDED,ECRAN_CHOIX_PERSO,PlanInfo);
+	addElementToElement(txtinfo,txtpv);
+	addElementToElement(txtinfo,txtforce);
+	addElementToElement(txtinfo,txtvitesse);
+	addElementToElement(txtinfo,txtattaque);
+	GenerateInfo(0, txtinfo);
+	createBlock(positionContourBlanc,HFEN/23,LFEN/2-200,HFEN-2*HFEN/23,white,ECRAN_CHOIX_PERSO,PlanContourBlanc);
+	createBlock(positionContourBlanc+2,HFEN/23+2,LFEN/2-204,HFEN-2*HFEN/23-4,black,ECRAN_CHOIX_PERSO,PlanFondNoir);
+	Element * valider = createButton(5*LFEN/8+80,HFEN/30+600,200,100,80,"fonts/arial.ttf","Valider",white,SANDAL2_BLENDED,red,ECRAN_CHOIX_PERSO,PlanBtnValiderUp);
+	DataValidate * d = initDataValidate();
+	valider->data = d;
+	addClickableElement(valider,rectangleClickable(0.f,0.f,1.f,1.f),0);
+	setOnClickElement(valider,ValiderDown);
+	setUnClickElement(valider,ValiderUp);
+	Element * retour = createButton(LFEN/30,HFEN/30,100,50,80,"fonts/arial.ttf","Retour",white,SANDAL2_BLENDED,red,ECRAN_CHOIX_PERSO,PlanBtnRetourUp);
+	DataRetour * d2 = initDataRetour();
+	retour->data = d2;
+	addClickableElement(retour,rectangleClickable(0.f,0.f,1.f,1.f),0);
+	setOnClickElement(retour,RetourDown);
+	setUnClickElement(retour,RetourUp);
+	addElementToElement(retour,valider);
+	for(int i = 0; i < NBPERSO; i ++) {
+		if(!i) Perso = createImage(ecartPerso+(i%nbPersoParLigne)*(largeurPerso+ecartPerso),titrePosY+titreHeight+(i/nbPersoParLigne)*(largeurPerso+ecartPerso),largeurPerso,largeurPerso,"assets/p9.png",ECRAN_CHOIX_PERSO,PlanPersoDown);
+		Perso = createImage(ecartPerso+(i%nbPersoParLigne)*(largeurPerso+ecartPerso),titrePosY+titreHeight+(i/nbPersoParLigne)*(largeurPerso+ecartPerso),largeurPerso,largeurPerso,"assets/p0.png",ECRAN_CHOIX_PERSO,PlanPersoUp);
+		addElementToElement(valider,Perso);
+		addElementToElement(Perso,valider);
+		addElementToElement(Perso,txtinfo);
+		DataPerso * d3 = initDataPerso(i);
+		Perso->data = d3;
+		addClickableElement(Perso,rectangleClickable(0.f,0.f,1.f,1.f),0);
+		setOnClickElement(Perso,PersoDown);
+		setUnClickElement(Perso,PersoUp);
 	}
 }
 
@@ -188,12 +166,12 @@ void GenerateInfo(int idPerso, Element * txtinfo) {
 	createText(txtattaque->x+txtattaque->width-60,txtattaque->y,320,110,50,"fonts/arial.ttf",caracteristique,white,SANDAL2_BLENDED,ECRAN_CHOIX_PERSO,PlanInfoModif);
 }
 
-DataValidate * initDataValidate(int indiceJoueur) {
+DataValidate * initDataValidate() {
 	DataValidate * d = malloc(sizeof(DataValidate));
 	if(d){
 		d->verif = 0;
-		d->indiceJoueur = indiceJoueur;
-		d->idJoueurG = 0;
+		d->indiceJoueur = JOUEUR_G;
+		d->sauvegarde = 0;
 	}
 
 	return d;
@@ -207,29 +185,30 @@ void ValiderDown(Element * valider, int i) {
 	if(!d->verif) {
 		d->verif = 1;
 		createButton(5*LFEN/8+80,HFEN/30+600,200,100,80,"fonts/arial.ttf","Valider",white,SANDAL2_BLENDED,green,ECRAN_CHOIX_PERSO,PlanBtnValiderDown);
-		if(d->indiceJoueur == JOUEUR_G) printf("perso joueur gauche = %d\n", WhoIsSelectedPerso(valider));
-		else printf("perso joueur droite = %d\n", WhoIsSelectedPerso(valider));
+		//if(d->indiceJoueur == JOUEUR_G) printf("perso joueur gauche = %d\n", WhoIsSelectedPerso(valider));
+		//else printf("perso joueur droite = %d\n", WhoIsSelectedPerso(valider));
 	}
 }
 
 void ValiderUp(Element * valider, int i) {
 	(void) i;
 	DataValidate * d = valider->data;
+	int white[4] = {255,255,255,255};
+	int titrePosY = HFEN/30;
+	int titreHeight = 150;
 	d->verif = 0;
 	clearPlanDisplayCode(ECRAN_CHOIX_PERSO,PlanBtnValiderDown);
 	if(d->indiceJoueur == JOUEUR_G)
 	{
 		d->indiceJoueur = JOUEUR_D;
-		d->idJoueurG = WhoIsSelectedPerso(valider);
-		printf("ici %d\n", d->idJoueurG);
-		initChoicePerso(JOUEUR_D, valider);
+		d->sauvegarde = WhoIsSelectedPerso(valider);
 		clearPlanDisplayCode(ECRAN_CHOIX_PERSO,PlanTitre);
+		createText(LFEN/8,titrePosY,400,titreHeight,50,"fonts/arial.ttf","Choix du perso J2",white,SANDAL2_BLENDED,ECRAN_CHOIX_PERSO,PlanTitre);
 	}
 	else if(d->indiceJoueur == JOUEUR_D)
 	{
-		printf("là %d\n", d->idJoueurG);
 		setDisplayCodeWindow(ECRAN_CHOIX_MAP);
-		initChoiceMap(d->idJoueurG,WhoIsSelectedPerso(valider));
+		initChoiceMap(d->sauvegarde,WhoIsSelectedPerso(valider),valider);
 	}
 }
 
@@ -256,9 +235,18 @@ void RetourDown(Element * retour, int i) {
 void RetourUp(Element * retour, int i) {
 	(void) i;
 	DataRetour * d = retour->data;
+	int white[4] = {255,255,255,255};
+	initIteratorElement(retour);
+	Element * valider = nextIteratorElement(retour);
+	DataValidate * d2 = valider->data;
+	d2->indiceJoueur = JOUEUR_G;
 	d->verif = 0;
 	clearPlanDisplayCode(ECRAN_CHOIX_PERSO,PlanBtnRetourDown);
 	setDisplayCodeWindow(ECRAN_TITRE);
+	int titrePosY = HFEN/30;
+	int titreHeight = 150;
+	clearPlanDisplayCode(ECRAN_CHOIX_PERSO,PlanTitre);
+	createText(LFEN/8,titrePosY,400,titreHeight,50,"fonts/arial.ttf","Choix du perso J2",white,SANDAL2_BLENDED,ECRAN_CHOIX_PERSO,PlanTitre);
 }
 
 DataPerso * initDataPerso(int i) {
@@ -336,7 +324,7 @@ void PersoUp(Element * perso, int i) {
 /******************* ECRAN_CHOIX_MAP ***********************************/
 // init
 
-void initChoiceMap(int indiceJoueur, int indiceJoueur2) {
+void initChoiceMap(int indiceJoueur, int indiceJoueur2, Element * validerPerso) {
 	int white[4] = {255,255,255,255};
 	int red[4] = {255,0,0,255};
 	int largeurMap = HFEN/5;
@@ -350,6 +338,7 @@ void initChoiceMap(int indiceJoueur, int indiceJoueur2) {
 	addClickableElement(retour,rectangleClickable(0.f,0.f,1.f,1.f),0);
 	setOnClickElement(retour,RetourDown2);
 	setUnClickElement(retour,RetourUp2);
+	addElementToElement(retour,validerPerso);
 	Element * valider = createButton(5*LFEN/8+80,HFEN/30+600,200,100,80,"fonts/arial.ttf","Valider",white,SANDAL2_BLENDED,red,ECRAN_CHOIX_MAP,PlanBtnValiderUp);
 	DataValidate2 * d2 = initDataValidate2(indiceJoueur, indiceJoueur2);
 	valider->data = d2;
@@ -383,9 +372,18 @@ void RetourDown2(Element * retour, int i) {
 void RetourUp2(Element * retour, int i) {
 	(void) i;
 	DataRetour * d = retour->data;
+	int white[4] = {255,255,255,255};
+	initIteratorElement(retour);
+	Element * valider = nextIteratorElement(retour);
+	DataValidate * d2 = valider->data;
+	d2->indiceJoueur = JOUEUR_G;
 	d->verif = 0;
 	clearPlanDisplayCode(ECRAN_CHOIX_MAP,PlanBtnRetourDown);
 	setDisplayCodeWindow(ECRAN_CHOIX_PERSO);
+	int titrePosY = HFEN/30;
+	int titreHeight = 150;
+	clearPlanDisplayCode(ECRAN_CHOIX_PERSO,PlanTitre);
+	createText(LFEN/8,titrePosY,400,titreHeight,50,"fonts/arial.ttf","Choix du perso J1",white,SANDAL2_BLENDED,ECRAN_CHOIX_PERSO,PlanTitre);
 }
 
 DataValidate2 * initDataValidate2(int indiceJoueur, int indiceJoueur2) {
