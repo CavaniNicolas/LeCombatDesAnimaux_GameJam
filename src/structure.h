@@ -5,13 +5,18 @@
 
 #define LFEN 1400
 #define HFEN 800
-#define NBPERSO 4
+#define NBPERSO 2
 #define NBMAP 3
 #define GRAVITY 4
 
 enum Player {
 	JOUEUR_G = 0,
 	JOUEUR_D = 1
+};
+
+enum Perso {
+	GORILLE = 0,
+	CROCODILE = 1
 };
 
 enum Display {

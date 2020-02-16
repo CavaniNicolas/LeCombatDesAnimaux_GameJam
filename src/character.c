@@ -24,6 +24,7 @@ DataCharacter_t * initDataCharacter(int idPlayer, int idChosen) {
 			d->left    = false;
 			d->right   = false;
 			d->jump    = false;
+			d->allowJump = true;
 			d->crouch  = false;
 
 			d->attack1 = false;
@@ -71,18 +72,23 @@ void initCharacter(int idPlayer, int idPerso, Element ** character) {
 	DataCharacter_t * d = initDataCharacter(idPlayer, idPerso);
 
 	if (d != NULL) {
-		switch (idPlayer) {
-			case JOUEUR_G:
-				(*character) = createImage(100, HFEN-50-(d->height), d->width, d->height, "assets/kingKrool.png", 0, PlanCharacter);
+		switch (idPerso) {
+			case GORILLE:
+				(*character) = createImage(100, HFEN-50-(d->height), d->width, d->height, "assets/donkeyKong.png", ECRAN_FIGHT, PlanCharacter);
 			break;
 
-			case JOUEUR_D:
-				(*character) = createImage(LFEN-100-(d->width), HFEN-50-(d->height), d->width, d->height, "assets/donkeyKong.png", 0, PlanCharacter);
-				(*character)->flip = SANDAL2_FLIP_HOR;
+			case CROCODILE:
+				(*character) = createImage(100, HFEN-50-(d->height), d->width, d->height, "assets/kingKrool.png", ECRAN_FIGHT, PlanCharacter);
 			break;
 
 				default:
 			break;
+		}
+		if(idPlayer == JOUEUR_D)
+		{
+			(*character)->x = LFEN-100-(d->width);
+			(*character)->y = HFEN-50-(d->height);
+			(*character)->flip = SANDAL2_FLIP_HOR;
 		}
 		(*character)->data = d;
 	}
@@ -106,7 +112,7 @@ void moveCharacterOn(Element * character, SDL_Keycode k) {
 
 		case 's':
 			if (d->idPlayer == JOUEUR_G) {
-				if (d->jump == false) {
+				if (d->jump == false && d->allowJump == true) {
 					d->jump = true;
 				}
 			}
@@ -127,7 +133,7 @@ void moveCharacterOn(Element * character, SDL_Keycode k) {
 
 		case 'k':
 			if (d->idPlayer == JOUEUR_D) {
-				if (d->jump == false) {
+				if (d->jump == false && d->allowJump == true) {
 					d->jump = true;
 				}
 			}
@@ -163,7 +169,6 @@ void moveCharacterOff(Element * character, SDL_Keycode k) {
 			}
 			break;
 	}
-
 }
 
 
@@ -194,15 +199,19 @@ void moveCharacter(Element * character) {
 	// attendre un peu avant de resauter
 		else {
 			character->y = HFEN-50-(d->height);
+			d->jump = false;
+			d->jumpForceTmp = d->jumpForce;
+			d->allowJump = false;
+			d->jumpLagTmp = SDL_GetTicks();
+		}
+	}
 
-			// si on a finit dattendre :
-			if (d->jumpLagTmp == 0) {
-				jumpLag(character);
 
-				d->jump = false;
-				d->jumpForceTmp = d->jumpForce;
-				puts("jump again");
-			}
+	if(d->allowJump == false)
+	{
+		if ((int)SDL_GetTicks() - d->jumpLagTmp > d->jumpLag) {
+			d->allowJump = true;
+			puts("jump again");
 		}
 	}
 

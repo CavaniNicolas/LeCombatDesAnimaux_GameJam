@@ -21,6 +21,7 @@ typedef struct DataCharacter {
 	bool   left;
 	bool   right;
 	bool   jump;
+	bool	 allowJump;
 	bool   crouch;
 
 	bool   attack1;
