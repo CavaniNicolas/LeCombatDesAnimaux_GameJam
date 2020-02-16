@@ -55,6 +55,6 @@ void collisionCharacters(Element * character) {
 		//d->limit = true;
 		d->right = false;
 		d2->left = false;
-		printf("%d\n",SDL_GetTicks());
+		//printf("%d\n",SDL_GetTicks());
 	}
 }
