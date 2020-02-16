@@ -3,20 +3,20 @@
 #include "structure.h"
 #include "menu.h"
 #include "fight.h"
+#include <string.h>
 /******************* ECRAN_TITRE ***********************************/
 // init
 
 void Launcher() {
 	int red[4] = {255,0,0,255};
-	int green[4] = {0,255,0,255};
 	int black[4] = {0,0,0,255};
-	createImage(0,0,LFEN,HFEN,"assets/beach.jpg",ECRAN_TITRE,PlanDecor);
+	createImage(0,0,LFEN,HFEN,"assets/fond.jpg",ECRAN_TITRE,PlanDecor);
 
 	Element * titre = createText(LFEN/2-100,HFEN/2,500,100,50,"fonts/arial.ttf","Le Combat Des Animaux",red,SANDAL2_BLENDED,ECRAN_TITRE,PlanTitre);
 	Element * titre2 = createText(LFEN/2-4-100,HFEN/2+5,500,100,50,"fonts/arial.ttf","Le Combat Des Animaux",black,SANDAL2_BLENDED,ECRAN_TITRE,PlanTitreFond);
 	addElementToElement(titre,titre2);
-	Element * r1 = createBlock(0,0,LFEN/2,HFEN,green,ECRAN_TITRE,PlanRideau);
-	Element * r2 = createBlock(LFEN/2,0,LFEN/2,HFEN,green,ECRAN_TITRE,PlanRideau);
+	Element * r1 = createImage(0,0,LFEN/2,HFEN,"assets/rideaugauche.png",ECRAN_TITRE,PlanRideau);
+	Element * r2 = createImage(LFEN/2,0,LFEN/2,HFEN,"assets/rideaudroit.png",ECRAN_TITRE,PlanRideau);
 
 	setActionElement(r1,depRideau1);
 	setActionElement(r2,depRideau2);
@@ -105,8 +105,9 @@ void initChoicePerso() {
 	int ecartPerso = (positionContourBlanc-nbPersoParLigne*largeurPerso)/(nbPersoParLigne+1);
 	int titrePosY = HFEN/30;
 	int titreHeight = 150;
+	char s[14] = "assets/p9.png";
 
-	createImage(0,0,LFEN,HFEN,"assets/beach.jpg",ECRAN_CHOIX_PERSO,PlanDecor);
+	createImage(0,0,LFEN,HFEN,"assets/fond.jpg",ECRAN_CHOIX_PERSO,PlanDecor);
 	createText(LFEN/8,titrePosY,400,titreHeight,50,"fonts/arial.ttf","Choix du perso J1",white,SANDAL2_BLENDED,ECRAN_CHOIX_PERSO,PlanTitre);
 	Element * txtinfo = createText(5*LFEN/8-20,HFEN/30,400,150,50,"fonts/arial.ttf","Infos Personnage",white,SANDAL2_BLENDED,ECRAN_CHOIX_PERSO,PlanInfo);
 	Element * txtpv = createText(LFEN/2+100,HFEN/30+170,150,80,40,"fonts/arial.ttf","Pv",white,SANDAL2_BLENDED,ECRAN_CHOIX_PERSO,PlanInfo);
@@ -134,8 +135,9 @@ void initChoicePerso() {
 	setUnClickElement(retour,RetourUp);
 	addElementToElement(retour,valider);
 	for(int i = 0; i < NBPERSO; i ++) {
-		if(!i) Perso = createImage(ecartPerso+(i%nbPersoParLigne)*(largeurPerso+ecartPerso),titrePosY+titreHeight+(i/nbPersoParLigne)*(largeurPerso+ecartPerso),largeurPerso,largeurPerso,"assets/p9.png",ECRAN_CHOIX_PERSO,PlanPersoDown);
-		Perso = createImage(ecartPerso+(i%nbPersoParLigne)*(largeurPerso+ecartPerso),titrePosY+titreHeight+(i/nbPersoParLigne)*(largeurPerso+ecartPerso),largeurPerso,largeurPerso,"assets/p0.png",ECRAN_CHOIX_PERSO,PlanPersoUp);
+		if(!i) Perso = createImage(ecartPerso+(i%nbPersoParLigne)*(largeurPerso+ecartPerso),titrePosY+titreHeight+(i/nbPersoParLigne)*(largeurPerso+ecartPerso),largeurPerso,largeurPerso,"assets/p1.png",ECRAN_CHOIX_PERSO,PlanPersoDown);
+		s[8] = i*2+48;
+		Perso = createImage(ecartPerso+(i%nbPersoParLigne)*(largeurPerso+ecartPerso),titrePosY+titreHeight+(i/nbPersoParLigne)*(largeurPerso+ecartPerso),largeurPerso,largeurPerso,s,ECRAN_CHOIX_PERSO,PlanPersoUp);
 		addElementToElement(valider,Perso);
 		addElementToElement(Perso,valider);
 		addElementToElement(Perso,txtinfo);
@@ -149,8 +151,17 @@ void initChoicePerso() {
 
 void GenerateInfo(int idPerso, Element * txtinfo) {
 	int white[4] = {255,255,255,255};
+	
 	char nom[20] = "Toto";
 	char caracteristique[50] = "100";
+
+	if (idPerso == CROCODILE) {
+		strcpy(nom,"kingKrool");
+	}
+	else {
+		strcpy(nom,"donkeyKong");
+	}
+
 	initIteratorElement(txtinfo);
 	Element * txtpv = nextIteratorElement(txtinfo);
 	Element * txtforce = nextIteratorElement(txtinfo);
@@ -161,10 +172,26 @@ void GenerateInfo(int idPerso, Element * txtinfo) {
 	txtforce->y = txtpv->y+txtpv->height;
 	txtvitesse->y = txtforce->y+txtforce->height;
 	txtattaque->y = txtvitesse->y+txtvitesse->height;
-	createText(txtpv->x+txtpv->width+20,txtpv->y,150,80,50,"fonts/arial.ttf",caracteristique,white,SANDAL2_BLENDED,ECRAN_CHOIX_PERSO,PlanInfoModif);
-	createText(txtforce->x+txtforce->width+20,txtforce->y,150,80,50,"fonts/arial.ttf",caracteristique,white,SANDAL2_BLENDED,ECRAN_CHOIX_PERSO,PlanInfoModif);
-	createText(txtvitesse->x+txtvitesse->width+20,txtvitesse->y,150,80,50,"fonts/arial.ttf",caracteristique,white,SANDAL2_BLENDED,ECRAN_CHOIX_PERSO,PlanInfoModif);
-	createText(txtattaque->x+txtattaque->width-60,txtattaque->y,320,110,50,"fonts/arial.ttf",caracteristique,white,SANDAL2_BLENDED,ECRAN_CHOIX_PERSO,PlanInfoModif);
+
+	if (idPerso == CROCODILE) {
+		strcpy(caracteristique,"100");
+		createText(txtpv->x+txtpv->width+20,txtpv->y,150,80,50,"fonts/arial.ttf",caracteristique,white,SANDAL2_BLENDED,ECRAN_CHOIX_PERSO,PlanInfoModif);
+		strcpy(caracteristique,"100");
+		createText(txtforce->x+txtforce->width+20,txtforce->y,150,80,50,"fonts/arial.ttf",caracteristique,white,SANDAL2_BLENDED,ECRAN_CHOIX_PERSO,PlanInfoModif);
+		strcpy(caracteristique,"32");
+		createText(txtvitesse->x+txtvitesse->width+20,txtvitesse->y,150,80,50,"fonts/arial.ttf",caracteristique,white,SANDAL2_BLENDED,ECRAN_CHOIX_PERSO,PlanInfoModif);
+		//createText(txtattaque->x+txtattaque->width-60,txtattaque->y,320,110,50,"fonts/arial.ttf",caracteristique,white,SANDAL2_BLENDED,ECRAN_CHOIX_PERSO,PlanInfoModif);
+	}
+
+	else {
+		strcpy(caracteristique,"200");
+		createText(txtpv->x+txtpv->width+20,txtpv->y,150,80,50,"fonts/arial.ttf",caracteristique,white,SANDAL2_BLENDED,ECRAN_CHOIX_PERSO,PlanInfoModif);
+		strcpy(caracteristique,"60");
+		createText(txtforce->x+txtforce->width+20,txtforce->y,150,80,50,"fonts/arial.ttf",caracteristique,white,SANDAL2_BLENDED,ECRAN_CHOIX_PERSO,PlanInfoModif);
+		strcpy(caracteristique,"24");
+		createText(txtvitesse->x+txtvitesse->width+20,txtvitesse->y,150,80,50,"fonts/arial.ttf",caracteristique,white,SANDAL2_BLENDED,ECRAN_CHOIX_PERSO,PlanInfoModif);
+		//createText
+	}
 }
 
 DataValidate * initDataValidate() {
@@ -298,6 +325,7 @@ void PersoDown(Element * perso, int i) {
 	int titrePosY = HFEN/30;
 	int titreHeight = 150;
 	int ecartPerso = (positionContourBlanc-nbPersoParLigne*largeurPerso)/(nbPersoParLigne+1);
+	char s[14] = "assets/p9.png";
 	DataPerso * d = perso->data;
 	if(!d->verif) {
 		d->verif = 1;
@@ -311,7 +339,8 @@ void PersoDown(Element * perso, int i) {
 			GenerateInfo(d->id,txtinfo);
 			clearPlanDisplayCode(ECRAN_CHOIX_PERSO,PlanPersoDown);
 			d->isSelected = 1;
-			createImage(ecartPerso+(d->id%nbPersoParLigne)*(largeurPerso+ecartPerso),titrePosY+titreHeight+(d->id/nbPersoParLigne)*(largeurPerso+ecartPerso),largeurPerso,largeurPerso,"assets/p9.png",ECRAN_CHOIX_PERSO,PlanPersoDown);
+			s[8] = d->id*2+49;
+			createImage(ecartPerso+(d->id%nbPersoParLigne)*(largeurPerso+ecartPerso),titrePosY+titreHeight+(d->id/nbPersoParLigne)*(largeurPerso+ecartPerso),largeurPerso,largeurPerso,s,ECRAN_CHOIX_PERSO,PlanPersoDown);
 		}
 	}
 }
@@ -331,7 +360,8 @@ void initChoiceMap(int indiceJoueur, int indiceJoueur2, Element * validerPerso) 
 	int largeurMap = HFEN/5;
 	int ecartMap = (LFEN-NBMAP*largeurMap)/(NBMAP+1);
 	Element * Map = NULL;
-	createImage(0,0,LFEN,HFEN,"assets/beach.jpg",ECRAN_CHOIX_MAP,PlanDecor);
+	char s[14] = "assets/m9.png";
+	createImage(0,0,LFEN,HFEN,"assets/fond.jpg",ECRAN_CHOIX_MAP,PlanDecor);
 	createText(LFEN/2-200,HFEN/30,400,150,50,"fonts/arial.ttf","Choix de la map",white,SANDAL2_BLENDED,ECRAN_CHOIX_MAP,PlanTitre);
 	Element * retour = createButton(LFEN/30,HFEN/30,100,50,80,"fonts/arial.ttf","Retour",white,SANDAL2_BLENDED,red,ECRAN_CHOIX_MAP,PlanBtnRetourUp);
 	DataRetour * d = initDataRetour();
@@ -347,8 +377,9 @@ void initChoiceMap(int indiceJoueur, int indiceJoueur2, Element * validerPerso) 
 	setOnClickElement(valider,ValiderDown2);
 	setUnClickElement(valider,ValiderUp2);
 	for(int i = 0; i < NBMAP; i ++) {
-		if(!i) Map = createImage(ecartMap+i*(largeurMap+ecartMap),2*HFEN/5,largeurMap,largeurMap,"assets/p9.png",ECRAN_CHOIX_MAP,PlanMapDown);
-		Map = createImage(ecartMap+i*(largeurMap+ecartMap),2*HFEN/5,largeurMap,largeurMap,"assets/p0.png",ECRAN_CHOIX_MAP,PlanMapUp);
+		if(!i) Map = createImage(ecartMap+i*(largeurMap+ecartMap),2*HFEN/5,largeurMap,largeurMap,"assets/m1.png",ECRAN_CHOIX_MAP,PlanMapDown);
+		s[8] = i*2+48;
+		Map = createImage(ecartMap+i*(largeurMap+ecartMap),2*HFEN/5,largeurMap,largeurMap,s,ECRAN_CHOIX_MAP,PlanMapUp);
 		addElementToElement(valider,Map);
 		addElementToElement(Map,valider);
 		DataMap * d3 = initDataMap(i);
@@ -466,6 +497,7 @@ void MapDown(Element * map, int i) {
 	int largeurMap = HFEN/5;
 	int ecartMap = (LFEN-NBMAP*largeurMap)/(NBMAP+1);
 	DataMap * d = map->data;
+	char s[14] = "assets/m9.png";
 	if(!d->verif) {
 		d->verif = 1;
 		if(!d->isSelected)
@@ -473,7 +505,8 @@ void MapDown(Element * map, int i) {
 			UnSelectMap(map);
 			clearPlanDisplayCode(ECRAN_CHOIX_MAP,PlanMapDown);
 			d->isSelected = 1;
-			createImage(ecartMap+d->id*(largeurMap+ecartMap),2*HFEN/5,largeurMap,largeurMap,"assets/p9.png",ECRAN_CHOIX_MAP,PlanMapDown);
+			s[8] = d->id*2+49;
+			createImage(ecartMap+d->id*(largeurMap+ecartMap),2*HFEN/5,largeurMap,largeurMap,s,ECRAN_CHOIX_MAP,PlanMapDown);
 		}
 	}
 }

@@ -6,7 +6,9 @@
 
 
 void initFight(int idCharacterG, int idCharacterD, int idMap) {
-	createImage(0, 0, LFEN,HFEN, "assets/bund.jpg", ECRAN_FIGHT, PlanDecor);
+	char s[16] = "assets/map0.jpg";
+	s[10] = idMap+48;
+	createImage(0, 0, LFEN,HFEN, s, ECRAN_FIGHT, PlanDecor);
 
 	Element * characterG = NULL;
 	Element * characterD = NULL;

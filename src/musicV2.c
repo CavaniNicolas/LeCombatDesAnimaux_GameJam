@@ -1,4 +1,4 @@
-#include "musicV2.h"
+/*#include "musicV2.h"
 
 ZIK * initZIK(char * nomFic)
 {
@@ -90,3 +90,4 @@ void go_music(ZIK * m, int i)
     }
   }
 }
+*/

@@ -1,4 +1,4 @@
-#ifndef __MUSICV2_H__
+/*#ifndef __MUSICV2_H__
 #define __MUSICV2_H__
 
 #include <SDL2/SDL_mixer.h>
@@ -19,3 +19,4 @@ int count_nb_line(FILE * f);
 void go_music(ZIK * m, int i);
 
 #endif
+*/
