@@ -6,6 +6,7 @@
 #define LFEN 1400
 #define HFEN 800
 #define NBPERSO 4
+#define NBMAP 3
 #define GRAVITY 10
 
 enum Player {
@@ -36,13 +37,16 @@ enum PlanMenu {
 	PlanFondNoir = 11,
 	PlanBtnRetourUp = 10,
 	PlanBtnRetourDown = 9,
-	PlanPerso = 8,
-	PlayerContourPersoUp = 7,
-	PlayerContourPersoDown = 6,
-	PlanInfo = 5,
-	PlanInfoModif = 4,
+	PlanPersoUp = 8,
+	PlanPersoDown = 7,
+	PlanInfo = 6,
+	PlanInfoModif = 5,
 	PlanBtnValiderUp = 3,
-	PlanBtnValiderDown = 2
+	PlanBtnValiderDown = 2,
+
+	//3 ECRAN_CHOIX_MAP
+	PlanMapUp = 5,
+	PlanMapDown = 4
 };
 
 typedef struct DataStart {
@@ -51,11 +55,31 @@ typedef struct DataStart {
 
 typedef struct DataValidate {
 	int verif;
+	int indiceJoueur;
+	int idJoueurG;
 }DataValidate;
+
+typedef struct DataValidate2 {
+	int verif;
+	int indiceJoueur;
+	int indiceJoueur2;
+}DataValidate2;
 
 typedef struct DataRetour {
 	int verif;
 }DataRetour;
+
+typedef struct DataPerso {
+	int id;
+	int verif;
+	int isSelected;
+}DataPerso;
+
+typedef struct DataMap {
+	int id;
+	int verif;
+	int isSelected;
+}DataMap;
 
 // liste des plans du fight
 enum {
