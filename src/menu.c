@@ -2,6 +2,7 @@
 #include <SANDAL2/SANDAL2.h>
 #include "structure.h"
 #include "menu.h"
+#include "fight.h"
 /******************* ECRAN_TITRE ***********************************/
 // init
 
@@ -413,10 +414,11 @@ void ValiderDown2(Element * valider, int i) {
 
 void ValiderUp2(Element * valider, int i) {
 	(void) i;
-	DataValidate * d = valider->data;
+	DataValidate2 * d = valider->data;
 	d->verif = 0;
 	clearPlanDisplayCode(ECRAN_CHOIX_MAP,PlanBtnValiderDown);
 	setDisplayCodeWindow(ECRAN_FIGHT);
+	initFight(d->indiceJoueur,d->indiceJoueur2,WhoIsSelectedMap(valider));
 }
 
 DataMap * initDataMap(int i) {

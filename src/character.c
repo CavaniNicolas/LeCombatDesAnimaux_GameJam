@@ -20,6 +20,7 @@ DataCharacter_t * initDataCharacter(int idPlayer, int idChosen) {
 
 			d->idPlayer = idPlayer;
 
+			d->limit   = false;
 			d->left    = false;
 			d->right   = false;
 			d->jump    = false;
@@ -54,6 +55,9 @@ DataCharacter_t * initDataCharacter(int idPlayer, int idChosen) {
 			fgets(ligne, 6, file);
 			d->jumpForce = atoi(ligne);
 			d->jumpForceTmp = d->jumpForce;
+
+			fgets(ligne, 6, file);
+			d->jumpLag = atoi(ligne);
 		}
 
 		fclose(file);
@@ -63,28 +67,24 @@ DataCharacter_t * initDataCharacter(int idPlayer, int idChosen) {
 }
 
 
-void initCharacter(int idPlayer, int idPerso, Element * character) {
+void initCharacter(int idPlayer, int idPerso, Element ** character) {
 	DataCharacter_t * d = initDataCharacter(idPlayer, idPerso);
 
 	if (d != NULL) {
 		switch (idPlayer) {
 			case JOUEUR_G:
-				character = createImage(100, HFEN-50-(d->height), d->width, d->height, "assets/kingKrool.png", 0, PlanCharacter);
+				(*character) = createImage(100, HFEN-50-(d->height), d->width, d->height, "assets/kingKrool.png", 0, PlanCharacter);
 			break;
 
 			case JOUEUR_D:
-				character = createImage(LFEN-100-(d->width), HFEN-50-(d->height), d->width, d->height, "assets/donkeyKong.png", 0, PlanCharacter);
-				character->flip = SANDAL2_FLIP_HOR;
+				(*character) = createImage(LFEN-100-(d->width), HFEN-50-(d->height), d->width, d->height, "assets/donkeyKong.png", 0, PlanCharacter);
+				(*character)->flip = SANDAL2_FLIP_HOR;
 			break;
 
 				default:
 			break;
 		}
-		character->data = d;
-
-		setKeyPressedElement(character,moveCharacterOn);
-		setKeyReleasedElement(character,moveCharacterOff);
-		setActionElement(character,moveCharacter);
+		(*character)->data = d;
 	}
 }
 
@@ -99,7 +99,7 @@ void moveCharacterOn(Element * character, SDL_Keycode k) {
 			break;
 
 		case 'd':
-			if (d->idPlayer == JOUEUR_G) {
+			if (d->idPlayer == JOUEUR_G && d->limit == false) {
 				d->right = true;
 			}
 			break;
@@ -114,7 +114,7 @@ void moveCharacterOn(Element * character, SDL_Keycode k) {
 
 
 		case 'j':
-			if (d->idPlayer == JOUEUR_D) {
+			if (d->idPlayer == JOUEUR_D && d->limit == false) {
  				d->left = true;
  			}
 			break;
@@ -169,29 +169,54 @@ void moveCharacterOff(Element * character, SDL_Keycode k) {
 
 void moveCharacter(Element * character) {
 	DataCharacter_t * d = character->data;
-	double speed = (d->speed);
+
+	double speed = (d->speed)/8;
 
 	if (d->left) {
-		moveElement(character, -speed, 0);
+		if ((character->x)-speed > 0)
+			moveElement(character, -speed, 0);
 	}
 
 	if (d->right) {
-		moveElement(character, speed, 0);
+		if ((character->x)-speed < LFEN-(d->width))
+			moveElement(character, speed, 0);
 	}
 
-
+	// si on appuye sur sauter et que on est en l'air
+	// alors deplacer le perso
 	if (d->jump == true) {
 		if (character->y - d->jumpForceTmp + GRAVITY < HFEN-50-(d->height)) {
-			character->y -= d->jumpForceTmp + GRAVITY;
+			character->y -= (d->jumpForceTmp + GRAVITY);
 			d->jumpForceTmp -= GRAVITY;
-			puts("jump");
 		}
+	// sinon, on appuye sur sauter mais on est plus en l'air
+	// se positionner au niveau du sol
+	// attendre un peu avant de resauter
 		else {
 			character->y = HFEN-50-(d->height);
-			d->jump = false;
-			d->jumpForceTmp = d->jumpForce;
-			puts("stopjump");
-		}
 
+			// si on a finit dattendre :
+			if (d->jumpLagTmp == 0) {
+				jumpLag(character);
+
+				d->jump = false;
+				d->jumpForceTmp = d->jumpForce;
+				puts("jump again");
+			}
+		}
+	}
+
+}
+
+
+void jumpLag(Element * character) {
+	DataCharacter_t * d = character->data;
+
+	if (d->jumpLagTmp == 0) {
+		d->jumpLagTmp = SDL_GetTicks();
+	}
+	else if ((int)SDL_GetTicks() - d->jumpLagTmp > d->jumpLag) {
+		d->jump = false;
+		d->jumpLagTmp = 0;
 	}
 }

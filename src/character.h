@@ -7,14 +7,17 @@ typedef struct DataCharacter {
 	int    hp;
 	int    strength;
 	double speed;
+	int    jumpLag;
 
 	int    width;
 	int    height;
 	int    jumpForce;
 	int    jumpForceTmp;
+	int    jumpLagTmp;
 
 	int    idPlayer;
 
+	bool   limit;
 	bool   left;
 	bool   right;
 	bool   jump;
@@ -28,12 +31,13 @@ typedef struct DataCharacter {
 }DataCharacter_t;
 
 DataCharacter_t * initDataCharacter(int, int);
-void initCharacter(int, int, Element *);
+void initCharacter(int, int, Element **);
 
 
 void moveCharacterOn(Element *, SDL_Keycode);
 void moveCharacterOff(Element *, SDL_Keycode);
 void moveCharacter(Element *);
 
+void jumpLag(Element *);
 
 #endif

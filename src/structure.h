@@ -7,7 +7,7 @@
 #define HFEN 800
 #define NBPERSO 4
 #define NBMAP 3
-#define GRAVITY 10
+#define GRAVITY 4
 
 enum Player {
 	JOUEUR_G = 0,
