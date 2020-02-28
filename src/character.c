@@ -7,6 +7,39 @@
 #include "character.h"
 
 
+void initCharacter(int idPlayer, int idPerso, Element ** character) {
+	DataCharacter_t * d = initDataCharacter(idPlayer, idPerso);
+	double x = 0;
+	double y = 0;
+	char filename[50];
+	double groundLevel = HFEN-50-(d->height);
+
+	if (!getCharactersFilename(idPerso, filename)) {
+		printf("Error fetching character's filename\n");
+	} else {
+
+		if (d != NULL) {
+
+			if (idPlayer == JOUEUR_G) {
+				x = 100;
+				y = groundLevel;
+			} else { // JOUEUR_D
+				x = LFEN-100-(d->width);
+				y = groundLevel;
+			}
+
+			(*character) = createImage(x, y, d->width, d->height, filename, ECRAN_FIGHT, PlanCharacter);
+
+			if (idPlayer == JOUEUR_D) {
+				(*character)->flip = SANDAL2_FLIP_HOR;
+			}
+
+			(*character)->data = d;
+		}
+	}
+}
+
+
 DataCharacter_t * initDataCharacter(int idPlayer, int idChosen) {
 	DataCharacter_t * d = malloc(sizeof(DataCharacter_t));
 
@@ -22,12 +55,13 @@ DataCharacter_t * initDataCharacter(int idPlayer, int idChosen) {
 
 			d->idPlayer = idPlayer;
 
-			d->limit   = false;
-			d->left    = false;
-			d->right   = false;
-			d->jump    = false;
-			d->allowJump = true;
-			d->crouch  = false;
+			d->left       = false;
+			d->allowLeft  = false;
+			d->right      = false;
+			d->allowRight = false;
+			d->jump       = false;
+			d->allowJump  = true;
+			d->crouch     = false;
 
 			d->attack1 = false;
 			d->attack2 = false;
@@ -70,38 +104,6 @@ DataCharacter_t * initDataCharacter(int idPlayer, int idChosen) {
 }
 
 
-void initCharacter(int idPlayer, int idPerso, Element ** character) {
-	DataCharacter_t * d = initDataCharacter(idPlayer, idPerso);
-	double x = 0;
-	double y = 0;
-	char filename[50];
-
-	if (!getCharactersFilename(idPerso, filename)) {
-		printf("Error fetching character's filename\n");
-	} else {
-
-		if (d != NULL) {
-
-			if (idPlayer == JOUEUR_G) {
-				x = 100;
-				y = HFEN-50-(d->height);
-			} else { // JOUEUR_D
-				x = LFEN-100-(d->width);
-				y = HFEN-50-(d->height);
-			}
-
-			(*character) = createImage(x, y, d->width, d->height, filename, ECRAN_FIGHT, PlanCharacter);
-
-			if (idPlayer == JOUEUR_D) {
-				(*character)->flip = SANDAL2_FLIP_HOR;
-			}
-
-			(*character)->data = d;
-		}
-	}
-}
-
-
 int getCharactersFilename(int idPerso, char filename[50]) {
 	int error = 1;
 	DIR * rep = opendir("./assets/characters");
@@ -134,13 +136,13 @@ void moveCharacterOn(Element * character, SDL_Keycode k) {
 	DataCharacter_t * d = character->data;
 	switch (k) {
 		case 'q':
-			if (d->idPlayer == JOUEUR_G) {
+			if (d->idPlayer == JOUEUR_G  && d->allowLeft == true) {
  				d->left = true;
 			}
 			break;
 
 		case 'd':
-			if (d->idPlayer == JOUEUR_G && d->limit == false) {
+			if (d->idPlayer == JOUEUR_G && d->allowRight == true) {
 				d->right = true;
 			}
 			break;
@@ -155,13 +157,13 @@ void moveCharacterOn(Element * character, SDL_Keycode k) {
 
 
 		case 'j':
-			if (d->idPlayer == JOUEUR_D && d->limit == false) {
+			if (d->idPlayer == JOUEUR_D && d->allowLeft == true) {
  				d->left = true;
  			}
 			break;
 
 		case 'l':
-			if (d->idPlayer == JOUEUR_D) {
+			if (d->idPlayer == JOUEUR_D  && d->allowRight == true) {
 				d->right = true;
 			}
 			break;
@@ -211,6 +213,7 @@ void moveCharacter(Element * character) {
 	DataCharacter_t * d = character->data;
 
 	double speed = (d->speed)/8;
+	double groundLevel = HFEN-50-(d->height);
 
 	if (d->left) {
 		if ((character->x)-speed > 0)
@@ -225,7 +228,7 @@ void moveCharacter(Element * character) {
 	// si on appuye sur sauter et que on est en l'air
 	// alors deplacer le perso
 	if (d->jump == true) {
-		if (character->y - d->jumpForceTmp + GRAVITY < HFEN-50-(d->height)) {
+		if (character->y - d->jumpForceTmp + GRAVITY < groundLevel) {
 			character->y -= (d->jumpForceTmp + GRAVITY);
 			d->jumpForceTmp -= GRAVITY;
 		}
@@ -233,7 +236,7 @@ void moveCharacter(Element * character) {
 	// se positionner au niveau du sol
 	// attendre un peu avant de resauter
 		else {
-			character->y = HFEN-50-(d->height);
+			character->y = groundLevel;
 			d->jump = false;
 			d->jumpForceTmp = d->jumpForce;
 			d->allowJump = false;
@@ -241,7 +244,7 @@ void moveCharacter(Element * character) {
 		}
 	}
 
-
+	// jumpLag
 	if(d->allowJump == false)
 	{
 		if ((int)SDL_GetTicks() - d->jumpLagTmp > d->jumpLag) {
@@ -250,17 +253,4 @@ void moveCharacter(Element * character) {
 		}
 	}
 
-}
-
-
-void jumpLag(Element * character) {
-	DataCharacter_t * d = character->data;
-
-	if (d->jumpLagTmp == 0) {
-		d->jumpLagTmp = SDL_GetTicks();
-	}
-	else if ((int)SDL_GetTicks() - d->jumpLagTmp > d->jumpLag) {
-		d->jump = false;
-		d->jumpLagTmp = 0;
-	}
 }
