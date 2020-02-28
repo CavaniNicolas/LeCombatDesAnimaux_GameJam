@@ -1,6 +1,8 @@
 
 #include <SANDAL2/SANDAL2.h>
 #include <stdlib.h>
+#include <stdio.h>
+#include <dirent.h>
 #include "structure.h"
 #include "character.h"
 
@@ -70,28 +72,61 @@ DataCharacter_t * initDataCharacter(int idPlayer, int idChosen) {
 
 void initCharacter(int idPlayer, int idPerso, Element ** character) {
 	DataCharacter_t * d = initDataCharacter(idPlayer, idPerso);
+	double x = 0;
+	double y = 0;
+	char filename[50];
 
-	if (d != NULL) {
-		switch (idPerso) {
-			case GORILLE:
-				(*character) = createImage(100, HFEN-50-(d->height), d->width, d->height, "assets/donkeyKong.png", ECRAN_FIGHT, PlanCharacter);
-			break;
+	if (!getCharactersFilename(idPerso, filename)) {
+		printf("Error fetching character's filename\n");
+	} else {
 
-			case CROCODILE:
-				(*character) = createImage(100, HFEN-50-(d->height), d->width, d->height, "assets/kingKrool.png", ECRAN_FIGHT, PlanCharacter);
-			break;
+		if (d != NULL) {
 
-				default:
-			break;
+			if (idPlayer == JOUEUR_G) {
+				x = 100;
+				y = HFEN-50-(d->height);
+			} else { // JOUEUR_D
+				x = LFEN-100-(d->width);
+				y = HFEN-50-(d->height);
+			}
+
+			(*character) = createImage(x, y, d->width, d->height, filename, ECRAN_FIGHT, PlanCharacter);
+
+			if (idPlayer == JOUEUR_D) {
+				(*character)->flip = SANDAL2_FLIP_HOR;
+			}
+
+			(*character)->data = d;
 		}
-		if(idPlayer == JOUEUR_D)
-		{
-			(*character)->x = LFEN-100-(d->width);
-			(*character)->y = HFEN-50-(d->height);
-			(*character)->flip = SANDAL2_FLIP_HOR;
-		}
-		(*character)->data = d;
 	}
+}
+
+
+int getCharactersFilename(int idPerso, char filename[50]) {
+	int error = 1;
+	DIR * rep = opendir("./assets/characters");
+	char filenameTmp[20] = "_";
+
+	if (rep != NULL) {
+		struct dirent * ent = NULL;
+
+		while ((ent = readdir(rep)) != NULL) {
+			if (ent->d_name[0] - 48 == idPerso) {
+				strcpy(filenameTmp, ent->d_name);
+			}
+		}
+
+		if (filenameTmp[0] == '_') {
+			error = 0;
+		}
+
+		snprintf(filename, 50, "./assets/characters/%s", filenameTmp);
+
+		closedir(rep);
+	} else {
+		error = 0;
+	}
+	return error;
 }
 
 

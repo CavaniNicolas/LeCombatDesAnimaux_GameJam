@@ -34,6 +34,17 @@ typedef struct DataCharacter {
 DataCharacter_t * initDataCharacter(int, int);
 void initCharacter(int, int, Element **);
 
+/* --------------------------------------------------- */
+/* getCharactersFilename   Récupère le nom du fichier  */
+/*                         de l'image du perso choisie */
+/*                                                     */
+/* En entrée:  idPerso  : int, perso choisi            */
+/*             filename : char[40], nom du fichier     */
+/*                        de l'image du perso choisi   */
+/*                                                     */
+/* En sortie:  int, 1 si pas d'erreurs, 0 sinon        */
+/* --------------------------------------------------- */
+int getCharactersFilename(int, char[40]);
 
 void moveCharacterOn(Element *, SDL_Keycode);
 void moveCharacterOff(Element *, SDL_Keycode);

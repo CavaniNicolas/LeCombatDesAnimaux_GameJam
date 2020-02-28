@@ -16,7 +16,8 @@ enum Player {
 
 enum Perso {
 	GORILLE = 0,
-	CROCODILE = 1
+	CROCODILE = 1,
+	DRAGON = 2
 };
 
 enum Display {
