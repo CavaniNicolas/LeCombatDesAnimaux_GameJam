@@ -21,21 +21,26 @@ enum Perso {
 };
 
 enum Display {
-	ECRAN_TITRE = 0,
+	TITLE_SCREEN = 0,
+	ECRAN_TITRE = 0, //a supprimer un fois terminé
 	ECRAN_CHOIX_PERSO = 1,
 	ECRAN_CHOIX_MAP = 2,
 	ECRAN_FIGHT = 3
 };
 
+enum PlanMenuStart {
+	PlanBackground = 5,
+	PlanTextBack = 4,
+	PlanTextMain = 3,
+	PlanTextFront = 2,
+	PlanCurtains = 1,
+};
+
 // liste des plans du menu
 enum PlanMenu {
   //1 ECRAN_TITRE
-	PlanTitreFond = 15,
 	PlanTitre = 14,
-	PlanStartUp = 8,
-	PlanStartDown = 7,
-	//PlanAnim = 6,
-	PlanRideau = 5,
+
 
 	//2 ECRAN_CHOIX_PERSO
 	PlanContourNoir = 13,

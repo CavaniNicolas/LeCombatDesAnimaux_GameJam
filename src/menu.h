@@ -11,49 +11,6 @@
 *  fonctions : Launcher, depRideau1, depRideau2, aggrandissement, initDataStart, StartDown, StartUp
 */
 
-/******************** ECRAN_TITRE ***********************************/
-/*
-* Fonction : Launcher
-* Objectif : fonction de lancement du jeu
-*/
-void Launcher();
-
-/*
-* Fonction : depRideau1
-* Objectif : déplace le rideau 1 (celui de gauche)
-*/
-void depRideau1(Element * r1);
-
-/*
-* Fonction : depRideau2
-* Objectif : déplace le rideau 2 (celui de droite)
-*/
-void depRideau2(Element * r2);
-
-/*
-* Fonction : aggrandissement
-* Objectif : aggrandit le titre
-*/
-void aggrandissement(Element * titre);
-
-/*
-* Fonction : initDataStart
-* Objectif : initialise la data du bouton start
-*/
-DataStart * initDataStart();
-
-/*
-* Fonction : StartDown
-* Objectif : surligne le texte "start" en vert une fois le bouton pressé
-*/
-void StartDown(Element * start, int i);
-
-/*
-* Fonction : StartUp
-* Objectif : lance le jeu une fois le bouton start relaché
-*/
-void StartUp(Element * start, int i);
-
 /***************************** ECRAN_CHOIX_PERSO ******************************/
 /*
 * Fonction : initChoicePerso
@@ -84,6 +41,7 @@ int WhoIsSelectedPerso(Element * valider);
 void PersoDown(Element * perso, int i);
 
 void PersoUp(Element * perso, int i);
+
 
 /***************************** ECRAN_CHOIX_MAP ******************************/
 /*
