@@ -11,36 +11,7 @@
 *  fonctions : Launcher, depRideau1, depRideau2, aggrandissement, initDataStart, StartDown, StartUp
 */
 
-/***************************** ECRAN_CHOIX_PERSO ******************************/
-/*
-* Fonction : initChoicePerso
-* Objectif : fonction de lancement du choix des perso
-*/
-void initChoicePerso();
 
-void GenerateInfo(int idPerso, Element * txtinfo);
-
-DataValidate * initDataValidate();
-
-void ValiderDown(Element * valider, int i);
-
-void ValiderUp(Element * valider, int i);
-
-DataRetour * initDataRetour();
-
-void RetourDown(Element * retour, int i);
-
-void RetourUp(Element * retour, int i);
-
-DataPerso * initDataPerso(int i);
-
-void UnSelectPerso(Element * perso);
-
-int WhoIsSelectedPerso(Element * valider);
-
-void PersoDown(Element * perso, int i);
-
-void PersoUp(Element * perso, int i);
 
 
 /***************************** ECRAN_CHOIX_MAP ******************************/

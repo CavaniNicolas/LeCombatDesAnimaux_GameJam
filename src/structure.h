@@ -1,8 +1,6 @@
 #ifndef MAIN_H
 #define MAIN_H
 
-#include <SANDAL2/SANDAL2.h>
-
 #define LFEN 1400
 #define HFEN 800
 #define NBPERSO 2
@@ -20,41 +18,20 @@ enum Perso {
 	DRAGON = 2
 };
 
-enum Display {
+enum Display { //good
 	TITLE_SCREEN = 0,
-	ECRAN_TITRE = 0, //a supprimer un fois terminé
+	CHAMP_SELECT = 1,
+
+	//a supprimer un fois terminé
+	ECRAN_TITRE = 0,
 	ECRAN_CHOIX_PERSO = 1,
 	ECRAN_CHOIX_MAP = 2,
 	ECRAN_FIGHT = 3
 };
 
-enum PlanMenuStart {
-	PlanBackground = 5,
-	PlanTextBack = 4,
-	PlanTextMain = 3,
-	PlanTextFront = 2,
-	PlanCurtains = 1,
-};
 
 // liste des plans du menu
 enum PlanMenu {
-  //1 ECRAN_TITRE
-	PlanTitre = 14,
-
-
-	//2 ECRAN_CHOIX_PERSO
-	PlanContourNoir = 13,
-	PlanContourBlanc = 12,
-	PlanFondNoir = 11,
-	PlanBtnRetourUp = 10,
-	PlanBtnRetourDown = 9,
-	PlanPersoUp = 8,
-	PlanPersoDown = 7,
-	PlanInfo = 6,
-	PlanInfoModif = 5,
-	PlanBtnValiderUp = 3,
-	PlanBtnValiderDown = 2,
-
 	//3 ECRAN_CHOIX_MAP
 	PlanMapUp = 5,
 	PlanMapDown = 4

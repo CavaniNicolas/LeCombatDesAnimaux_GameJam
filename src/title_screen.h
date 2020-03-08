@@ -2,6 +2,15 @@
 #define TITLESCREEN_H
 
 /******************** ECRAN_TITRE ***********************************/
+
+enum PlanMenuStart {
+	PlanBackground = 5,
+	PlanTextBack = 4,
+	PlanTextMain = 3,
+	PlanTextFront = 2,
+	PlanCurtains = 1,
+};
+
 /*
 * Fonction : Launcher
 * Objectif : fonction de lancement du jeu

@@ -5,7 +5,6 @@
 #include "title_screen.h"
 
 #include "menu.h"
-#include "champ_select.h"
 
 /******************* TITLE_SCREEN ***********************************/
 // Init title_screen
@@ -137,7 +136,6 @@ void StartUp(Element * start, int i) {
 	d->verif = 0;
 
 	clearPlanDisplayCode(TITLE_SCREEN, PlanTextFront);
-	setDisplayCodeWindow(ECRAN_CHOIX_PERSO);
 
 	// free le texte
 

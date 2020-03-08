@@ -20,14 +20,14 @@ void initFight(int idCharacterG, int idCharacterD, int idMap) {
 	addElementToElement(characterD, characterG);
 
 	/*Fonctions à appeler lors de l'appuie / le relachement d'une touche / les actions à effectuer*/
-	setKeyPressedElement(characterG,moveCharacterOn);
-	setKeyReleasedElement(characterG,moveCharacterOff);
-	setActionElement(characterG,actionCharacters);
+	setKeyPressedElement(characterG, moveCharacterOn);
+	setKeyReleasedElement(characterG, moveCharacterOff);
+	setActionElement(characterG, actionCharacters);
 
 	/*Fonctions à appeler lors de l'appuie / le relachement d'une touche / les actions à effectuer*/
-	setKeyPressedElement(characterD,moveCharacterOn);
-	setKeyReleasedElement(characterD,moveCharacterOff);
-	setActionElement(characterD,actionCharacters);
+	setKeyPressedElement(characterD, moveCharacterOn);
+	setKeyReleasedElement(characterD, moveCharacterOff);
+	setActionElement(characterD, actionCharacters);
 }
 
 
