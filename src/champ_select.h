@@ -6,11 +6,11 @@
 /*********************** CHAMP_SELECT ******************************/
 
 enum PlanChampSelect {
-	PlanBackground = 99,
+	PlanBackgroundCS = 99,
 
 	PlanBlock = 89,
 
-
+	PlanChampSelect = 79,
 
 
 
@@ -31,8 +31,11 @@ enum PlanChampSelect {
 
 
 void ChampSelect();
+void createCharactersSelect(int xBlock, int yBlock, int wBlock, int hBlock);
+void generateAllDisplays();
 void createValidateInBlock(int, int, int, int);
 void createStatsNames(int xBlock, int yBlock, int wBlock, int hBlock);
+void createStatsGraphs(int xBlock, int yBlock, int wBlock, int hBlock);
 
 /*
 * Fonction : initChoicePerso

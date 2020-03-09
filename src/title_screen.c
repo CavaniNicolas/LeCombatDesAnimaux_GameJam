@@ -4,6 +4,7 @@
 #include "structure.h"
 #include "title_screen.h"
 
+#include "champ_select.h"
 #include "menu.h"
 
 /******************* TITLE_SCREEN ***********************************/
@@ -20,7 +21,7 @@ void Launcher() {
 	char font[100]      = "fonts/arial.ttf";
 	char titleText[100] = "Le Combat Des Animaux";
 
-	createImage(0, 0, LFEN, HFEN, "assets/fond.jpg", TITLE_SCREEN, PlanBackground);
+	createImage(0, 0, LFEN, HFEN, "assets/fond.jpg", TITLE_SCREEN, PlanBackgroundTS);
 
 	Element * title       = createText(xTitle, yTitle, wTitle, hTitle, textSizeTitle, font, titleText, red, SANDAL2_BLENDED, TITLE_SCREEN, PlanTextMain);
 	Element * titleShadow = createText(xTitle-2, yTitle+5, wTitle, hTitle, textSizeTitle, font, titleText, black, SANDAL2_BLENDED, TITLE_SCREEN, PlanTextBack);

@@ -4,7 +4,7 @@
 /******************** ECRAN_TITRE ***********************************/
 
 enum PlanMenuStart {
-	PlanBackground = 5,
+	PlanBackgroundTS = 5,
 	PlanTextBack = 4,
 	PlanTextMain = 3,
 	PlanTextFront = 2,

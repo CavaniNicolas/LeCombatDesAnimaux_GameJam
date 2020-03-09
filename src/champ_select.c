@@ -10,56 +10,118 @@
 // init
 
 void ChampSelect() {
+	generateAllDisplays();
+
+
+
+}
+
+
+void generateAllDisplays() {
 	setDisplayCodeWindow(CHAMP_SELECT);
 	int white[4] = {255, 255, 255, 255};
 	int black[4] = {0, 0, 0, 255};
 
-	int xBlock = LFEN / 2 + 120;
-	int yBlock = HFEN / 23;
-	int wBlock = LFEN - 50 - xBlock;
-	int hBlock = HFEN - 2 * yBlock;
+	int xStatBlock = 0.6 * LFEN;
+	int yStatBlock = 0.05 * HFEN;
+	int wStatBlock = 0.4 * LFEN - yStatBlock;
+	int hStatBlock = HFEN - 2 * yStatBlock;
 
-	int statsNb = 3; // Nombre de champs pour les stats des perso
-
-	createImage(0, 0, LFEN, HFEN, "assets/map0.jpg", CHAMP_SELECT, PlanBackground);
+	createImage(0, 0, LFEN, HFEN, "assets/map0.jpg", CHAMP_SELECT, PlanBackgroundCS);
 
 	// Block d'info à droite
-	createBlock(xBlock, yBlock, wBlock, hBlock, white, CHAMP_SELECT, PlanBlock);
-	createBlock(xBlock+2, yBlock+2, wBlock-4, hBlock-4, black, CHAMP_SELECT, PlanBlock-1);
-	createBlock(xBlock, HFEN/2-50, wBlock, 2, white, CHAMP_SELECT, PlanBlock-1); // Ligne séparatrice dans le block
+	createBlock(xStatBlock, yStatBlock, wStatBlock, hStatBlock, white, CHAMP_SELECT, PlanBlock);
+	createBlock(xStatBlock+2, yStatBlock+2, wStatBlock-4, hStatBlock-4, black, CHAMP_SELECT, PlanBlock-1);
+	createBlock(xStatBlock, yStatBlock+0.4*hStatBlock, wStatBlock, 2, white, CHAMP_SELECT, PlanBlock-1); // Ligne séparatrice dans le block
 
-	createValidateInBlock(xBlock, yBlock, wBlock, hBlock);
+	// Button OK
+	createValidateInBlock(xStatBlock, yStatBlock, wStatBlock, hStatBlock);
 
-	createStatsNames(xBlock, HFEN/2-50, wBlock, hBlock - yBlock - HFEN/2-50);
+	// Stats Texts
+	createStatsNames(xStatBlock, yStatBlock+0.4*hStatBlock, wStatBlock, 0.6*hStatBlock);
 
-createBlock(0, 0, 400, 400, black, CHAMP_SELECT, PlanBlock);
-createStatsNames(0, 0, 400, 400);
+	// Characters
+	int xCharBlock = yStatBlock;
+	int yCharBlock = yStatBlock;
+	int wCharBlock = 0.6 * LFEN - 4 * yStatBlock;
+	int hCharBlock = hStatBlock;
+
+createBlock(xCharBlock, yCharBlock, wCharBlock, hCharBlock, white, CHAMP_SELECT, PlanChampSelect);
+createBlock(xCharBlock+2, yCharBlock+2, wCharBlock-4, hCharBlock-4, black, CHAMP_SELECT, PlanChampSelect);
+createCharactersSelect(xCharBlock+2, yCharBlock+2, wCharBlock-4, hCharBlock-4);
+
+	createStatsGraphs(xStatBlock, yStatBlock+0.4*hStatBlock, wStatBlock, 0.6*hStatBlock);
+}
+
+
+void createCharactersSelect(int xBlock, int yBlock, int wBlock, int hBlock) {
+	char filenameCharacter[10] = "c0.png";
+
+	int nbPerso                = 9;
+	int nbPersoParLigne        = 3;
+
+	int totalSpaceUsed = 0.8 * wBlock;
+	int totalSpaceFree = wBlock - totalSpaceUsed;
+	int interObjSpace  = totalSpaceFree / (2 * nbPersoParLigne);
+
+	int sIm = totalSpaceUsed / nbPersoParLigne; // side of the square
+	int xIm = xBlock;
+	int yIm = yBlock + interObjSpace;
+
+	int white[4] = {255, 255, 255, 255};
+	int i = 1; int y = 1;
+
+	for (i=1; i<=nbPerso; i++) {
+
+		if (nbPersoParLigne%y < nbPersoParLigne) {
+			xIm += interObjSpace;
+			createBlock(xIm, yIm, sIm, sIm, white, CHAMP_SELECT, PlanChampSelect);
+			xIm += sIm + interObjSpace;
+			puts("ici");
+		} else {
+			y=1;
+			xIm = xBlock + interObjSpace;
+			yIm += sIm + 2 * interObjSpace;
+			createBlock(xIm, yIm, sIm, sIm, white, CHAMP_SELECT, PlanChampSelect);
+			xIm += sIm + interObjSpace;
+			puts("la");
+		}
+		y++;
+
+		filenameCharacter[1] = i + 48;
+		//createImage(0, 0, LFEN, HFEN, filenameCharacter, CHAMP_SELECT, PlanChampSelect);
+	}
+}
+
+void createStatsGraphs(int xBlock, int yBlock, int wBlock, int hBlock) {
+	int statsNb    = 4;
+	int fieldSpace = hBlock / statsNb;
+
+	//createBlock();
 }
 
 void createStatsNames(int xBlock, int yBlock, int wBlock, int hBlock) {
-	int white[4]   = {255, 255, 255, 255};
-	int statsNb    = 4;
-	int fieldSpace = hBlock / (statsNb);
+	int statsNb    = 4; // Nombre de champs pour les stats des perso
+	int fieldSpace = hBlock / statsNb; 
 
-	int xText =	xBlock + 0.2*wBlock;
+	int xText =	xBlock;
 	int yText = yBlock;
-	int wText = 0.3 * wBlock;
-	int hText = 0.1 * hBlock;
+	int wText = 0.4 * wBlock;
+	int hText = fieldSpace;
 
-	Element * textInfo     = createText(xBlock , yBlock, wText, hText, 50, "fonts/arial.ttf", "Infos Personnage", white, SANDAL2_BLENDED, CHAMP_SELECT, PlanBlock-2);
-	Element * textHP       = createText(xBlock , yBlock+fieldSpace, wText, hText, 50, "fonts/arial.ttf", "HP", white, SANDAL2_BLENDED, CHAMP_SELECT, PlanBlock-2);
-	Element * textSTRENGTH = createText(xBlock , yBlock+2*fieldSpace, wText, hText, 50, "fonts/arial.ttf", "STRENGTH", white, SANDAL2_BLENDED, CHAMP_SELECT, PlanBlock-2);
-	Element * textSPEED    = createText(xBlock , yBlock+3*fieldSpace, wText, hText, 50, "fonts/arial.ttf", "SPEED", white, SANDAL2_BLENDED, CHAMP_SELECT, PlanBlock-2);
+	Element * textInfo     = createImage(xText, yBlock, wText, hText, "assets/texts/Infos_Perso.png", CHAMP_SELECT, PlanBlock-2);
+	Element * textHP       = createImage(xText, yBlock+fieldSpace, wText, hText, "assets/texts/HP.png", CHAMP_SELECT, PlanBlock-2);
+	Element * textSTRENGTH = createImage(xText, yBlock+2*fieldSpace, wText, hText, "assets/texts/STRENGTH.png", CHAMP_SELECT, PlanBlock-2);
+	Element * textSPEED    = createImage(xText, yBlock+3*fieldSpace, wText, hText, "assets/texts/SPEED.png", CHAMP_SELECT, PlanBlock-2);
 }
 
 void createValidateInBlock(int xBlock, int yBlock, int wBlock, int hBlock) {
 	int red[4] = {255, 0, 0, 255};
-	(void) yBlock;
 
 	int wVal = wBlock/3;
 	int hVal = 0.1*hBlock;
 	int xVal = xBlock+wVal;
-	int yVal = HFEN/2-50 - hVal/2 ;
+	int yVal = yBlock+0.4*hBlock - hVal/2 ;
 
 	Element * okButton = createBlock(xVal, yVal, wVal, hVal, red, CHAMP_SELECT, PlanBlock-4);
 
@@ -83,7 +145,7 @@ void initChoicePerso() {
 	int titreHeight          = 150;
 	char s[14]               = "assets/p9.png";
 
-	createImage(0, 0, LFEN, HFEN, "assets/fond.jpg", CHAMP_SELECT, PlanBackground);
+	createImage(0, 0, LFEN, HFEN, "assets/fond.jpg", CHAMP_SELECT, PlanBackgroundCS);
 	createText(xTitle, yTitle, 600, titreHeight, 50, "fonts/arial.ttf", "Choix du perso J1", white, SANDAL2_BLENDED, CHAMP_SELECT, PlanTitre);
 
 	Element * txtinfo     = createText(5*xTitle-20, yTitle, 400, 150, 50, "fonts/arial.ttf", "Infos Personnage", white, SANDAL2_BLENDED, CHAMP_SELECT, PlanInfo);
