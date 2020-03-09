@@ -32,7 +32,7 @@ enum PlanChampSelect {
 
 void ChampSelect();
 void createValidateInBlock(int, int, int, int);
-void createStatsNames(int xBlock, int yBlock, int wBlock, int hBlock, int statsNb);
+void createStatsNames(int xBlock, int yBlock, int wBlock, int hBlock);
 
 /*
 * Fonction : initChoicePerso

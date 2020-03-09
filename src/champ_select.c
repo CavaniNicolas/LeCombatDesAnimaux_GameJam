@@ -11,8 +11,8 @@
 
 void ChampSelect() {
 	setDisplayCodeWindow(CHAMP_SELECT);
-	int white[4]             = {255, 255, 255, 255};
-	int black[4]             = {0, 0, 0, 255};
+	int white[4] = {255, 255, 255, 255};
+	int black[4] = {0, 0, 0, 255};
 
 	int xBlock = LFEN / 2 + 120;
 	int yBlock = HFEN / 23;
@@ -30,25 +30,26 @@ void ChampSelect() {
 
 	createValidateInBlock(xBlock, yBlock, wBlock, hBlock);
 
-	createStatsNames(xBlock, HFEN/2-50, wBlock, hBlock - yBlock - HFEN/2-50, statsNb);
+	createStatsNames(xBlock, HFEN/2-50, wBlock, hBlock - yBlock - HFEN/2-50);
 
-
+createBlock(0, 0, 400, 400, black, CHAMP_SELECT, PlanBlock);
+createStatsNames(0, 0, 400, 400);
 }
 
-void createStatsNames(int xBlock, int yBlock, int wBlock, int hBlock, int statsNb) {
-	int white[4]             = {255, 255, 255, 255};
-	int sbf = hBlock / (statsNb + 1); // spaceBetweenFields
-	(void) wBlock;
+void createStatsNames(int xBlock, int yBlock, int wBlock, int hBlock) {
+	int white[4]   = {255, 255, 255, 255};
+	int statsNb    = 4;
+	int fieldSpace = hBlock / (statsNb);
 
-	int xText =	xBlock + 30;
+	int xText =	xBlock + 0.2*wBlock;
 	int yText = yBlock;
-	int wText = 200;
-	int hText = 50;
+	int wText = 0.3 * wBlock;
+	int hText = 0.1 * hBlock;
 
-	Element * textInfo     = createText(xText , yText+sbf, wText, hText, 50, "fonts/arial.ttf", "Infos Personnage", white, SANDAL2_BLENDED, CHAMP_SELECT, PlanBlock-2);
-	Element * textHP       = createText(xText , yText+2*sbf, wText, hText, 50, "fonts/arial.ttf", "HP", white, SANDAL2_BLENDED, CHAMP_SELECT, PlanBlock-2);
-	Element * textSTRENGTH = createText(xText , yText+3*sbf, wText, hText, 50, "fonts/arial.ttf", "STRENGTH", white, SANDAL2_BLENDED, CHAMP_SELECT, PlanBlock-2);
-	Element * textSPEED    = createText(xText , yText+4*sbf, wText, hText, 50, "fonts/arial.ttf", "SPEED", white, SANDAL2_BLENDED, CHAMP_SELECT, PlanBlock-2);
+	Element * textInfo     = createText(xBlock , yBlock, wText, hText, 50, "fonts/arial.ttf", "Infos Personnage", white, SANDAL2_BLENDED, CHAMP_SELECT, PlanBlock-2);
+	Element * textHP       = createText(xBlock , yBlock+fieldSpace, wText, hText, 50, "fonts/arial.ttf", "HP", white, SANDAL2_BLENDED, CHAMP_SELECT, PlanBlock-2);
+	Element * textSTRENGTH = createText(xBlock , yBlock+2*fieldSpace, wText, hText, 50, "fonts/arial.ttf", "STRENGTH", white, SANDAL2_BLENDED, CHAMP_SELECT, PlanBlock-2);
+	Element * textSPEED    = createText(xBlock , yBlock+3*fieldSpace, wText, hText, 50, "fonts/arial.ttf", "SPEED", white, SANDAL2_BLENDED, CHAMP_SELECT, PlanBlock-2);
 }
 
 void createValidateInBlock(int xBlock, int yBlock, int wBlock, int hBlock) {
