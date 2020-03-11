@@ -54,7 +54,7 @@ createBlock(marge+2, marge+2, wCharBlock-4, hBlock-4, black, CHAMP_SELECT, PlanC
 //createCharactersSelect(marge+2, marge+2, wCharBlock-4, hBlock-4, 8, 3);
 //createCharactersSelect(0, 0, LFEN, HFEN, 25, 7);
 
-int nbChara = 5; int nbLines = 0; int nbColumns = 0; int sizeSideIm = 0;
+int nbChara = 8; int nbLines = 0; int nbColumns = 0; int sizeSideIm = 0;
 createFieldsChampSelectInBlock(marge+2, marge+2, wCharBlock-4, hBlock-4, nbChara, &nbLines, &nbColumns, &sizeSideIm);
 
 }
@@ -72,8 +72,10 @@ void createFieldsChampSelectInBlock(int xBlock, int yBlock, int wBlock, int hBlo
 void setOptimizedLinesAndColumns(int wBlock, int hBlock, int nbChara, int * nbLines, int * nbColumns, int * sizeSideIm) {
 	if (*nbColumns > 0 && *nbLines > 0) {
 		printf("Ne pas entrer à la fois nbColumns et nbLines > 0\n"\
-			   "(l'utilisateur ne doit pas appliquer de contraintes sur les deux paramètres en même temps)\n"\
-			   "Mettre 0 pour une optimisation automatique");
+			   "(Ne pas appliquer de contraintes sur les deux paramètres en même temps)\n"\
+			   "Mettre 0 pour une optimisation automatique d'une ou des deux variables\n");
+		optimizeNumberOfLinesColumns(wBlock, hBlock, nbChara, nbLines, nbColumns, sizeSideIm);
+
 	} else {
 
 		if (*nbColumns > 0) {
@@ -122,36 +124,42 @@ void optimizeNumberOfLinesColumns(int wBlock, int hBlock, int nbChara, int * nbL
 	int ecartSImNouv = 0;
 
 	int sImAncien = 0;
-	int ecartSImAncien = hBlock; //max entre hBlock et hBlock
+	int ecartSImAncien = (hBlock > wBlock)? hBlock : wBlock;; //max entre hBlock et hBlock
 
-	while (good == 0 && *nbColumns > 0) {
+	while (good == 0) {
 		sImX = 0.8 * wBlock / *nbColumns;
 		sImY = 0.8 * hBlock / *nbLines;
 		sImNouv = (sImX < sImY)? sImX : sImY;
 		ecartSImNouv = abs(sImX - sImY);
 
 		if (ecartSImNouv > ecartSImAncien) {
-			*sizeSideIm = sImAncien;
 			good = 1;
 
 			// on remet les bonnes valeurs de ligne et de colonne correspondantes aux bonnes valeurs de sizeSideIm
 			(*nbColumns)++;
 			(*nbLines)--;
-			if (*nbColumns * *nbLines < nbChara) {
-				(*nbLines)++;
-			}
+
 
 		} else {
 			sImAncien = sImNouv;
 			ecartSImAncien = ecartSImNouv;
 			(*nbColumns)--;
-
-			if (*nbColumns * *nbLines < nbChara) {
-				(*nbLines)++;
-			}
 		}
 
+
+		if (*nbColumns == 0) {
+			good = 1;
+			(*nbColumns)++;
+		}
+		if (*nbLines == 0) {
+			good = 1;
+			(*nbLines)++;
+		}
+		if (*nbColumns * *nbLines < nbChara) {
+			(*nbLines)++;
+		}
 	}
+	*sizeSideIm = sImAncien;
 
 	printf("colonne = %d, ligne = %d \n", *nbColumns, * nbLines);
 
