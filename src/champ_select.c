@@ -44,30 +44,79 @@ void generateAllDisplays() {
 
 	// Stats Texts
 	createStatsNames(xStatBlock, marge+0.4*hBlock, wStatBlock, 0.6*hBlock);
+	createStatsGraphs(xStatBlock, marge+0.4*hBlock, wStatBlock, 0.6*hBlock);
 
 	// Characters
 	
 
 createBlock(marge, marge, wCharBlock, hBlock, white, CHAMP_SELECT, PlanChampSelect);
 createBlock(marge+2, marge+2, wCharBlock-4, hBlock-4, black, CHAMP_SELECT, PlanChampSelect);
-createCharactersSelect(marge+2, marge+2, wCharBlock-4, hBlock-4, 5, 3);
+//createCharactersSelect(marge+2, marge+2, wCharBlock-4, hBlock-4, 8, 3);
 //createCharactersSelect(0, 0, LFEN, HFEN, 25, 7);
 
-	createStatsGraphs(xStatBlock, marge+0.4*hBlock, wStatBlock, 0.6*hBlock);
+int nbChara = 5; int nbLines = 0; int nbColumns = 0; int sizeSideIm = 0;
+createFieldsChampSelectInBlock(marge+2, marge+2, wCharBlock-4, hBlock-4, nbChara, &nbLines, &nbColumns, &sizeSideIm);
+
 }
 
-void createCharactersSelect(int xBlock, int yBlock, int wBlock, int hBlock, int nbPerso, int nbPersoParLigne) {
-	char filenameCharacter[10] = "c0.png";
 
-	(void) nbPersoParLigne;
+// affiche les cases pour la champ select et les rends clickable
+void createFieldsChampSelectInBlock(int xBlock, int yBlock, int wBlock, int hBlock, int nbChara, int * nbLines, int * nbColumns, int * sizeSideIm) {
+	setOptimizedLinesAndColumns(wBlock, hBlock, nbChara, nbLines, nbColumns, sizeSideIm);
+	displayBlocksInOptimizedPosition(xBlock, yBlock, wBlock, hBlock, nbChara, *nbLines, *nbColumns, *sizeSideIm);
+
+}
+
+
+//modifie (optimise) les valeurs de lines et columns si elles sont = 0.
+void setOptimizedLinesAndColumns(int wBlock, int hBlock, int nbChara, int * nbLines, int * nbColumns, int * sizeSideIm) {
+	if (*nbColumns > 0 && *nbLines > 0) {
+		printf("Ne pas entrer à la fois nbColumns et nbLines > 0\n"\
+			   "(l'utilisateur ne doit pas appliquer de contraintes sur les deux paramètres en même temps)\n"\
+			   "Mettre 0 pour une optimisation automatique");
+	} else {
+
+		if (*nbColumns > 0) {
+
+			setSecondVariable(*nbColumns, nbLines, sizeSideIm, nbChara, wBlock, hBlock);
+
+		} else if (*nbLines > 0){
+
+			setSecondVariable(*nbLines, nbColumns, sizeSideIm, nbChara, wBlock, hBlock);
+
+		} else {
+			optimizeNumberOfLinesColumns(wBlock, hBlock, nbChara, nbLines, nbColumns, sizeSideIm);
+		}
+
+	}
+}
+
+
+void setSecondVariable(int varCte, int * varAdapting, int * sizeSideIm, int nbChara, int wBlock, int hBlock) {
+	int sizeSideImX = 0;
+	int sizeSideImY = 0;
+
+	// varCte, varAdapting : nombre de lignes ou de colonnes, l'une est fixe et détermine la valeur de l'autre
+	*varAdapting = nbChara / varCte;
+	if (nbChara%varCte != 0) {
+		(*varAdapting) ++;
+	}
+
+	sizeSideImX = 0.8 * wBlock / varCte;
+	sizeSideImY = 0.8 * hBlock / *varAdapting;
+	*sizeSideIm  = (sizeSideImX < sizeSideImY)? sizeSideImX : sizeSideImY; // side of the square
+}
+
+
+//calcul le nombre optimal de lignes et colonnes
+void optimizeNumberOfLinesColumns(int wBlock, int hBlock, int nbChara, int * nbLines, int * nbColumns, int * sizeSideIm) {
 	int good = 0;
 
-	int nbColonne = nbPerso;
-	int nbLigne   = 1;
+	*nbColumns = nbChara;
+	*nbLines   = 1;
 
 	int sImX = 0;
 	int sImY = 0;
-	int sIm = 0; //side of the square
 
 	int sImNouv = 0;
 	int ecartSImNouv = 0;
@@ -75,75 +124,80 @@ void createCharactersSelect(int xBlock, int yBlock, int wBlock, int hBlock, int 
 	int sImAncien = 0;
 	int ecartSImAncien = hBlock; //max entre hBlock et hBlock
 
-	while (good == 0 && nbColonne > 0) {
-		sImX = 0.8 * wBlock / nbColonne;
-		sImY = 0.8 * hBlock / nbLigne;
+	while (good == 0 && *nbColumns > 0) {
+		sImX = 0.8 * wBlock / *nbColumns;
+		sImY = 0.8 * hBlock / *nbLines;
 		sImNouv = (sImX < sImY)? sImX : sImY;
 		ecartSImNouv = abs(sImX - sImY);
 
 		if (ecartSImNouv > ecartSImAncien) {
-			sIm = sImAncien;
+			*sizeSideIm = sImAncien;
 			good = 1;
 
-			// on remet les bonnes valeurs de ligne et de colonne correspondantes aux bonnes valeurs de sIm
-			nbColonne++;
-			nbLigne--;
-			if (nbColonne * nbLigne < nbPerso) {
-				nbLigne ++;
+			// on remet les bonnes valeurs de ligne et de colonne correspondantes aux bonnes valeurs de sizeSideIm
+			(*nbColumns)++;
+			(*nbLines)--;
+			if (*nbColumns * *nbLines < nbChara) {
+				(*nbLines)++;
 			}
 
 		} else {
 			sImAncien = sImNouv;
 			ecartSImAncien = ecartSImNouv;
-			nbColonne--;
+			(*nbColumns)--;
 
-			if (nbColonne * nbLigne < nbPerso) {
-				nbLigne ++;
+			if (*nbColumns * *nbLines < nbChara) {
+				(*nbLines)++;
 			}
 		}
 
 	}
 
-	printf("colonne = %d, ligne = %d \n",nbColonne, nbLigne );
+	printf("colonne = %d, ligne = %d \n", *nbColumns, * nbLines);
+
+}
 
 
-
-	int xTotalSpaceUsed = nbColonne * sIm;
-	int xTotalSpaceFree = wBlock - xTotalSpaceUsed;
-	int xinterObjSpace  = xTotalSpaceFree / (2 * nbColonne);
-
-	int yTotalSpaceUsed = nbLigne * sIm;
-	int yTotalSpaceFree = hBlock - yTotalSpaceUsed;
-	int yinterObjSpace  = yTotalSpaceFree / (2 * nbLigne);
-
-	int xIm = xBlock + xinterObjSpace;
-	int yIm = yBlock + yinterObjSpace;
+// affiche les blocs une fois quon connait le nombre de lignes et colonnes souhaitées
+void displayBlocksInOptimizedPosition(int xBlock, int yBlock, int wBlock, int hBlock, int nbChara, int nbLines, int nbColumns, int sizeSideIm) {
+	//char filenameCharacter[10] = "c0.png";
 
 	int white[4] = {255, 255, 255, 255};
 	int i = 1; int y = 1;
 
-	for (i=1; i<=nbPerso; i++) {
-		createBlock(xIm, yIm, sIm, sIm, white, CHAMP_SELECT, PlanChampSelect);
+	int xTotalSpaceUsed = nbColumns * sizeSideIm;
+	int xTotalSpaceFree = wBlock - xTotalSpaceUsed;
+	int xinterObjSpace  = xTotalSpaceFree / (2 * nbColumns);
+
+	int yTotalSpaceUsed = nbLines * sizeSideIm;
+	int yTotalSpaceFree = hBlock - yTotalSpaceUsed;
+	int yinterObjSpace  = yTotalSpaceFree / (2 * nbLines);
+
+	int xIm = xBlock + xinterObjSpace;
+	int yIm = yBlock + yinterObjSpace;
+
+	for (i=1; i<=nbChara; i++) {
+		createBlock(xIm, yIm, sizeSideIm, sizeSideIm, white, CHAMP_SELECT, PlanChampSelect);
 		y++;
 
-		if (y <= nbColonne) {
-			xIm += sIm + 2 * xinterObjSpace;
-			puts("ici");
+		if (y <= nbColumns) {
+			xIm += sizeSideIm + 2 * xinterObjSpace;
 
 		} else {
 			xIm = xBlock + xinterObjSpace;
-			yIm += sIm + 2 * yinterObjSpace;
+			yIm += sizeSideIm + 2 * yinterObjSpace;
 			y = 1;
-			puts("la");
 		}
 
-		filenameCharacter[1] = i + 48;
+		//filenameCharacter[1] = i + 48;
 		//createImage(0, 0, LFEN, HFEN, filenameCharacter, CHAMP_SELECT, PlanChampSelect);
 	}
+
 }
 
-/*void createCharactersSelect(int xBlock, int yBlock, int wBlock, int hBlock, int nbPerso, int nbPersoParLigne) {
-	char filenameCharacter[10] = "c0.png";
+
+void createCharactersSelect(int xBlock, int yBlock, int wBlock, int hBlock, int nbPerso, int nbPersoParLigne) {
+	//char filenameCharacter[10] = "c0.png";
 
 	int nbLigne = nbPerso / nbPersoParLigne;
 	if (nbPerso%nbPersoParLigne != 0) {
@@ -183,16 +237,22 @@ void createCharactersSelect(int xBlock, int yBlock, int wBlock, int hBlock, int 
 			puts("la");
 		}
 
-		filenameCharacter[1] = i + 48;
+		//filenameCharacter[1] = i + 48;
 		//createImage(0, 0, LFEN, HFEN, filenameCharacter, CHAMP_SELECT, PlanChampSelect);
 	}
-}*/
+}
 
 
 void createStatsGraphs(int xBlock, int yBlock, int wBlock, int hBlock) {
+	(void) xBlock;
+	(void) yBlock;
+	(void) wBlock;
+	(void) hBlock;
+
 	int statsNb    = 4;
 	int fieldSpace = hBlock / statsNb;
 
+	(void) fieldSpace;
 	//createBlock();
 }
 
@@ -201,14 +261,13 @@ void createStatsNames(int xBlock, int yBlock, int wBlock, int hBlock) {
 	int fieldSpace = hBlock / statsNb; 
 
 	int xText =	xBlock;
-	int yText = yBlock;
 	int wText = 0.4 * wBlock;
 	int hText = fieldSpace;
 
-	Element * textInfo     = createImage(xText, yBlock, wText, hText, "assets/texts/Infos_Perso.png", CHAMP_SELECT, PlanBlock-2);
-	Element * textHP       = createImage(xText, yBlock+fieldSpace, wText, hText, "assets/texts/HP.png", CHAMP_SELECT, PlanBlock-2);
-	Element * textSTRENGTH = createImage(xText, yBlock+2*fieldSpace, wText, hText, "assets/texts/STRENGTH.png", CHAMP_SELECT, PlanBlock-2);
-	Element * textSPEED    = createImage(xText, yBlock+3*fieldSpace, wText, hText, "assets/texts/SPEED.png", CHAMP_SELECT, PlanBlock-2);
+	createImage(xText, yBlock, wText, hText, "assets/texts/Infos_Perso.png", CHAMP_SELECT, PlanBlock-2); // Element * textInfo
+	createImage(xText, yBlock+fieldSpace, wText, hText, "assets/texts/HP.png", CHAMP_SELECT, PlanBlock-2); // Element * textHP
+	createImage(xText, yBlock+2*fieldSpace, wText, hText, "assets/texts/STRENGTH.png", CHAMP_SELECT, PlanBlock-2); // Element * textSTRENGTH
+	createImage(xText, yBlock+3*fieldSpace, wText, hText, "assets/texts/SPEED.png", CHAMP_SELECT, PlanBlock-2); // Element * textSPEED
 }
 
 void createValidateInBlock(int xBlock, int yBlock, int wBlock, int hBlock) {
@@ -219,7 +278,8 @@ void createValidateInBlock(int xBlock, int yBlock, int wBlock, int hBlock) {
 	int xVal = xBlock+wVal;
 	int yVal = yBlock+0.4*hBlock - hVal/2 ;
 
-	Element * okButton = createBlock(xVal, yVal, wVal, hVal, red, CHAMP_SELECT, PlanBlock-4);
+	//Element * okButton = 
+	createBlock(xVal, yVal, wVal, hVal, red, CHAMP_SELECT, PlanBlock-4);
 
 	// fcts a assigner a ce block lorsquon clic dessus
 }

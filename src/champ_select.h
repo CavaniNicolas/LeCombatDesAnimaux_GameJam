@@ -33,9 +33,32 @@ enum PlanChampSelect {
 void ChampSelect();
 void createCharactersSelect(int xBlock, int yBlock, int wBlock, int hBlock, int nbPerso, int nbPersoParLigne);
 void generateAllDisplays();
+
+// affiche les cases pour la champ select et les rends clickable
+void createFieldsChampSelectInBlock(int xBlock, int yBlock, int wBlock, int hBlock, int nbChara, int * nbLines, int * nbColumns, int * sizeSideIm);
+
+//calcul le nombre optimal de lignes et colonnes en fct du nombre total delements a placer et autorise de contraindre un des deux parametres
+void setOptimizedLinesAndColumns(int wBlock, int hBlock, int nbChara, int * nbLines, int * nbColumns, int * sizeSideIm);
+
+// varCte, varAdapting : nombre de lignes ou de colonnes, l'une est fixe et détermine la valeur de l'autre
+void setSecondVariable(int varCte, int * varAdapting, int * sizeSideIm, int nbChara, int wBlock, int hBlock);
+
+//calcul le nombre optimal de lignes et colonnes en fct du nombre total delements a placer
+void optimizeNumberOfLinesColumns(int wBlock, int hBlock, int nbChara, int * nbLines, int * nbColumns, int * sizeSideIm);
+
+// affiche les blocs une fois quon connait le nombre de lignes et colonnes souhaitées
+void displayBlocksInOptimizedPosition(int xBlock, int yBlock, int wBlock, int hBlock, int nbChara, int nbLines, int nbColumns, int sizeSideIm);
+
+
+
+// menu stats
 void createValidateInBlock(int, int, int, int);
 void createStatsNames(int xBlock, int yBlock, int wBlock, int hBlock);
 void createStatsGraphs(int xBlock, int yBlock, int wBlock, int hBlock);
+
+
+
+
 
 /*
 * Fonction : initChoicePerso
