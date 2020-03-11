@@ -50,8 +50,8 @@ void generateAllDisplays() {
 
 createBlock(marge, marge, wCharBlock, hBlock, white, CHAMP_SELECT, PlanChampSelect);
 createBlock(marge+2, marge+2, wCharBlock-4, hBlock-4, black, CHAMP_SELECT, PlanChampSelect);
-//createCharactersSelect(marge+2, marge+2, wCharBlock-4, hBlock-4, 24, 3);
-createCharactersSelect(0, 0, LFEN, HFEN, 25, 7);
+createCharactersSelect(marge+2, marge+2, wCharBlock-4, hBlock-4, 5, 3);
+//createCharactersSelect(0, 0, LFEN, HFEN, 25, 7);
 
 	createStatsGraphs(xStatBlock, marge+0.4*hBlock, wStatBlock, 0.6*hBlock);
 }
