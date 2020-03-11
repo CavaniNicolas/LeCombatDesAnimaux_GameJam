@@ -2,6 +2,7 @@
 #include <SANDAL2/SANDAL2.h>
 #include "structure.h"
 #include "champ_select.h"
+#include <stdlib.h>
 
 #include "menu.h"
 
@@ -49,13 +50,99 @@ void generateAllDisplays() {
 
 createBlock(marge, marge, wCharBlock, hBlock, white, CHAMP_SELECT, PlanChampSelect);
 createBlock(marge+2, marge+2, wCharBlock-4, hBlock-4, black, CHAMP_SELECT, PlanChampSelect);
-createCharactersSelect(marge+2, marge+2, wCharBlock-4, hBlock-4, 25, 3);
+//createCharactersSelect(marge+2, marge+2, wCharBlock-4, hBlock-4, 24, 3);
+createCharactersSelect(0, 0, LFEN, HFEN, 25, 7);
 
 	createStatsGraphs(xStatBlock, marge+0.4*hBlock, wStatBlock, 0.6*hBlock);
 }
 
-
 void createCharactersSelect(int xBlock, int yBlock, int wBlock, int hBlock, int nbPerso, int nbPersoParLigne) {
+	char filenameCharacter[10] = "c0.png";
+
+	(void) nbPersoParLigne;
+	int good = 0;
+
+	int nbColonne = nbPerso;
+	int nbLigne   = 1;
+
+	int sImX = 0;
+	int sImY = 0;
+	int sIm = 0; //side of the square
+
+	int sImNouv = 0;
+	int ecartSImNouv = 0;
+
+	int sImAncien = 0;
+	int ecartSImAncien = hBlock; //max entre hBlock et hBlock
+
+	while (good == 0 && nbColonne > 0) {
+		sImX = 0.8 * wBlock / nbColonne;
+		sImY = 0.8 * hBlock / nbLigne;
+		sImNouv = (sImX < sImY)? sImX : sImY;
+		ecartSImNouv = abs(sImX - sImY);
+
+		if (ecartSImNouv > ecartSImAncien) {
+			sIm = sImAncien;
+			good = 1;
+
+			// on remet les bonnes valeurs de ligne et de colonne correspondantes aux bonnes valeurs de sIm
+			nbColonne++;
+			nbLigne--;
+			if (nbColonne * nbLigne < nbPerso) {
+				nbLigne ++;
+			}
+
+		} else {
+			sImAncien = sImNouv;
+			ecartSImAncien = ecartSImNouv;
+			nbColonne--;
+
+			if (nbColonne * nbLigne < nbPerso) {
+				nbLigne ++;
+			}
+		}
+
+	}
+
+	printf("colonne = %d, ligne = %d \n",nbColonne, nbLigne );
+
+
+
+	int xTotalSpaceUsed = nbColonne * sIm;
+	int xTotalSpaceFree = wBlock - xTotalSpaceUsed;
+	int xinterObjSpace  = xTotalSpaceFree / (2 * nbColonne);
+
+	int yTotalSpaceUsed = nbLigne * sIm;
+	int yTotalSpaceFree = hBlock - yTotalSpaceUsed;
+	int yinterObjSpace  = yTotalSpaceFree / (2 * nbLigne);
+
+	int xIm = xBlock + xinterObjSpace;
+	int yIm = yBlock + yinterObjSpace;
+
+	int white[4] = {255, 255, 255, 255};
+	int i = 1; int y = 1;
+
+	for (i=1; i<=nbPerso; i++) {
+		createBlock(xIm, yIm, sIm, sIm, white, CHAMP_SELECT, PlanChampSelect);
+		y++;
+
+		if (y <= nbColonne) {
+			xIm += sIm + 2 * xinterObjSpace;
+			puts("ici");
+
+		} else {
+			xIm = xBlock + xinterObjSpace;
+			yIm += sIm + 2 * yinterObjSpace;
+			y = 1;
+			puts("la");
+		}
+
+		filenameCharacter[1] = i + 48;
+		//createImage(0, 0, LFEN, HFEN, filenameCharacter, CHAMP_SELECT, PlanChampSelect);
+	}
+}
+
+/*void createCharactersSelect(int xBlock, int yBlock, int wBlock, int hBlock, int nbPerso, int nbPersoParLigne) {
 	char filenameCharacter[10] = "c0.png";
 
 	int nbLigne = nbPerso / nbPersoParLigne;
@@ -99,7 +186,7 @@ void createCharactersSelect(int xBlock, int yBlock, int wBlock, int hBlock, int 
 		filenameCharacter[1] = i + 48;
 		//createImage(0, 0, LFEN, HFEN, filenameCharacter, CHAMP_SELECT, PlanChampSelect);
 	}
-}
+}*/
 
 
 void createStatsGraphs(int xBlock, int yBlock, int wBlock, int hBlock) {
