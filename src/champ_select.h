@@ -31,7 +31,7 @@ enum PlanChampSelect {
 
 
 void ChampSelect();
-void createCharactersSelect(int xBlock, int yBlock, int wBlock, int hBlock);
+void createCharactersSelect(int xBlock, int yBlock, int wBlock, int hBlock, int nbPerso, int nbPersoParLigne);
 void generateAllDisplays();
 void createValidateInBlock(int, int, int, int);
 void createStatsNames(int xBlock, int yBlock, int wBlock, int hBlock);

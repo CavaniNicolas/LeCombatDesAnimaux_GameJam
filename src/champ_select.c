@@ -22,76 +22,85 @@ void generateAllDisplays() {
 	int white[4] = {255, 255, 255, 255};
 	int black[4] = {0, 0, 0, 255};
 
+	int marge      = 0.05 * HFEN;
+
 	int xStatBlock = 0.6 * LFEN;
-	int yStatBlock = 0.05 * HFEN;
-	int wStatBlock = 0.4 * LFEN - yStatBlock;
-	int hStatBlock = HFEN - 2 * yStatBlock;
+	int hBlock     = HFEN - 2 * marge;
+
+	int wStatBlock = 0.4 * LFEN - marge;
+
+	int wCharBlock = 0.6 * LFEN - 4 * marge;
 
 	createImage(0, 0, LFEN, HFEN, "assets/map0.jpg", CHAMP_SELECT, PlanBackgroundCS);
 
 	// Block d'info à droite
-	createBlock(xStatBlock, yStatBlock, wStatBlock, hStatBlock, white, CHAMP_SELECT, PlanBlock);
-	createBlock(xStatBlock+2, yStatBlock+2, wStatBlock-4, hStatBlock-4, black, CHAMP_SELECT, PlanBlock-1);
-	createBlock(xStatBlock, yStatBlock+0.4*hStatBlock, wStatBlock, 2, white, CHAMP_SELECT, PlanBlock-1); // Ligne séparatrice dans le block
+	createBlock(xStatBlock, marge, wStatBlock, hBlock, white, CHAMP_SELECT, PlanBlock);
+	createBlock(xStatBlock+2, marge+2, wStatBlock-4, hBlock-4, black, CHAMP_SELECT, PlanBlock-1);
+	createBlock(xStatBlock, marge+0.4*hBlock, wStatBlock, 2, white, CHAMP_SELECT, PlanBlock-1); // Ligne séparatrice dans le block
 
 	// Button OK
-	createValidateInBlock(xStatBlock, yStatBlock, wStatBlock, hStatBlock);
+	createValidateInBlock(xStatBlock, marge, wStatBlock, hBlock);
 
 	// Stats Texts
-	createStatsNames(xStatBlock, yStatBlock+0.4*hStatBlock, wStatBlock, 0.6*hStatBlock);
+	createStatsNames(xStatBlock, marge+0.4*hBlock, wStatBlock, 0.6*hBlock);
 
 	// Characters
-	int xCharBlock = yStatBlock;
-	int yCharBlock = yStatBlock;
-	int wCharBlock = 0.6 * LFEN - 4 * yStatBlock;
-	int hCharBlock = hStatBlock;
+	
 
-createBlock(xCharBlock, yCharBlock, wCharBlock, hCharBlock, white, CHAMP_SELECT, PlanChampSelect);
-createBlock(xCharBlock+2, yCharBlock+2, wCharBlock-4, hCharBlock-4, black, CHAMP_SELECT, PlanChampSelect);
-createCharactersSelect(xCharBlock+2, yCharBlock+2, wCharBlock-4, hCharBlock-4);
+createBlock(marge, marge, wCharBlock, hBlock, white, CHAMP_SELECT, PlanChampSelect);
+createBlock(marge+2, marge+2, wCharBlock-4, hBlock-4, black, CHAMP_SELECT, PlanChampSelect);
+createCharactersSelect(marge+2, marge+2, wCharBlock-4, hBlock-4, 25, 3);
 
-	createStatsGraphs(xStatBlock, yStatBlock+0.4*hStatBlock, wStatBlock, 0.6*hStatBlock);
+	createStatsGraphs(xStatBlock, marge+0.4*hBlock, wStatBlock, 0.6*hBlock);
 }
 
 
-void createCharactersSelect(int xBlock, int yBlock, int wBlock, int hBlock) {
+void createCharactersSelect(int xBlock, int yBlock, int wBlock, int hBlock, int nbPerso, int nbPersoParLigne) {
 	char filenameCharacter[10] = "c0.png";
 
-	int nbPerso                = 9;
-	int nbPersoParLigne        = 3;
+	int nbLigne = nbPerso / nbPersoParLigne;
+	if (nbPerso%nbPersoParLigne != 0) {
+		nbLigne ++;
+	}
 
-	int totalSpaceUsed = 0.8 * wBlock;
-	int totalSpaceFree = wBlock - totalSpaceUsed;
-	int interObjSpace  = totalSpaceFree / (2 * nbPersoParLigne);
+	int sImX = 0.8 * wBlock / nbPersoParLigne;
+	int sImY = 0.8 * hBlock / nbLigne;
+	int sIm  = (sImX < sImY)? sImX : sImY; // side of the square
 
-	int sIm = totalSpaceUsed / nbPersoParLigne; // side of the square
-	int xIm = xBlock;
-	int yIm = yBlock + interObjSpace;
+	int xTotalSpaceUsed = nbPersoParLigne * sIm;
+	int xTotalSpaceFree = wBlock - xTotalSpaceUsed;
+	int xinterObjSpace  = xTotalSpaceFree / (2 * nbPersoParLigne);
+
+	int yTotalSpaceUsed = nbLigne * sIm;
+	int yTotalSpaceFree = hBlock - yTotalSpaceUsed;
+	int yinterObjSpace  = yTotalSpaceFree / (2 * nbLigne);
+
+	int xIm = xBlock + xinterObjSpace;
+	int yIm = yBlock + yinterObjSpace;
 
 	int white[4] = {255, 255, 255, 255};
 	int i = 1; int y = 1;
 
 	for (i=1; i<=nbPerso; i++) {
+		createBlock(xIm, yIm, sIm, sIm, white, CHAMP_SELECT, PlanChampSelect);
+		y++;
 
-		if (nbPersoParLigne%y < nbPersoParLigne) {
-			xIm += interObjSpace;
-			createBlock(xIm, yIm, sIm, sIm, white, CHAMP_SELECT, PlanChampSelect);
-			xIm += sIm + interObjSpace;
+		if (y <= nbPersoParLigne) {
+			xIm += sIm + 2 * xinterObjSpace;
 			puts("ici");
+
 		} else {
-			y=1;
-			xIm = xBlock + interObjSpace;
-			yIm += sIm + 2 * interObjSpace;
-			createBlock(xIm, yIm, sIm, sIm, white, CHAMP_SELECT, PlanChampSelect);
-			xIm += sIm + interObjSpace;
+			xIm = xBlock + xinterObjSpace;
+			yIm += sIm + 2 * yinterObjSpace;
+			y = 1;
 			puts("la");
 		}
-		y++;
 
 		filenameCharacter[1] = i + 48;
 		//createImage(0, 0, LFEN, HFEN, filenameCharacter, CHAMP_SELECT, PlanChampSelect);
 	}
 }
+
 
 void createStatsGraphs(int xBlock, int yBlock, int wBlock, int hBlock) {
 	int statsNb    = 4;
