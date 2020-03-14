@@ -11,7 +11,8 @@ enum PlanChampSelect {
 	PlanBlock = 89,
 
 	PlanChampSelect = 79,
-
+	PlanStatsGraphsBackground = 71,
+	PlanStatsGraphs = 70,
 
 
 	PlanTitre = 14,
@@ -29,30 +30,46 @@ enum PlanChampSelect {
 	PlanBtnValiderDown = 2,
 };
 
+typedef struct StatsCharacter {
+	int    idChara;
+	int    hp;
+	int    strength;
+	double speed;
+}StatsCharacter_t;
+
 
 void ChampSelect();
-void createCharactersSelect(int xBlock, int yBlock, int wBlock, int hBlock, int nbPerso, int nbPersoParLigne);
+
 void generateAllDisplays();
 
 // affiche les cases pour la champ select et les rends clickable
-void createFieldsChampSelectInBlock(int xBlock, int yBlock, int wBlock, int hBlock, int nbChara, int * nbLines, int * nbColumns, int * sizeSideIm);
+void createFieldsChampSelectInBlock(int xBlock, int yBlock, int wBlock, int hBlock, int nbChara, float fillPercent, int * nbLines, int * nbColumns, int * sizeSideIm);
 
 //calcul le nombre optimal de lignes et colonnes en fct du nombre total delements a placer et autorise de contraindre un des deux parametres
-void setOptimizedLinesAndColumns(int wBlock, int hBlock, int nbChara, int * nbLines, int * nbColumns, int * sizeSideIm);
+void setOptimizedLinesAndColumns(int wBlock, int hBlock, int nbChara, float fillPercent, int * nbLines, int * nbColumns, int * sizeSideIm);
 
 // varCte, varAdapting : nombre de lignes ou de colonnes, l'une est fixe et détermine la valeur de l'autre
-void setSecondVariable(int varCte, int * varAdapting, int * sizeSideIm, int nbChara, int wBlock, int hBlock);
+void setSecondVariable(int varCte, int * varAdapting, int * sizeSideIm, int nbChara, float fillPercent, int wBlock, int hBlock);
 
 //calcul le nombre optimal de lignes et colonnes en fct du nombre total delements a placer
-void optimizeNumberOfLinesColumns(int wBlock, int hBlock, int nbChara, int * nbLines, int * nbColumns, int * sizeSideIm);
+void optimizeNumberOfLinesColumns(int wBlock, int hBlock, int nbChara, float fillPercent, int * nbLines, int * nbColumns, int * sizeSideIm);
 
 // affiche les blocs une fois quon connait le nombre de lignes et colonnes souhaitées
 void displayBlocksInOptimizedPosition(int xBlock, int yBlock, int wBlock, int hBlock, int nbChara, int nbLines, int nbColumns, int sizeSideIm);
 
 
+// affiche les stats des persos quand on clic dessus
+void displayCharacterStats(Element * element, int idChara);
+
+// recupere les valeurs des stats des perso dans le fichier et rempli les structures StatsCharacter_t
+StatsCharacter_t * getCharacterStatsInFIle(FILE * file, int idChara);
+
+
 
 // menu stats
 void createValidateInBlock(int, int, int, int);
+void validateCharacterChoice(Element * element, int i);
+
 void createStatsNames(int xBlock, int yBlock, int wBlock, int hBlock);
 void createStatsGraphs(int xBlock, int yBlock, int wBlock, int hBlock);
 
