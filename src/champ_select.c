@@ -50,7 +50,7 @@ void generateAllDisplays() {
 	createBlock(marge, marge, wCharBlock, hBlock, white, CHAMP_SELECT, PlanChampSelect);
 	createBlock(marge+2, marge+2, wCharBlock-4, hBlock-4, black, CHAMP_SELECT, PlanChampSelect);
 
-	int nbChara = 3; float fillPercent = 0.8; int nbLines = 0; int nbColumns = 0; int sizeSideIm = 0;
+	int nbChara = 4; float fillPercent = 0.8; int nbLines = 0; int nbColumns = 0; int sizeSideIm = 0;
 	createFieldsChampSelectInBlock(marge+2, marge+2, wCharBlock-4, hBlock-4, nbChara, fillPercent, &nbLines, &nbColumns, &sizeSideIm);
 
 }
@@ -198,15 +198,17 @@ void displayBlocksInOptimizedPosition(int xBlock, int yBlock, int wBlock, int hB
 			//createBlock(xIm, yIm, sizeSideIm, sizeSideIm, white, CHAMP_SELECT, PlanChampSelect);
 			element = createImage(xIm, yIm, sizeSideIm, sizeSideIm, filenameCharacter, CHAMP_SELECT, PlanChampSelect);
 
-			element->data = getCharacterStatsInFIle(file, idChara);
-			addClickableElement(element, rectangleClickable(0.f, 0.f, 1.f, 1.f), 0);
-			setOnClickElement(element, displayCharacterStats);
+			if (element != NULL) {
+				element->data = getCharacterStatsInFIle(file, idChara);
+				addClickableElement(element, rectangleClickable(0.f, 0.f, 1.f, 1.f), 0);
+				setOnClickElement(element, displayCharacterStats);
 
-			// assemble les elements entre eux
-			if (idChara == 0) {
-				element1 = element;
-			} else {
-				addElementToElement(element1, element);
+				// assemble les elements entre eux
+				if (idChara == 0) {
+					element1 = element;
+				} else {
+					addElementToElement(element1, element);
+				}
 			}
 
 			/* colonne suivante */
@@ -306,8 +308,10 @@ void createValidateInBlock(int xBlock, int yBlock, int wBlock, int hBlock) {
 
 	Element * okButton = createBlock(xVal, yVal, wVal, hVal, red, CHAMP_SELECT, PlanBlock-4);
 
-	addClickableElement(okButton, rectangleClickable(0.f, 0.f, 1.f, 1.f), 0);
-	setOnClickElement(okButton, validateCharacterChoice);
+	if (okButton != NULL) {
+		addClickableElement(okButton, rectangleClickable(0.f, 0.f, 1.f, 1.f), 0);
+		setOnClickElement(okButton, validateCharacterChoice);
+	}
 }
 
 void validateCharacterChoice(Element * element, int i) {
