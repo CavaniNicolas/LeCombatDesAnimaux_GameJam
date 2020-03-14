@@ -1,6 +1,7 @@
 
 #include <SANDAL2/SANDAL2.h>
 #include <stdlib.h>
+#include <dirent.h>
 #include "structure.h"
 #include "champ_select.h"
 
@@ -50,9 +51,44 @@ void generateAllDisplays() {
 	createBlock(marge, marge, wCharBlock, hBlock, white, CHAMP_SELECT, PlanChampSelect);
 	createBlock(marge+2, marge+2, wCharBlock-4, hBlock-4, black, CHAMP_SELECT, PlanChampSelect);
 
-	int nbChara = 4; float fillPercent = 0.8; int nbLines = 0; int nbColumns = 0; int sizeSideIm = 0;
-	createFieldsChampSelectInBlock(marge+2, marge+2, wCharBlock-4, hBlock-4, nbChara, fillPercent, &nbLines, &nbColumns, &sizeSideIm);
+	int nbChara = 3; float fillPercent = 0.8; int nbLines = 0; int nbColumns = 0; int sizeSideIm = 0;
+	if (0 == checkIfnbCharaIsCorrect(nbChara)) {
+		createFieldsChampSelectInBlock(marge+2, marge+2, wCharBlock-4, hBlock-4, nbChara, fillPercent, &nbLines, &nbColumns, &sizeSideIm);
+	} else {
+		printf("Assets des personnages pour la ChampSelect manquantes\n");
+	}
 
+}
+
+
+// verifie si il y a suffisament d'assets dans le repertoire pour creer les perso de la champSelect
+int checkIfnbCharaIsCorrect(int nbChara) {
+	char  error = 1;
+
+	int counter = 0;
+	DIR * rep   = opendir("./assets/characters"); /*Pointeur répertoire*/
+	char  filename[10];                           /*Nom du fichier*/
+
+	if (rep != NULL) {
+		struct dirent * ent = NULL;               /*Pointeur entitée*/
+
+		while ((ent = readdir(rep)) != NULL) {
+
+			if (strcmp(ent->d_name, ".") && strcmp(ent->d_name, "..")) { /*Si ce n'est pas un de ces fichiers*/
+				strcpy(filename, ent->d_name);
+				if (filename[0] == 'c') {
+					counter++;
+				}
+			}
+		}
+
+		if (counter == nbChara) {
+			error = 0;
+		}
+
+		closedir(rep);
+	}
+	return error;
 }
 
 
@@ -169,8 +205,9 @@ void displayBlocksInOptimizedPosition(int xBlock, int yBlock, int wBlock, int hB
 
 	if (file != NULL) {
 
-		Element * element1 = NULL;
-		Element * element  = NULL;
+		Element * element0 = NULL;
+		Element * newElement  = NULL;
+		Element * prevElement = NULL;
 
 		char filenameCharacter[30] = "assets/characters/c0.png";
 
@@ -188,7 +225,7 @@ void displayBlocksInOptimizedPosition(int xBlock, int yBlock, int wBlock, int hB
 		int yTotalSpaceFree = hBlock - yTotalSpaceUsed;
 		int yinterObjSpace  = yTotalSpaceFree / (2 * nbLines);
 
-		/* position initiale du premier element */
+		/* position initiale du premier element0 */
 		int xIm = xBlock + xinterObjSpace;
 		int yIm = yBlock + yinterObjSpace;
 
@@ -196,19 +233,21 @@ void displayBlocksInOptimizedPosition(int xBlock, int yBlock, int wBlock, int hB
 			filenameCharacter[19] = 48 + idChara;
 
 			//createBlock(xIm, yIm, sizeSideIm, sizeSideIm, white, CHAMP_SELECT, PlanChampSelect);
-			element = createImage(xIm, yIm, sizeSideIm, sizeSideIm, filenameCharacter, CHAMP_SELECT, PlanChampSelect);
+			newElement = createImage(xIm, yIm, sizeSideIm, sizeSideIm, filenameCharacter, CHAMP_SELECT, PlanChampSelect);
 
-			if (element != NULL) {
-				element->data = getCharacterStatsInFIle(file, idChara);
-				addClickableElement(element, rectangleClickable(0.f, 0.f, 1.f, 1.f), 0);
-				setOnClickElement(element, displayCharacterStats);
+			if (newElement != NULL) {
+				newElement->data = getCharacterStatsInFile(file, idChara);
+				addClickableElement(newElement, rectangleClickable(0.f, 0.f, 1.f, 1.f), 0);
+				setOnClickElement(newElement, displayCharacterStats);
 
 				// assemble les elements entre eux
 				if (idChara == 0) {
-					element1 = element;
+					element0 = newElement;
 				} else {
-					addElementToElement(element1, element);
+					prevElement->elementParent = newElement;
 				}
+				prevElement = newElement;
+
 			}
 
 			/* colonne suivante */
@@ -225,6 +264,8 @@ void displayBlocksInOptimizedPosition(int xBlock, int yBlock, int wBlock, int hB
 
 		}
 
+		newElement->elementParent = element0;
+
 		fclose(file);
 	} else {
 		printf("Ne peut pas ouvrir le fichier des stats des Perso\n");
@@ -232,12 +273,14 @@ void displayBlocksInOptimizedPosition(int xBlock, int yBlock, int wBlock, int hB
 }
 
 
-StatsCharacter_t * getCharacterStatsInFIle(FILE * file, int idChara) {
+StatsCharacter_t * getCharacterStatsInFile(FILE * file, int idChara) {
 	StatsCharacter_t * d = (StatsCharacter_t *)malloc(sizeof(StatsCharacter_t));
 	int idCharaFile = -1;
 	char line[6];
 
 	if (d != NULL) {
+		d->isClicked = false;
+		//d->isSelected = false;
 		while (!feof(file) && idCharaFile != idChara) {
 			fgets(line, 6, file);
 			idCharaFile = atoi(line);
@@ -266,7 +309,28 @@ void displayCharacterStats(Element * element, int i) {
 	(void) i;
 	clearPlanDisplayCode(CHAMP_SELECT, PlanStatsGraphs);
 	StatsCharacter_t * d = element->data;
-	printf("id = %d\n",d->idChara);
+
+	Element    * parentElement = element;
+	StatsCharacter_t * dParent = element->data;
+
+	while (dParent->idChara != 0) {
+		parentElement = parentElement->elementParent;
+		dParent = parentElement->data;
+	}
+
+	printf("id = %d\n", dParent->idChara);
+	Element * nextElement = parentElement->elementParent;
+	StatsCharacter_t * dNext = nextElement->data;
+
+	while (nextElement != parentElement) {
+		printf("id = %d\n", dNext->idChara);
+		dNext->isClicked = false;
+		nextElement = nextElement->elementParent;
+		dNext = nextElement->data;
+	}
+
+	d->isClicked = true;
+	printf("clicked on : id = %d\n",d->idChara);
 }
 
 
@@ -318,8 +382,12 @@ void validateCharacterChoice(Element * element, int i) {
 	(void) i;
 
 	printf("OK\n");
+
 }
 
+
+
+/* ------------------------------------------------------------------------------------------------------------------------ */
 
 
 void initChoicePerso() {

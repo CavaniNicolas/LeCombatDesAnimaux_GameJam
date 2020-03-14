@@ -1,6 +1,7 @@
 
 #ifndef CHAMPSELECT_H
 #define CHAMPSELECT_H
+#include <stdbool.h>
 
 
 /*********************** CHAMP_SELECT ******************************/
@@ -35,12 +36,18 @@ typedef struct StatsCharacter {
 	int    hp;
 	int    strength;
 	double speed;
+
+	bool isClicked;
+	//bool isSelected;
 }StatsCharacter_t;
 
 
 void ChampSelect();
 
 void generateAllDisplays();
+
+// verifie si il y a suffisament d'assets dans le repertoire pour creer les perso de la champSelect
+int checkIfnbCharaIsCorrect(int nbChara);
 
 // affiche les cases pour la champ select et les rends clickable
 void createFieldsChampSelectInBlock(int xBlock, int yBlock, int wBlock, int hBlock, int nbChara, float fillPercent, int * nbLines, int * nbColumns, int * sizeSideIm);
@@ -62,7 +69,7 @@ void displayBlocksInOptimizedPosition(int xBlock, int yBlock, int wBlock, int hB
 void displayCharacterStats(Element * element, int idChara);
 
 // recupere les valeurs des stats des perso dans le fichier et rempli les structures StatsCharacter_t
-StatsCharacter_t * getCharacterStatsInFIle(FILE * file, int idChara);
+StatsCharacter_t * getCharacterStatsInFile(FILE * file, int idChara);
 
 
 
