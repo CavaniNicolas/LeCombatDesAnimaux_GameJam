@@ -258,8 +258,7 @@ void displayBlocksInOptimizedPosition(int xBlock, int yBlock, int wBlock, int hB
 
 						// rend l'element clickable et lui assigne une action
 						addClickableElement(newElement, rectangleClickable(0.f, 0.f, 1.f, 1.f), 0);
-						setOnClickElement(newElement, isClickedSetOn);
-						setActionElement(newElement, displayCharacterStats);
+						setOnClickElement(newElement, displayCharacterStats);
 
 						// assemble les elements entre eux (sous la forme d'une liste chainée circulaire)
 						if (idChara == 0) {
@@ -333,8 +332,7 @@ StatsCharacter_t * getCharacterStatsInFile(FILE * file, int idChara) {
 	char line[6];
 
 	if (d != NULL) {
-		d->isClicked = false;
-		//d->isSelected = false;
+		d->isSelected = false;
 		while (!feof(file) && idCharaFile != idChara) {
 			fgets(line, 6, file);
 			idCharaFile = atoi(line);
@@ -374,46 +372,26 @@ StatsCharacterMax_t * getCharacterStatsMaxInFile() {
 	return statsMax;
 }
 
-/*_-_-_-_-_-_-_-_-_-_-_-_-_-A MODIFIER_-_--_mieux : simplement modifier la taille des blocks dans la structure-_-_-_-_-_-_-_-_-_-_-_-_--_-_-_*/
-// passe la valeur de isClicked a true quand on clic sur lelement
-void isClickedSetOn(Element * element, int i) {
-	(void) i;
-	clearPlanDisplayCode(CHAMP_SELECT, PlanStatsGraphs);
-	StatsCharacter_t * d = element->data;
-
-	Element    * parentElement = element;
-	StatsCharacter_t * dParent = element->data;
-
-	while (dParent->idChara != 0) {
-		parentElement = parentElement->elementParent;
-		dParent = parentElement->data;
-	}
-
-	printf("id = %d\n", dParent->idChara);
-	Element * nextElement = parentElement->elementParent;
-	StatsCharacter_t * dNext = nextElement->data;
-
-	while (nextElement != parentElement) {
-		printf("id = %d\n", dNext->idChara);
-		dNext->isClicked = false;
-		nextElement = nextElement->elementParent;
-		dNext = nextElement->data;
-	}
-
-	d->isClicked = true;
-	printf("clicked on : id = %d\n",d->idChara);
-}
-
 
 // affiche les stats des persos quand on clic dessus
-void displayCharacterStats(Element * element) {
+void displayCharacterStats(Element * element, int i) {
+	(void) i;
 	int white[4] = {255, 255, 255, 255};
 	StatsCharacter_t * d = element->data;
 
-	if (d->isClicked) {
+	int hpMax = d->statsMax->hp;
+	int strengthMax = d->statsMax->strength;
+	int speedMax = d->statsMax->speed;
 
-		createBlock(0, 0, 100, 50, white, CHAMP_SELECT, PlanStatsGraphs);
-	}
+	int hp = d->hp;
+	int strength = d->strength;
+	int speed = d->speed;
+
+	int widthMax = d->statsGraphs->hpBox->width;
+
+	d->statsGraphs->hp->width = (hp * widthMax / hpMax) - 4;
+	d->statsGraphs->strength->width = (strength * widthMax / strengthMax) - 4;
+	d->statsGraphs->speed->width = (speed * widthMax / speedMax) - 4;
 }
 
 
@@ -457,6 +435,36 @@ void validateCharacterChoice(Element * element, int i) {
 
 
 /* ------------------------------------------------------------------------------------------------------------------------ */
+/*
+// passe la valeur de isClicked a true quand on clic sur lelement
+void isClickedSetOn(Element * element, int i) {
+	(void) i;
+	clearPlanDisplayCode(CHAMP_SELECT, PlanStatsGraphs);
+	StatsCharacter_t * d = element->data;
+
+	Element    * parentElement = element;
+	StatsCharacter_t * dParent = element->data;
+
+	while (dParent->idChara != 0) {
+		parentElement = parentElement->elementParent;
+		dParent = parentElement->data;
+	}
+
+	printf("id = %d\n", dParent->idChara);
+	Element * nextElement = parentElement->elementParent;
+	StatsCharacter_t * dNext = nextElement->data;
+
+	while (nextElement != parentElement) {
+		printf("id = %d\n", dNext->idChara);
+		dNext->isClicked = false;
+		nextElement = nextElement->elementParent;
+		dNext = nextElement->data;
+	}
+
+	d->isClicked = true;
+	printf("clicked on : id = %d\n",d->idChara);
+}
+*/
 
 
 void initChoicePerso() {

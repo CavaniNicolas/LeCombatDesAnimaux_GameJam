@@ -57,8 +57,7 @@ typedef struct StatsCharacter {
 	StatsGraphs_t * statsGraphs;
 	StatsCharacterMax_t * statsMax;
 
-	bool isClicked;
-	//bool isSelected;
+	bool isSelected;
 }StatsCharacter_t;
 
 
@@ -85,11 +84,9 @@ void optimizeNumberOfLinesColumns(int wBlock, int hBlock, int nbChara, float fil
 void displayBlocksInOptimizedPosition(int xBlock, int yBlock, int wBlock, int hBlock, int nbChara, int nbLines, int nbColumns, int sizeSideIm, int xGraph, int yGraph, int wGraph, int hGraph);
 
 
-// passe la valeur de isClicked a true quand on clic sur lelement
-void isClickedSetOn(Element * element, int idChara);
 
 // affiche les stats des persos quand on clic dessus
-void displayCharacterStats(Element * element);
+void displayCharacterStats(Element * element, int i);
 
 // creer les blocks de stats pour les perso, qui seront a modifier lors d'un clic
 StatsGraphs_t * initStatsGraphs(int xBlock, int yBlock, int wBlock, int hBlock);
