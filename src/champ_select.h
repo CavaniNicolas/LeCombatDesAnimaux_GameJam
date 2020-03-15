@@ -31,13 +31,22 @@ enum PlanChampSelect {
 	PlanBtnValiderDown = 2,
 };
 
+// struct du boutton "GO !" pour valider le choix du perso (data de lelement okButton de la struct StatsCharacter)
+typedef struct okButton {
+	int nbClick;
 
+	int idCharaLeftPlayer;
+	int idCharaRightPlayer;
+}okButton_t;
+
+// struct contenant les valeurs max possible des stats (lues dans un fichiers statsMax)
 typedef struct StatsCharacterMax {
 	int    hp;
 	int    strength;
 	double speed;
 }StatsCharacterMax_t;
 
+// struct pour les graphes pour afficher les stats des persos
 typedef struct StatsGraphs {
 	Element * hpBox;
 	Element * strengthBox;
@@ -48,12 +57,14 @@ typedef struct StatsGraphs {
 	Element * speed;
 }StatsGraphs_t;
 
+// struct des persos de la champ select
 typedef struct StatsCharacter {
 	int    idChara;
 	int    hp;
 	int    strength;
 	double speed;
 
+	Element * okButton;
 	StatsGraphs_t * statsGraphs;
 	StatsCharacterMax_t * statsMax;
 
@@ -84,9 +95,14 @@ void optimizeNumberOfLinesColumns(int wBlock, int hBlock, int nbChara, float fil
 void displayBlocksInOptimizedPosition(int xBlock, int yBlock, int wBlock, int hBlock, int nbChara, int nbLines, int nbColumns, int sizeSideIm, int xGraph, int yGraph, int wGraph, int hGraph);
 
 
+// actions a executer quand on clic sur un perso de la champ select
+void onClickActionsChampSelect(Element * element, int i);
 
 // affiche les stats des persos quand on clic dessus
-void displayCharacterStats(Element * element, int i);
+void displayCharacterStats(Element * element);
+
+// rempli la structure okButton avec l'id du perso choisi
+void selectCharacter(Element * element);
 
 // creer les blocks de stats pour les perso, qui seront a modifier lors d'un clic
 StatsGraphs_t * initStatsGraphs(int xBlock, int yBlock, int wBlock, int hBlock);
@@ -98,9 +114,12 @@ StatsCharacter_t * getCharacterStatsInFile(FILE * file, int idChara);
 // recupere les valeurs max des stats des perso et les stock dans une structure unique a tous les persos
 StatsCharacterMax_t * getCharacterStatsMaxInFile();
 
+// effectue des actions quand on clic sur "GO!" (valide les persos puis change de fenetre en liberant la memoire)
+void charactersValidation(Element * okButton);
+
 
 // menu stats
-void createValidateInBlock(int, int, int, int);
+Element * createValidateInBlock(int, int, int, int);
 void validateCharacterChoice(Element * element, int i);
 
 void createStatsNames(int xBlock, int yBlock, int wBlock, int hBlock);
