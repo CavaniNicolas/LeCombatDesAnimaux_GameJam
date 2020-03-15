@@ -43,17 +43,17 @@ void generateAllDisplays() {
 	// Button OK
 	createValidateInBlock(xStatBlock, marge, wStatBlock, hBlock);
 
+	int yGraphBlock = marge+0.4*hBlock;
 	// Stats Texts
-	createStatsNames(xStatBlock, marge+0.4*hBlock, wStatBlock, 0.6*hBlock);
-	createStatsGraphs(xStatBlock, marge+0.4*hBlock, wStatBlock, 0.6*hBlock);
+	createStatsNames(xStatBlock, yGraphBlock, wStatBlock/2, 0.6*hBlock);
 
-	// Characters
+	// Characters and statsGraphs
 	createBlock(marge, marge, wCharBlock, hBlock, white, CHAMP_SELECT, PlanChampSelect);
 	createBlock(marge+2, marge+2, wCharBlock-4, hBlock-4, black, CHAMP_SELECT, PlanChampSelect);
 
 	int nbChara = 3; float fillPercent = 0.8; int nbLines = 0; int nbColumns = 0; int sizeSideIm = 0;
 	if (0 == checkIfnbCharaIsCorrect(nbChara)) {
-		createFieldsChampSelectInBlock(marge+2, marge+2, wCharBlock-4, hBlock-4, nbChara, fillPercent, &nbLines, &nbColumns, &sizeSideIm);
+		createFieldsChampSelectInBlock(marge+2, marge+2, wCharBlock-4, hBlock-4, nbChara, fillPercent, &nbLines, &nbColumns, &sizeSideIm, xStatBlock+0.5*wStatBlock, yGraphBlock, wStatBlock/2, 0.6*hBlock);
 	} else {
 		printf("Assets des personnages pour la ChampSelect manquantes\n");
 	}
@@ -93,9 +93,9 @@ int checkIfnbCharaIsCorrect(int nbChara) {
 
 
 // affiche les cases pour la champ select et les rends clickable
-void createFieldsChampSelectInBlock(int xBlock, int yBlock, int wBlock, int hBlock, int nbChara, float fillPercent, int * nbLines, int * nbColumns, int * sizeSideIm) {
+void createFieldsChampSelectInBlock(int xBlock, int yBlock, int wBlock, int hBlock, int nbChara, float fillPercent, int * nbLines, int * nbColumns, int * sizeSideIm, int xGraph, int yGraph, int wGraph, int hGraph) {
 	setOptimizedLinesAndColumns(wBlock, hBlock, nbChara, fillPercent, nbLines, nbColumns, sizeSideIm);
-	displayBlocksInOptimizedPosition(xBlock, yBlock, wBlock, hBlock, nbChara, *nbLines, *nbColumns, *sizeSideIm);
+	displayBlocksInOptimizedPosition(xBlock, yBlock, wBlock, hBlock, nbChara, *nbLines, *nbColumns, *sizeSideIm, xGraph, yGraph, wGraph, hGraph);
 
 }
 
@@ -199,18 +199,17 @@ void optimizeNumberOfLinesColumns(int wBlock, int hBlock, int nbChara, float fil
 
 
 // affiche les blocs une fois quon connait le nombre de lignes et colonnes souhaitées
-void displayBlocksInOptimizedPosition(int xBlock, int yBlock, int wBlock, int hBlock, int nbChara, int nbLines, int nbColumns, int sizeSideIm) {
+void displayBlocksInOptimizedPosition(int xBlock, int yBlock, int wBlock, int hBlock, int nbChara, int nbLines, int nbColumns, int sizeSideIm, int xGraph, int yGraph, int wGraph, int hGraph) {
 	FILE * file = NULL;
-	file = fopen("assets/DataCharacters.txt", "r");
+	file = fopen("assets/stats/DataCharacters.txt", "r");
 
 	if (file != NULL) {
 
-		Element * element0 = NULL;
+		Element * element0    = NULL;
 		Element * newElement  = NULL;
 		Element * prevElement = NULL;
 
 		char filenameCharacter[30] = "assets/characters/c0.png";
-
 
 		//int white[4] = {255, 255, 255, 255};
 		int idChara = 0; int y = 1;
@@ -229,42 +228,67 @@ void displayBlocksInOptimizedPosition(int xBlock, int yBlock, int wBlock, int hB
 		int xIm = xBlock + xinterObjSpace;
 		int yIm = yBlock + yinterObjSpace;
 
-		for (idChara=0; idChara<nbChara; idChara++) {
-			filenameCharacter[19] = 48 + idChara;
+		// structure des statsMax
+		StatsCharacter_t    * dataNewElement = NULL;
+		StatsCharacterMax_t * statsMax       = getCharacterStatsMaxInFile();
+		// structure des blocs pour afficher les stats
+		StatsGraphs_t * statsGraphs = initStatsGraphs(xGraph, yGraph, wGraph, hGraph);
 
-			//createBlock(xIm, yIm, sizeSideIm, sizeSideIm, white, CHAMP_SELECT, PlanChampSelect);
-			newElement = createImage(xIm, yIm, sizeSideIm, sizeSideIm, filenameCharacter, CHAMP_SELECT, PlanChampSelect);
 
-			if (newElement != NULL) {
-				newElement->data = getCharacterStatsInFile(file, idChara);
-				addClickableElement(newElement, rectangleClickable(0.f, 0.f, 1.f, 1.f), 0);
-				setOnClickElement(newElement, displayCharacterStats);
+		if (statsMax != NULL && statsGraphs!=NULL) {
 
-				// assemble les elements entre eux
-				if (idChara == 0) {
-					element0 = newElement;
-				} else {
-					prevElement->elementParent = newElement;
+			for (idChara=0; idChara<nbChara; idChara++) {
+				filenameCharacter[19] = 48 + idChara; /*max 10 perso car va de 0 à 9*/
+
+				//createBlock(xIm, yIm, sizeSideIm, sizeSideIm, white, CHAMP_SELECT, PlanChampSelect);
+				newElement = createImage(xIm, yIm, sizeSideIm, sizeSideIm, filenameCharacter, CHAMP_SELECT, PlanChampSelect);
+
+				if (newElement != NULL) {
+
+					// initialise les champs (stats) du nouvel element
+					newElement->data = getCharacterStatsInFile(file, idChara);
+
+					if (newElement->data != NULL) {
+						// ajoute le pointeur sur la structure des statsMax
+						dataNewElement = newElement->data;
+						dataNewElement->statsMax = statsMax;
+						
+						// ajoute les blocs où seront affichées les stats
+						dataNewElement->statsGraphs = statsGraphs;
+
+						// rend l'element clickable et lui assigne une action
+						addClickableElement(newElement, rectangleClickable(0.f, 0.f, 1.f, 1.f), 0);
+						setOnClickElement(newElement, isClickedSetOn);
+						setActionElement(newElement, displayCharacterStats);
+
+						// assemble les elements entre eux (sous la forme d'une liste chainée circulaire)
+						if (idChara == 0) {
+							element0 = newElement;
+						} else {
+							prevElement->elementParent = newElement;
+						}
+						prevElement = newElement;
+					}
+
 				}
-				prevElement = newElement;
+
+				/* colonne suivante */
+				y++;
+
+				/* calcul d'un saut de ligne nécessaire ou non */
+				if (y <= nbColumns) {
+					xIm += sizeSideIm + 2 * xinterObjSpace;
+				} else {
+					xIm = xBlock + xinterObjSpace;
+					yIm += sizeSideIm + 2 * yinterObjSpace;
+					y = 1;
+				}
 
 			}
 
-			/* colonne suivante */
-			y++;
-
-			/* calcul d'un saut de ligne nécessaire ou non */
-			if (y <= nbColumns) {
-				xIm += sizeSideIm + 2 * xinterObjSpace;
-			} else {
-				xIm = xBlock + xinterObjSpace;
-				yIm += sizeSideIm + 2 * yinterObjSpace;
-				y = 1;
-			}
-
+			// dernier element de la liste chainée circulaire pointe sur le premier
+			newElement->elementParent = element0;
 		}
-
-		newElement->elementParent = element0;
 
 		fclose(file);
 	} else {
@@ -273,6 +297,36 @@ void displayBlocksInOptimizedPosition(int xBlock, int yBlock, int wBlock, int hB
 }
 
 
+// creer les blocks de stats pour les perso, qui seront a modifier lors d'un clic
+StatsGraphs_t * initStatsGraphs(int xBlock, int yBlock, int wBlock, int hBlock) {
+	StatsGraphs_t * statsGraphs = (StatsGraphs_t *)malloc(sizeof(StatsGraphs_t));
+	int white[4] = {255, 255, 255, 255};
+	int orange[4] = {255, 150, 0, 255};
+
+	int statsNb    = 4; // Nombre de champs pour les stats des perso
+	int fieldSpace = hBlock / statsNb; 
+	int quarterFieldSpace = 0.25*fieldSpace;
+
+	int xGraph = xBlock;
+	int wGraph = 0.8 * wBlock;
+	int hGraph = fieldSpace/2;
+
+
+	if (statsGraphs != NULL) {
+		statsGraphs->hpBox = createBlock(xGraph, yBlock+fieldSpace+quarterFieldSpace, wGraph, hGraph, white, CHAMP_SELECT, PlanStatsGraphs + 1);
+		statsGraphs->strengthBox = createBlock(xGraph, yBlock+2*fieldSpace+quarterFieldSpace, wGraph, hGraph, white, CHAMP_SELECT, PlanStatsGraphs + 1);
+		statsGraphs->speedBox = createBlock(xGraph, yBlock+3*fieldSpace+quarterFieldSpace, wGraph, hGraph, white, CHAMP_SELECT, PlanStatsGraphs + 1);
+
+		statsGraphs->hp = createBlock(xGraph+2, yBlock+fieldSpace+2+quarterFieldSpace, wGraph-4, hGraph-4, orange, CHAMP_SELECT, PlanStatsGraphs);
+		statsGraphs->strength = createBlock(xGraph+2, yBlock+2*fieldSpace+2+quarterFieldSpace, wGraph-4, hGraph-4, orange, CHAMP_SELECT, PlanStatsGraphs);
+		statsGraphs->speed = createBlock(xGraph+2, yBlock+3*fieldSpace+2+quarterFieldSpace, wGraph-4, hGraph-4, orange, CHAMP_SELECT, PlanStatsGraphs);
+	}
+
+	return statsGraphs;
+}
+
+
+// rempli les champs stats du perso
 StatsCharacter_t * getCharacterStatsInFile(FILE * file, int idChara) {
 	StatsCharacter_t * d = (StatsCharacter_t *)malloc(sizeof(StatsCharacter_t));
 	int idCharaFile = -1;
@@ -305,7 +359,24 @@ StatsCharacter_t * getCharacterStatsInFile(FILE * file, int idChara) {
 }
 
 
-void displayCharacterStats(Element * element, int i) {
+StatsCharacterMax_t * getCharacterStatsMaxInFile() {
+	FILE * file = fopen("assets/stats/statsMax.txt", "r");
+
+	StatsCharacterMax_t * statsMax = (StatsCharacterMax_t *)malloc(sizeof(StatsCharacterMax_t));
+
+	if (file != NULL) {
+		fscanf(file, "%d", &statsMax->hp);
+		fscanf(file, "%d", &statsMax->strength);
+		fscanf(file, "%le", &statsMax->speed);
+	}
+
+	fclose(file);
+	return statsMax;
+}
+
+/*_-_-_-_-_-_-_-_-_-_-_-_-_-A MODIFIER_-_--_mieux : simplement modifier la taille des blocks dans la structure-_-_-_-_-_-_-_-_-_-_-_-_--_-_-_*/
+// passe la valeur de isClicked a true quand on clic sur lelement
+void isClickedSetOn(Element * element, int i) {
 	(void) i;
 	clearPlanDisplayCode(CHAMP_SELECT, PlanStatsGraphs);
 	StatsCharacter_t * d = element->data;
@@ -334,26 +405,24 @@ void displayCharacterStats(Element * element, int i) {
 }
 
 
+// affiche les stats des persos quand on clic dessus
+void displayCharacterStats(Element * element) {
+	int white[4] = {255, 255, 255, 255};
+	StatsCharacter_t * d = element->data;
 
-void createStatsGraphs(int xBlock, int yBlock, int wBlock, int hBlock) {
-	(void) xBlock;
-	(void) yBlock;
-	(void) wBlock;
-	(void) hBlock;
+	if (d->isClicked) {
 
-	int statsNb    = 4;
-	int fieldSpace = hBlock / statsNb;
-
-	(void) fieldSpace;
-	//createBlock();
+		createBlock(0, 0, 100, 50, white, CHAMP_SELECT, PlanStatsGraphs);
+	}
 }
+
 
 void createStatsNames(int xBlock, int yBlock, int wBlock, int hBlock) {
 	int statsNb    = 4; // Nombre de champs pour les stats des perso
 	int fieldSpace = hBlock / statsNb; 
 
 	int xText =	xBlock;
-	int wText = 0.4 * wBlock;
+	int wText = 0.9 * wBlock;
 	int hText = fieldSpace;
 
 	createImage(xText, yBlock, wText, hText, "assets/texts/Infos_Perso.png", CHAMP_SELECT, PlanBlock-2); // Element * textInfo
