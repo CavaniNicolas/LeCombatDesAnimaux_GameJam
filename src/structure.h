@@ -37,9 +37,6 @@ enum PlanMenu {
 	PlanMapDown = 4
 };
 
-typedef struct DataStart {
-	int verif;
-}DataStart;
 
 typedef struct DataValidate {
 	int verif;

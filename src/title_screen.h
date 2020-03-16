@@ -1,5 +1,6 @@
 #ifndef TITLESCREEN_H
 #define TITLESCREEN_H
+#include <stdbool.h>
 
 /******************** ECRAN_TITRE ***********************************/
 
@@ -7,9 +8,22 @@ enum PlanMenuStart {
 	PlanBackgroundTS = 5,
 	PlanTextBack = 4,
 	PlanTextMain = 3,
-	PlanTextFront = 2,
+
 	PlanCurtains = 1,
 };
+
+typedef struct DataCurtain {
+	bool isClosed;
+	bool isMaxOpen;
+	bool isFinished;
+} DataCurtain_t;
+
+typedef struct DataStart {
+	bool isClicked;
+
+	Element * curtainLeft;
+	Element * curtainRight;
+}DataStart;
 
 /*
 * Fonction : Launcher
@@ -21,13 +35,13 @@ void Launcher();
 * Fonction : moveCurtainLeft
 * Objectif : déplace le rideau 1 (celui de gauche)
 */
-void moveCurtainLeft(Element * r1);
+void moveLeftCurtainLeft(Element * r1);
 
 /*
 * Fonction : moveCurtainRight
 * Objectif : déplace le rideau 2 (celui de droite)
 */
-void moveCurtainRight(Element * r2);
+void moveRightCurtainRight(Element * r2);
 
 /*
 * Fonction : zoomInTitle
@@ -36,10 +50,10 @@ void moveCurtainRight(Element * r2);
 void zoomInTitle(Element * titre);
 
 /*
-* Fonction : displayStartButton
-* Objectif : Affiche le bouton Start
+* Fonction : initStartButton
+* Objectif : Init le bouton Start
 */
-void displayStartButton();
+Element * initStartButton();
 
 /*
 * Fonction : initDataStart
@@ -58,5 +72,11 @@ void StartDown(Element * start, int i);
 * Objectif : lance le jeu une fois le bouton start relaché
 */
 void StartUp(Element * start, int i);
+
+
+// transition rideaux, recentre les rideaux puis les reéloigne en affichant le deuxieme menu
+void moveLeftCurtainRight(Element * curtainLeft);
+void moveRightCurtainLeft(Element * curtainLeft);
+
 
 #endif

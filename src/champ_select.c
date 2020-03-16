@@ -498,6 +498,10 @@ void charactersValidation(Element * okButton) {
 	}
 }
 
+
+// set Action Element sur element0 de la champSelect, quand nbClick >= 3 alors: free all
+
+
 /* ------------------------------------------------------------------------------------------------------------------------ */
 /*
 // passe la valeur de isClicked a true quand on clic sur lelement
