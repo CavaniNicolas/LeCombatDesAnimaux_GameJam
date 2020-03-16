@@ -289,8 +289,10 @@ void displayBlocksInOptimizedPosition(int xBlock, int yBlock, int wBlock, int hB
 
 			}
 
-			// dernier element de la liste chainée circulaire pointe sur le premier
-			newElement->elementParent = element0;
+			if (newElement != NULL) {
+				// dernier element de la liste chainée circulaire pointe sur le premier
+				newElement->elementParent = element0;
+			}
 		}
 
 		fclose(file);
