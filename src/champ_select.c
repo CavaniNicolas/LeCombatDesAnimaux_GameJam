@@ -235,8 +235,10 @@ void displayBlocksInOptimizedPosition(int xBlock, int yBlock, int wBlock, int hB
 		StatsGraphs_t * statsGraphs = initStatsGraphs(xStatBlock+0.5*wStatBlock, yStatBlock+0.4*hStatBlock, wStatBlock/2, 0.6*hStatBlock);
 		// structure du okButton_t
 		Element * okButton = createValidateInBlock(xStatBlock, yStatBlock, wStatBlock, hStatBlock);
+		// structure des 2 pointeurs sur les images afficher pour le Versus
+		VersusImages_t * versusImages = initVersusImages(xStatBlock+2, yStatBlock+2, wStatBlock-4, hStatBlock * 0.4);
 
-		if (statsMax!=NULL && statsGraphs!=NULL && okButton!=NULL) {
+		if (statsMax!=NULL && statsGraphs!=NULL && okButton!=NULL && versusImages!=NULL) {
 
 			for (idChara=0; idChara<nbChara; idChara++) {
 				filenameCharacter[19] = 48 + idChara; /*max 10 perso car va de 0 à 9*/
@@ -259,6 +261,9 @@ void displayBlocksInOptimizedPosition(int xBlock, int yBlock, int wBlock, int hB
 
 						// ajoute les blocs où seront affichées les stats
 						dataNewElement->statsGraphs = statsGraphs;
+
+						// ajoute la structure des deux images du Versus
+						dataNewElement->versusImages = versusImages;
 
 						// rend l'element clickable et lui assigne une action
 						addClickableElement(newElement, rectangleClickable(0.f, 0.f, 1.f, 1.f), 0);
@@ -299,6 +304,22 @@ void displayBlocksInOptimizedPosition(int xBlock, int yBlock, int wBlock, int hB
 	} else {
 		printf("Ne peut pas ouvrir le fichier des stats des Perso\n");
 	}
+}
+
+
+// init la structure des images du Versus
+VersusImages_t * initVersusImages(int xBlock, int yBlock, int wBlock, int hBlock) {
+	VersusImages_t * versusImages = (VersusImages_t *)malloc(sizeof(VersusImages_t));
+
+	int wImage = wBlock / 2;
+
+	if (versusImages != NULL) {
+		versusImages->leftChara = createImage(xBlock, yBlock, wImage, hBlock, "assets/empty.png", CHAMP_SELECT, PlanChampSelect);
+		versusImages->rightChara = createImage(xBlock + wImage, yBlock, wImage, hBlock, "assets/empty.png", CHAMP_SELECT, PlanChampSelect);
+		versusImages->rightChara->flip = SANDAL2_FLIP_HOR;
+	}
+
+	return versusImages;
 }
 
 
@@ -382,8 +403,12 @@ StatsCharacterMax_t * getCharacterStatsMaxInFile() {
 // actions a executer quand on clic sur un perso de la champ select
 void onClickActionsChampSelect(Element * element, int i) {
 	(void) i;
+	StatsCharacter_t * d = element->data;
+	okButton_t * okButton = d->okButton->data;
+
 	displayCharacterStats(element);
 	selectCharacter(element);
+	displayCharacterVersus(d->versusImages, d->idChara, okButton->nbClick);
 }
 
 
@@ -425,6 +450,21 @@ void selectCharacter(Element * element) {
 }
 
 
+// affiche le bon perso dans le versus
+void displayCharacterVersus(VersusImages_t * versusImages, int idChara, int nbClick) {
+
+	char filename[30] = "assets/characters/c0.png";
+	filename[19] = idChara + 48;
+
+	if (nbClick == 0) {
+		setImageElement(versusImages->leftChara, filename);
+	}
+	if (nbClick == 1) {
+		setImageElement(versusImages->rightChara, filename);
+	}
+}
+
+
 void createStatsNames(int xBlock, int yBlock, int wBlock, int hBlock) {
 	int statsNb    = 4; // Nombre de champs pour les stats des perso
 	int fieldSpace = hBlock / statsNb; 
@@ -445,7 +485,7 @@ Element * createValidateInBlock(int xBlock, int yBlock, int wBlock, int hBlock) 
 	int xVal = xBlock+wVal;
 	int yVal = yBlock+0.4*hBlock - hVal/2 ;
 
-	Element * okButton = createImage(xVal, yVal, wVal, hVal, "assets/GOButton.png", CHAMP_SELECT, PlanBlock-4);
+	Element * okButton = createImage(xVal, yVal, wVal, hVal, "assets/GOButton.png", CHAMP_SELECT, PlanOkButton);
 
 	if (okButton != NULL) {
 

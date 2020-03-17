@@ -15,6 +15,7 @@ enum PlanChampSelect {
 	PlanStatsGraphsBackground = 71,
 	PlanStatsGraphs = 70,
 
+	PlanOkButton = 49,
 
 	PlanTitre = 14,
 	
@@ -30,6 +31,12 @@ enum PlanChampSelect {
 	PlanBtnValiderUp = 3,
 	PlanBtnValiderDown = 2,
 };
+
+// structure des 2 pointeurs sur les images afficher pour le Versus
+typedef struct VersusImages {
+	Element * leftChara;
+	Element * rightChara;
+}VersusImages_t;
 
 // struct du boutton "GO !" pour valider le choix du perso (data de lelement okButton de la struct StatsCharacter)
 typedef struct okButton {
@@ -64,6 +71,7 @@ typedef struct StatsCharacter {
 	int    strength;
 	double speed;
 
+	VersusImages_t * versusImages;
 	Element * okButton;
 	StatsGraphs_t * statsGraphs;
 	StatsCharacterMax_t * statsMax;
@@ -104,8 +112,14 @@ void displayCharacterStats(Element * element);
 // rempli la structure okButton avec l'id du perso choisi
 void selectCharacter(Element * element);
 
+// affiche le bon perso dans le versus
+void displayCharacterVersus(VersusImages_t * versusImages, int idChara, int nbClick);
+
 // creer les blocks de stats pour les perso, qui seront a modifier lors d'un clic
 StatsGraphs_t * initStatsGraphs(int xBlock, int yBlock, int wBlock, int hBlock);
+
+// init la structure des images du Versus
+VersusImages_t * initVersusImages(int xBlock, int yBlock, int wBlock, int hBlock);
 
 
 // recupere les valeurs des stats des perso dans le fichier et rempli les structures StatsCharacter_t
