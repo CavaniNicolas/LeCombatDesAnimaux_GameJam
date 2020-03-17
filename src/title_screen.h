@@ -20,9 +20,9 @@ typedef struct DataCurtain {
 
 typedef struct DataStart {
 	bool isClicked;
+	bool allowClick;
 
 	Element * curtainLeft;
-	Element * curtainRight;
 }DataStart;
 
 /*
@@ -31,17 +31,12 @@ typedef struct DataStart {
 */
 void Launcher();
 
-/*
-* Fonction : moveCurtainLeft
-* Objectif : déplace le rideau 1 (celui de gauche)
-*/
-void moveLeftCurtainLeft(Element * r1);
+// Ouvre les rideaux (et les supprime si on les ouvre lors de la transition des menus)
+void openCurtains(Element * curtainLeft);
 
-/*
-* Fonction : moveCurtainRight
-* Objectif : déplace le rideau 2 (celui de droite)
-*/
-void moveRightCurtainRight(Element * r2);
+// Ferme les rideaux pour debuter une transition de menu
+void closeCurtains(Element * curtainLeft);
+
 
 /*
 * Fonction : zoomInTitle
@@ -73,10 +68,8 @@ void StartDown(Element * start, int i);
 */
 void StartUp(Element * start, int i);
 
-
-// transition rideaux, recentre les rideaux puis les reéloigne en affichant le deuxieme menu
-void moveLeftCurtainRight(Element * curtainLeft);
-void moveRightCurtainLeft(Element * curtainLeft);
-
+// change color when hovering on/off start button
+void hoverOnStartButton(Element * start);
+void hoverOffStartButton(Element * start);
 
 #endif

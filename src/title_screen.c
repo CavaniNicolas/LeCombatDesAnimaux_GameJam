@@ -13,11 +13,13 @@
 void Launcher() {
 	int  red[4]         = {255, 0, 0, 255};
 	int  black[4]       = {0, 0, 0, 255};
-	int  xTitle         = LFEN / 2 - 100;
-	int  yTitle         = HFEN / 2;
-	int  wTitle         = 500;
-	int  hTitle         = 100;
-	int  textSizeTitle  = 50;
+
+	double  wTitle         = LFEN * 0.3;
+	double  hTitle         = 0.2 * wTitle;
+	double  xTitle         = (LFEN / 2) - (wTitle / 2);
+	double  yTitle         = (HFEN * 0.2) - (hTitle / 2);
+
+	int  textSizeTitle  = 100;
 	char font[100]      = "fonts/arial.ttf";
 	char titleText[100] = "Le Combat Des Animaux";
 
@@ -35,98 +37,96 @@ void Launcher() {
 
 	Element * curtainLeft  = createImage(0, 0, LFEN/2, HFEN, "assets/rideaugauche.png", TITLE_SCREEN, PlanCurtains);
 	Element * curtainRight = createImage(LFEN/2, 0, LFEN/2, HFEN, "assets/rideaudroit.png", TITLE_SCREEN, PlanCurtains);
+	addElementToElement(curtainLeft, curtainRight);
 
 	DataCurtain_t * curtainLeftData = (DataCurtain_t *)malloc(sizeof(DataCurtain_t));
 	curtainLeftData->isClosed  = false;
 	curtainLeftData->isMaxOpen = false;
 	curtainLeftData->isFinished = false;
-	DataCurtain_t * curtainRightData = (DataCurtain_t *)malloc(sizeof(DataCurtain_t));
-	curtainRightData->isClosed  = false;
-	curtainRightData->isMaxOpen = false;
-	curtainRightData->isFinished = false;
-
 
 	curtainLeft->data = curtainLeftData;
-	curtainRight->data = curtainRightData;
-
 
 	dStart->curtainLeft = curtainLeft;
-	dStart->curtainRight = curtainRight;
 
-	setActionElement(curtainLeft, moveLeftCurtainLeft);
-	setActionElement(curtainRight, moveRightCurtainRight);
+	setActionElement(curtainLeft, openCurtains);
+
 	setActionElement(title, zoomInTitle);
 
-/*	if (curtainLeftData->isFinished == true && curtainRightData->isFinished == true) {
-		ChampSelect();
-	}*/
 }
 
 // Curtains
 
-void moveLeftCurtainLeft(Element * curtainLeft) {
+void openCurtains(Element * curtainLeft) {
+	initIteratorElement(curtainLeft);
+	Element * curtainRight = nextIteratorElement(curtainLeft);
+
 	DataCurtain_t * d = curtainLeft->data;
+
 	if (d->isMaxOpen == false) {
 		curtainLeft->x -= 5;
-puts("blablou ?");
+		curtainRight->x += 5;
+puts("opening Curtains");
 	}
 
 	if (curtainLeft->x < -LFEN/2) {
 		d->isMaxOpen = true;
 		curtainLeft->events.action = NULL; // Stop moving
-		//clearPlanDisplayCode(TITLE_SCREEN, PlanCurtains);
+	}
+
+	if (d->isFinished == true && d->isMaxOpen == true) {
+		clearPlanDisplayCode(CHAMP_SELECT, PlanCurtains);
+		free(d);
+		clearDisplayCode(TITLE_SCREEN);
 	}
 }
 
-void moveRightCurtainRight(Element * curtainRight) {
-	DataCurtain_t * d = curtainRight->data;
-
-	if (d->isMaxOpen == false) {
-		curtainRight->x += 5;
-	}
-
-	if (curtainRight->x > LFEN) {
-		d->isMaxOpen = true;
-		curtainRight->events.action = NULL; // Stop moving
-		//clearPlanDisplayCode(TITLE_SCREEN, PlanCurtains);
-	}
-}
 
 // Title
 
 void zoomInTitle(Element * title) {
-	int speed    = 2;
-	int yMaxZoom = LFEN/8-150;
-
 	initIteratorElement(title);
 	Element * titleShadow = nextIteratorElement(title);
 
-	title->x      -= speed;
-	title->y      -= speed;
-	title->width  += speed;
-	title->height += speed;
+	double wTitle = title->width;
 
-	titleShadow->x      -= speed;
-	titleShadow->y      -= speed;
-	titleShadow->width  += speed;
-	titleShadow->height += speed;
+	double wMax = LFEN * 0.8;
 
-	if (title->y < yMaxZoom) {
+	double wNew = wTitle + 4;
+	double hNew = 0.2 * wNew;
+
+	double xNew = (LFEN / 2) - (wNew / 2);
+	double yNew = (HFEN * 0.2) - (hNew / 2);
+
+	if (wNew >= wMax) {
 		title->events.action = NULL; // Stop moving
 		setTextElement(title->elementParent, "Start");
+	}
+
+	if (wNew < wMax) {
+		title->width = wNew;
+		title->x = xNew;
+		titleShadow->width = wNew;
+		titleShadow->x = xNew - 2;
+
+		title->height = hNew;
+		title->y = yNew;
+		titleShadow->height = hNew;
+		titleShadow->y = yNew + 5;
 	}
 }
 
 // Start
 
 Element * initStartButton() {
-	int red[4]          = {255, 0, 0, 255};
-	int xStart          = 2 * LFEN / 3 - 100;
-	int yStart          = HFEN / 2 - 100;
-	int wStart          = 350;
-	int hStart          = 180;
-	int textSizeStart   = 50;
-	char font[100]      = "fonts/arial.ttf";
+	int red[4]        = {255, 0, 0, 255};
+
+	double wStart     = LFEN * 0.4;
+	double hStart     = 0.4 * wStart;
+	double xStart     = (LFEN / 2) - (wStart / 4);
+	double yStart     = (HFEN * 0.6) - (hStart / 2);
+
+	int textSizeStart = 100;
+	char font[100]    = "fonts/arial.ttf";
 
 	Element * start = createText(xStart, yStart, wStart, hStart, textSizeStart, font, " ", red, SANDAL2_BLENDED, TITLE_SCREEN, PlanTextMain);
 
@@ -140,7 +140,8 @@ Element * initStartButton() {
 			setOnClickElement(start, StartDown);
 			setUnClickElement(start, StartUp);
 
-			// pour les actions when hover : setOnMouseMotionElement()
+			setOnMouseMotionElement(start, hoverOnStartButton);
+			setUnMouseMotionElement(start, hoverOffStartButton);
 		} else {
 			free(start);
 		}
@@ -154,55 +155,78 @@ DataStart * initDataStart() {
 	DataStart * d = malloc(sizeof(DataStart));
 	if (d) {
 		d->isClicked = false;
+		d->allowClick = true;
+		d->curtainLeft = NULL;
 	}
 	return d;
 }
 
 void StartDown(Element * start, int i) {
 	(void) i;
-	int green[4]        = {0,255,0,255};
+	int green[4]        = {0, 255, 0, 255};
 
 	DataStart * d = start->data;
 
-	if (d->isClicked == false) {
+	if (d->isClicked == false && d->allowClick == true) {
 		d->isClicked = true;
 		setTextColorElement(start, green);
 	
-		setActionElement(d->curtainLeft, moveLeftCurtainRight);
-		setActionElement(d->curtainRight, moveRightCurtainLeft);
+		setActionElement(d->curtainLeft, closeCurtains);
 	}
 }
-
-
 
 void StartUp(Element * start, int i) {
 	(void) i;
 
-	int coul[4] = {0,0,0,255};
+	int red[4] = {255,0,0,255};
+
 	DataStart * d = start->data;
-	d->isClicked = false;
-printf("yolo\n");
-	setTextColorElement(start, coul);
-
-
-	//ChampSelect();
+	
+	if (d->allowClick == true) {
+		d->allowClick = false;
+		setTextColorElement(start, red);
+	}
 }
+
+// Hover on Start Button
+void hoverOnStartButton(Element * start) {
+	int orange[4] = {255, 150, 0, 255};
+
+	DataStart * d = start->data;
+	if (d->isClicked == false) {
+		setTextColorElement(start, orange);
+	}
+}
+
+// Hover Off Start Button
+void hoverOffStartButton(Element * start) {
+	int red[4] = {255, 0, 0, 255};
+
+	DataStart * d = start->data;
+	if (d->isClicked == false) {
+		setTextColorElement(start, red);
+	}
+}
+
 
 // transition
 
-
-void moveLeftCurtainRight(Element * curtainLeft) {
+void closeCurtains(Element * curtainLeft) {
 	DataCurtain_t * d = curtainLeft->data;
+	initIteratorElement(curtainLeft);
+	Element * curtainRight = nextIteratorElement(curtainLeft);
 
 	if (d->isClosed == false) {
 		curtainLeft->x += 10;
+		curtainRight->x -= 10;
 	}
 
 	if (curtainLeft->x >= 0) {
 		d->isClosed = true;
-		curtainLeft->events.action = NULL; // Stop moving
-		setDisplayCodeWindow(CHAMP_SELECT);
+
 		addDisplayCodeElement(curtainLeft, CHAMP_SELECT, PlanCurtains);
+		addDisplayCodeElement(curtainRight, CHAMP_SELECT, PlanCurtains);
+		setDisplayCodeWindow(CHAMP_SELECT);
 		puts("fermé");
 	}
 
@@ -210,35 +234,13 @@ void moveLeftCurtainRight(Element * curtainLeft) {
 		d->isFinished = true;
 		d->isClosed = false;
 		d->isMaxOpen = false;
-		setActionElement(curtainLeft, moveLeftCurtainLeft);
+		setActionElement(curtainLeft, openCurtains);
 		puts("ALLO");
 		//free(curtainLeft);
 	}
+
+	if (d->isFinished == true) {
+		ChampSelect();
+	}
 }
 
-void moveRightCurtainLeft(Element * curtainRight) {
-	DataCurtain_t * d = curtainRight->data;
-
-	if (d->isClosed == false) {
-		curtainRight->x -= 10;
-	}
-
-	if (curtainRight->x <= LFEN/2) {
-		d->isClosed = true;
-		curtainRight->events.action = NULL; // Stop moving
-		setDisplayCodeWindow(CHAMP_SELECT);
-		addDisplayCodeElement(curtainRight, CHAMP_SELECT, PlanCurtains);
-		puts("fermé");
-	}
-
-	if (d->isClosed == true) {
-		d->isFinished = true;
-		d->isClosed = false;
-		d->isMaxOpen = false;
-		setActionElement(curtainRight, moveRightCurtainRight);
-		//ChampSelect();
-		puts("ALLO");
-		//free(curtainRight);
-	}
-
-}
