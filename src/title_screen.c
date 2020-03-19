@@ -21,7 +21,6 @@ void Launcher() {
 	char titleText[100] = "Le Combat Des Animaux";
 
 	createImage(0, 0, LFEN, HFEN, "assets/fond.jpg", TITLE_SCREEN, PlanBackgroundTS);
-	createImage(0, 0, LFEN, HFEN, "assets/map0.jpg", CHAMP_SELECT, PlanBackgroundCS);
 
 	Element * start = initStartButton();
 	DataStart * dStart = start->data;
@@ -32,8 +31,8 @@ void Launcher() {
 
 	title->elementParent = start;
 
-	Element * curtainLeft  = createImage(0, 0, LFEN/2, HFEN, "assets/rideaugauche.png", TITLE_SCREEN, PlanCurtains);
-	Element * curtainRight = createImage(LFEN/2, 0, LFEN/2, HFEN, "assets/rideaudroit.png", TITLE_SCREEN, PlanCurtains);
+	Element * curtainLeft  = createImage(0, 0, LFEN/2, HFEN, "assets/TITLE_SCREEN/leftCurtain.png", TITLE_SCREEN, PlanCurtains);
+	Element * curtainRight = createImage(LFEN/2, 0, LFEN/2, HFEN, "assets/TITLE_SCREEN/rightCurtain.png", TITLE_SCREEN, PlanCurtains);
 	addElementToElement(curtainLeft, curtainRight);
 
 	DataCurtain_t * curtainLeftData = (DataCurtain_t *)malloc(sizeof(DataCurtain_t));

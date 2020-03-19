@@ -4,8 +4,9 @@
 #include "optimiseDisplay.h"
 #include "structure.h"
 #include "champ_select.h"
+#include "map_select.h"
 
-#include "fight.h" // change this into map_select once its finished
+//#include "fight.h" // change this into map_select once its finished
 
 void ChampSelect() {
 	setDisplayCodeWindow(CHAMP_SELECT);
@@ -111,14 +112,11 @@ void displayBlocksInOptimizedPosition(int xBlock, int yBlock, int wBlock, int hB
 		int idChara = 0; int y = 1;
 
 		/* calcul de l'espace vide entre deux elements selon les x */
-		int xTotalSpaceUsed = nbColumns * sizeSideIm;
-		int xTotalSpaceFree = wBlock - xTotalSpaceUsed;
-		int xinterObjSpace  = xTotalSpaceFree / (2 * nbColumns);
+		int xinterObjSpace  = spaceBetweenObjects(nbColumns, sizeSideIm, wBlock);
 
 		/* calcul de l'espace vide entre deux elements selon les y */
-		int yTotalSpaceUsed = nbLines * sizeSideIm;
-		int yTotalSpaceFree = hBlock - yTotalSpaceUsed;
-		int yinterObjSpace  = yTotalSpaceFree / (2 * nbLines);
+		int yinterObjSpace  = spaceBetweenObjects(nbLines, sizeSideIm, hBlock);
+
 
 		/* position initiale du premier element0 */
 		int xIm = xBlock + xinterObjSpace;
@@ -432,7 +430,8 @@ void charactersValidation(Element * okButton) {
 		printf("idChara Gauche = %d\n", d->idCharaLeftPlayer);
 		printf("idChara Droite = %d\n", d->idCharaRightPlayer);
 
-		initFight(d->idCharaLeftPlayer, d->idCharaRightPlayer, 0);
+		MapSelect();
+		//initFight(d->idCharaLeftPlayer, d->idCharaRightPlayer, 0);
 	}
 }
 

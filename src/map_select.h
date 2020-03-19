@@ -3,9 +3,20 @@
 #define MAPSELECT_H
 
 enum PlanMapSelect {
-	PlanMapUp = 5,
-	PlanMapDown = 4
+	PlanBackgroundMS = 99,
+
+	PlanMapLogoBackground = 79,
+	PlanMapLogo = 75
+
 };
+
+
+void MapSelect();
+
+void generateMapSelectDisplays();
+
+
+/* *************************************************************** */
 
 typedef struct DataValidate2 {
 	int verif;
@@ -24,6 +35,11 @@ typedef struct DataMap {
 	int isSelected;
 }DataMap;
 
+enum {
+	//a supprimer
+	PlanMapUp = 5,
+	PlanMapDown = 4
+};
 
 /*
 * Fonction : initChoiceMap

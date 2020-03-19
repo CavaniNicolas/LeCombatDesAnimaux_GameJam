@@ -2,6 +2,7 @@
 #include <SANDAL2/SANDAL2.h>
 #include <string.h>
 #include "structure.h"
+#include "optimiseDisplay.h"
 #include "map_select.h"
 
 #include "fight.h"
@@ -11,8 +12,38 @@
 void MapSelect() {
 	setDisplayCodeWindow(MAP_SELECT);
 
+	generateMapSelectDisplays();
 }
 
+
+void generateMapSelectDisplays() {
+
+	int white[4] = {255, 255, 255, 255};
+	int black[4] = {0, 0, 0, 255};
+
+	createImage(0, 0, LFEN, HFEN, "assets/map1.jpg", MAP_SELECT, PlanBackgroundMS);
+
+	int xmarge = 0.1 * LFEN;
+	int ymarge = 0.1 * HFEN;
+	int wMapBlock = 0.8 * LFEN;
+	int hMapBlock = 0.8 * HFEN;
+
+	int nbMap = 3; float fillPercent = 0.8; int nbLines = 0; int nbColumns = 0; int sizeSideIm = 0;
+	setOptimizedLinesAndColumns(wMapBlock, hMapBlock, nbMap, fillPercent, &nbLines, &nbColumns, &sizeSideIm);
+
+	int xInterObjSpace = spaceBetweenObjects(nbColumns, sizeSideIm, wMapBlock);
+	int yInterObjSpace = spaceBetweenObjects(nbLines, sizeSideIm, hMapBlock);
+
+	createBlock(xmarge, ymarge, wMapBlock, hMapBlock, black, MAP_SELECT, PlanMapLogoBackground);
+
+	int xIm = xInterObjSpace; int yIm = yInterObjSpace; 
+	int numLine = 1; int numColumn = 1;
+	for (int i=0; i<nbMap; i++) {
+		createBlock(xmarge + xIm, ymarge + yIm, sizeSideIm, sizeSideIm, white, MAP_SELECT, PlanMapLogo);
+		newOptimisedXY(&xIm, &yIm, &numLine, &numColumn, nbLines, nbColumns, sizeSideIm, xInterObjSpace, yInterObjSpace);
+	}
+
+}
 
 /*
 void initChoiceMap(int indiceJoueur, int indiceJoueur2, Element * validerPerso) {
