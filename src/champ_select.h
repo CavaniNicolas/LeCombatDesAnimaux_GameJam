@@ -4,8 +4,6 @@
 #include <stdbool.h>
 
 
-/*********************** CHAMP_SELECT ******************************/
-
 enum PlanChampSelect {
 	PlanBackgroundCS = 99,
 
@@ -78,15 +76,6 @@ int checkIfnbCharaIsCorrect(int nbChara);
 
 // affiche les cases pour la champ select et les rends clickable
 void createFieldsChampSelectInBlock(int xBlock, int yBlock, int wBlock, int hBlock, int nbChara, float fillPercent, int * nbLines, int * nbColumns, int * sizeSideIm, int xGraph, int yGraph, int wGraph, int hGraph);
-
-//calcul le nombre optimal de lignes et colonnes en fct du nombre total delements a placer et autorise de contraindre un des deux parametres
-void setOptimizedLinesAndColumns(int wBlock, int hBlock, int nbChara, float fillPercent, int * nbLines, int * nbColumns, int * sizeSideIm);
-
-// varCte, varAdapting : nombre de lignes ou de colonnes, l'une est fixe et détermine la valeur de l'autre
-void setSecondVariable(int varCte, int * varAdapting, int * sizeSideIm, int nbChara, float fillPercent, int wBlock, int hBlock);
-
-//calcul le nombre optimal de lignes et colonnes en fct du nombre total delements a placer
-void optimizeNumberOfLinesColumns(int wBlock, int hBlock, int nbChara, float fillPercent, int * nbLines, int * nbColumns, int * sizeSideIm);
 
 // affiche les blocs une fois quon connait le nombre de lignes et colonnes souhaitées
 void displayBlocksInOptimizedPosition(int xBlock, int yBlock, int wBlock, int hBlock, int nbChara, int nbLines, int nbColumns, int sizeSideIm, int xGraph, int yGraph, int wGraph, int hGraph);
