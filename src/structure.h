@@ -21,10 +21,9 @@ enum Perso {
 enum Display { //good
 	TITLE_SCREEN = 0,
 	CHAMP_SELECT = 1,
+	MAP_SELECT = 2,
 
 	//a supprimer un fois terminé
-	ECRAN_TITRE = 0,
-	ECRAN_CHOIX_PERSO = 1,
 	ECRAN_CHOIX_MAP = 2,
 	ECRAN_FIGHT = 3
 };

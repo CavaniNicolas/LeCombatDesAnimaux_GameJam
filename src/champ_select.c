@@ -8,13 +8,13 @@
 #include "fight.h" // change this into map_select once its finished
 
 void ChampSelect() {
+	setDisplayCodeWindow(CHAMP_SELECT);
 	generateAllDisplays();
 
 }
 
 
 void generateAllDisplays() {
-	setDisplayCodeWindow(CHAMP_SELECT);
 	int white[4] = {255, 255, 255, 255};
 	int black[4] = {0, 0, 0, 255};
 

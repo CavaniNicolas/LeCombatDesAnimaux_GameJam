@@ -3,9 +3,15 @@
 #include <string.h>
 #include "structure.h"
 #include "map_select.h"
-#include "fight.h"
-#include "champ_select.h"
 
+#include "fight.h"
+
+
+
+void MapSelect() {
+	setDisplayCodeWindow(MAP_SELECT);
+
+}
 
 
 /*
