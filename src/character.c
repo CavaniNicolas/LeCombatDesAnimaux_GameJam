@@ -46,7 +46,7 @@ DataCharacter_t * initDataCharacter(int idPlayer, int idChosen) {
 	if (d != NULL) {
 
 		FILE * file = NULL;
-		file = fopen("assets/DataCharacters.txt", "r");
+		file = fopen("assets/stats/DataCharacters.txt", "r");
 
 		if (file != NULL) {
 
@@ -107,18 +107,18 @@ DataCharacter_t * initDataCharacter(int idPlayer, int idChosen) {
 int getCharactersFilename(int idPerso, char filename[50]) {
 	int error = 1;
 	DIR * rep = opendir("./assets/characters");
-	char filenameTmp[20] = "_";
+	char filenameTmp[30] = "c_.png";
 
 	if (rep != NULL) {
 		struct dirent * ent = NULL;
 
 		while ((ent = readdir(rep)) != NULL) {
-			if (ent->d_name[0] - 48 == idPerso) {
+			if (ent->d_name[1] - 48 == idPerso) {
 				strcpy(filenameTmp, ent->d_name);
 			}
 		}
 
-		if (filenameTmp[0] == '_') {
+		if (filenameTmp[1] == '_') {
 			error = 0;
 		}
 

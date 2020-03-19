@@ -9,7 +9,7 @@
 
 /******************* ECRAN_CHOIX_MAP ***********************************/
 // init
-
+/*
 void initChoiceMap(int indiceJoueur, int indiceJoueur2, Element * validerPerso) {
 	int white[4] = {255,255,255,255};
 	int red[4] = {255,0,0,255};
@@ -172,3 +172,4 @@ void MapUp(Element * map, int i) {
 	DataMap * d = map->data;
 	d->verif = 0;
 }
+*/

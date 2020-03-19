@@ -6,6 +6,9 @@
 
 
 void initFight(int idCharacterG, int idCharacterD, int idMap) {
+	setDisplayCodeWindow(ECRAN_FIGHT);
+
+
 	char s[16] = "assets/map0.jpg";
 	s[10] = idMap+48;
 	createImage(0, 0, LFEN,HFEN, s, ECRAN_FIGHT, PlanDecor);

@@ -5,8 +5,7 @@
 #include "structure.h"
 #include "champ_select.h"
 
-#include "menu.h"
-
+#include "fight.h"
 
 /******************* CHAMP_SELECT ***********************************/
 // init
@@ -535,6 +534,7 @@ void charactersValidation(Element * okButton) {
 		printf("On passe a la MapSelect\n");
 		printf("idChara Gauche = %d\n", d->idCharaLeftPlayer);
 		printf("idChara Droite = %d\n", d->idCharaRightPlayer);
+		initFight(d->idCharaLeftPlayer, d->idCharaRightPlayer, 0);
 	}
 }
 
