@@ -7,7 +7,7 @@
 #include "champ_select.h"
 
 
-/******************* ECRAN_CHOIX_MAP ***********************************/
+/*********************************************** ECRAN_CHOIX_MAP *************************************************************/
 // init
 /*
 void initChoiceMap(int indiceJoueur, int indiceJoueur2, Element * validerPerso) {

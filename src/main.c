@@ -1,4 +1,9 @@
 
+/*
+* Projet Game Jam : Le combat des animaux
+* Auteur : Nicolas Cavani
+*/
+
 #include <SANDAL2/SANDAL2.h>
 #include "structure.h"
 #include "title_screen.h"

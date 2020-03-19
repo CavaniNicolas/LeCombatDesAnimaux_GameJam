@@ -1,18 +1,6 @@
-#ifndef MENU_H
-#define MENU_H
 
-/*
-* Projet Game Jam : Le combat des animaux
-* Auteur : Théo Boucher, Nicolas Cavani
-* menu
-*
-* Le menu contient plusieurs display
-* Premièrement l'écran titre
-*  fonctions : Launcher, depRideau1, depRideau2, aggrandissement, initDataStart, StartDown, StartUp
-*/
-
-
-
+#ifndef MAPSELECT_H
+#define MAPSELECT_H
 
 /***************************** ECRAN_CHOIX_MAP ******************************/
 /*
