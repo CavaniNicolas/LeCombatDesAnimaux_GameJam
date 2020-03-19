@@ -7,6 +7,7 @@
 #include "champ_select.h"
 
 
+
 /*
 void initChoiceMap(int indiceJoueur, int indiceJoueur2, Element * validerPerso) {
 	int white[4] = {255,255,255,255};
