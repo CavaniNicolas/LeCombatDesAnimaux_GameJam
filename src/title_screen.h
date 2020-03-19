@@ -2,7 +2,6 @@
 #define TITLESCREEN_H
 #include <stdbool.h>
 
-/******************** ECRAN_TITRE ***********************************/
 
 enum PlanMenuStart {
 	PlanBackgroundTS = 5,
