@@ -6,7 +6,7 @@
 #include "champ_select.h"
 #include "map_select.h"
 
-//#include "fight.h" // change this into map_select once its finished
+#include "fight.h" // change this into map_select once its finished
 
 void ChampSelect() {
 	setDisplayCodeWindow(CHAMP_SELECT);
@@ -46,7 +46,7 @@ void generateAllDisplays() {
 	createBlock(marge, marge, wCharBlock, hBlock, white, CHAMP_SELECT, PlanChampSelect); // Contour blanc du block
 	createBlock(marge+2, marge+2, wCharBlock-4, hBlock-4, black, CHAMP_SELECT, PlanChampSelect); // Block noir
 
-	int nbChara = 3; float fillPercent = 0.8; int nbLines = 0; int nbColumns = 0; int sizeSideIm = 0;
+	int nbChara = 4; float fillPercent = 0.8; int nbLines = 0; int nbColumns = 0; int sizeSideIm = 0;
 	if (0 == checkIfnbCharaIsCorrect(nbChara)) {
 		createFieldsChampSelectInBlock(marge+2, marge+2, wCharBlock-4, hBlock-4, nbChara, fillPercent, &nbLines, &nbColumns, &sizeSideIm, xStatBlock, marge, wStatBlock, hBlock);
 	} else {
@@ -77,7 +77,7 @@ int checkIfnbCharaIsCorrect(int nbChara) {
 			}
 		}
 
-		if (counter == nbChara) {
+		if (counter >= nbChara) {
 			error = 0;
 		}
 
@@ -139,7 +139,7 @@ void displayBlocksInOptimizedPosition(int xBlock, int yBlock, int wBlock, int hB
 
 				//createBlock(xIm, yIm, sizeSideIm, sizeSideIm, white, CHAMP_SELECT, PlanChampSelect);
 				newElement = createImage(xIm, yIm, sizeSideIm, sizeSideIm, filenameCharacter, CHAMP_SELECT, PlanChampSelect); // affiche le perso sur lequel on peut clicker
-
+puts("a");
 				if (newElement != NULL) {
 
 					// initialise les champs (stats) du nouvel element
@@ -430,8 +430,8 @@ void charactersValidation(Element * okButton) {
 		printf("idChara Gauche = %d\n", d->idCharaLeftPlayer);
 		printf("idChara Droite = %d\n", d->idCharaRightPlayer);
 
-		MapSelect();
-		//initFight(d->idCharaLeftPlayer, d->idCharaRightPlayer, 0);
+		initFight(d->idCharaLeftPlayer, d->idCharaRightPlayer, 0);
+		//MapSelect();
 	}
 }
 

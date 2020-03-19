@@ -8,7 +8,7 @@
 #include "structure.h"
 #include "title_screen.h"
 
-//#include "champ_select.h"
+#include "champ_select.h"
 #include "map_select.h"
 
 int main() {
@@ -18,8 +18,8 @@ int main() {
 	createWindow(LFEN, HFEN, "Le Combat Des Animaux", 0, black, TITLE_SCREEN);
 
 	//Launcher();
-	//ChampSelect();
-	MapSelect();
+	ChampSelect();
+	//MapSelect();
 
 	while (!PollEvent(NULL)) {
 		updateWindow();
