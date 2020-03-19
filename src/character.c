@@ -28,7 +28,7 @@ void initCharacter(int idPlayer, int idPerso, Element ** character) {
 				y = groundLevel;
 			}
 
-			(*character) = createImage(x, y, d->width, d->height, filename, ECRAN_FIGHT, PlanCharacter);
+			(*character) = createImage(x, y, d->width, d->height, filename, ECRAN_FIGHT, 0);
 
 			if (idPlayer == JOUEUR_D) {
 				(*character)->flip = SANDAL2_FLIP_HOR;

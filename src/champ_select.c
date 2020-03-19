@@ -5,15 +5,10 @@
 #include "structure.h"
 #include "champ_select.h"
 
-#include "fight.h"
-
-/******************* CHAMP_SELECT ***********************************/
-// init
+#include "fight.h" // change this into map_select once its finished
 
 void ChampSelect() {
 	generateAllDisplays();
-
-
 
 }
 
@@ -35,8 +30,8 @@ void generateAllDisplays() {
 	createImage(0, 0, LFEN, HFEN, "assets/map0.jpg", CHAMP_SELECT, PlanBackgroundCS);
 
 	// Block d'info à droite
-	createBlock(xStatBlock, marge, wStatBlock, hBlock, white, CHAMP_SELECT, PlanBlock);
-	createBlock(xStatBlock+2, marge+2, wStatBlock-4, hBlock-4, black, CHAMP_SELECT, PlanBlock-1);
+	createBlock(xStatBlock, marge, wStatBlock, hBlock, white, CHAMP_SELECT, PlanBlock); // Contour blanc du block
+	createBlock(xStatBlock+2, marge+2, wStatBlock-4, hBlock-4, black, CHAMP_SELECT, PlanBlock-1); // Block noir
 	createBlock(xStatBlock, marge+0.4*hBlock, wStatBlock, 2, white, CHAMP_SELECT, PlanBlock-1); // Ligne séparatrice dans le block
 
 	// Button OK
@@ -47,8 +42,8 @@ void generateAllDisplays() {
 	createStatsNames(xStatBlock, yGraphBlock, wStatBlock/2, 0.6*hBlock);
 
 	// Characters and statsGraphs
-	createBlock(marge, marge, wCharBlock, hBlock, white, CHAMP_SELECT, PlanChampSelect);
-	createBlock(marge+2, marge+2, wCharBlock-4, hBlock-4, black, CHAMP_SELECT, PlanChampSelect);
+	createBlock(marge, marge, wCharBlock, hBlock, white, CHAMP_SELECT, PlanChampSelect); // Contour blanc du block
+	createBlock(marge+2, marge+2, wCharBlock-4, hBlock-4, black, CHAMP_SELECT, PlanChampSelect); // Block noir
 
 	int nbChara = 3; float fillPercent = 0.8; int nbLines = 0; int nbColumns = 0; int sizeSideIm = 0;
 	if (0 == checkIfnbCharaIsCorrect(nbChara)) {
@@ -243,7 +238,7 @@ void displayBlocksInOptimizedPosition(int xBlock, int yBlock, int wBlock, int hB
 				filenameCharacter[19] = 48 + idChara; /*max 10 perso car va de 0 à 9*/
 
 				//createBlock(xIm, yIm, sizeSideIm, sizeSideIm, white, CHAMP_SELECT, PlanChampSelect);
-				newElement = createImage(xIm, yIm, sizeSideIm, sizeSideIm, filenameCharacter, CHAMP_SELECT, PlanChampSelect);
+				newElement = createImage(xIm, yIm, sizeSideIm, sizeSideIm, filenameCharacter, CHAMP_SELECT, PlanChampSelect); // affiche le perso sur lequel on peut clicker
 
 				if (newElement != NULL) {
 
@@ -313,8 +308,8 @@ VersusImages_t * initVersusImages(int xBlock, int yBlock, int wBlock, int hBlock
 	int wImage = wBlock / 2;
 
 	if (versusImages != NULL) {
-		versusImages->leftChara = createImage(xBlock, yBlock, wImage, hBlock, "assets/empty.png", CHAMP_SELECT, PlanChampSelect);
-		versusImages->rightChara = createImage(xBlock + wImage, yBlock, wImage, hBlock, "assets/empty.png", CHAMP_SELECT, PlanChampSelect);
+		versusImages->leftChara = createImage(xBlock, yBlock, wImage, hBlock, "assets/empty.png", CHAMP_SELECT, PlanCharactersVersus);
+		versusImages->rightChara = createImage(xBlock + wImage, yBlock, wImage, hBlock, "assets/empty.png", CHAMP_SELECT, PlanCharactersVersus);
 		versusImages->rightChara->flip = SANDAL2_FLIP_HOR;
 	}
 
@@ -338,9 +333,9 @@ StatsGraphs_t * initStatsGraphs(int xBlock, int yBlock, int wBlock, int hBlock) 
 
 
 	if (statsGraphs != NULL) {
-		statsGraphs->hpBox = createBlock(xGraph, yBlock+fieldSpace+quarterFieldSpace, wGraph, hGraph, white, CHAMP_SELECT, PlanStatsGraphs + 1);
-		statsGraphs->strengthBox = createBlock(xGraph, yBlock+2*fieldSpace+quarterFieldSpace, wGraph, hGraph, white, CHAMP_SELECT, PlanStatsGraphs + 1);
-		statsGraphs->speedBox = createBlock(xGraph, yBlock+3*fieldSpace+quarterFieldSpace, wGraph, hGraph, white, CHAMP_SELECT, PlanStatsGraphs + 1);
+		statsGraphs->hpBox = createBlock(xGraph, yBlock+fieldSpace+quarterFieldSpace, wGraph, hGraph, white, CHAMP_SELECT, PlanStatsGraphsBackground);
+		statsGraphs->strengthBox = createBlock(xGraph, yBlock+2*fieldSpace+quarterFieldSpace, wGraph, hGraph, white, CHAMP_SELECT, PlanStatsGraphsBackground);
+		statsGraphs->speedBox = createBlock(xGraph, yBlock+3*fieldSpace+quarterFieldSpace, wGraph, hGraph, white, CHAMP_SELECT, PlanStatsGraphsBackground);
 
 		statsGraphs->hp = createBlock(xGraph+2, yBlock+fieldSpace+2+quarterFieldSpace, wGraph-4, hGraph-4, orange, CHAMP_SELECT, PlanStatsGraphs);
 		statsGraphs->strength = createBlock(xGraph+2, yBlock+2*fieldSpace+2+quarterFieldSpace, wGraph-4, hGraph-4, orange, CHAMP_SELECT, PlanStatsGraphs);
@@ -534,6 +529,7 @@ void charactersValidation(Element * okButton) {
 		printf("On passe a la MapSelect\n");
 		printf("idChara Gauche = %d\n", d->idCharaLeftPlayer);
 		printf("idChara Droite = %d\n", d->idCharaRightPlayer);
+
 		initFight(d->idCharaLeftPlayer, d->idCharaRightPlayer, 0);
 	}
 }

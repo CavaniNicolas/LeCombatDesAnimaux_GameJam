@@ -2,7 +2,29 @@
 #ifndef MAPSELECT_H
 #define MAPSELECT_H
 
-/***************************** ECRAN_CHOIX_MAP ******************************/
+enum PlanMapSelect {
+	PlanMapUp = 5,
+	PlanMapDown = 4
+};
+
+typedef struct DataValidate2 {
+	int verif;
+	int indiceJoueur;
+	int indiceJoueur2;
+}DataValidate2;
+
+typedef struct DataRetour {
+	int verif;
+}DataRetour;
+
+
+typedef struct DataMap {
+	int id;
+	int verif;
+	int isSelected;
+}DataMap;
+
+
 /*
 * Fonction : initChoiceMap
 * Objectif : fonction de lancement du choix de la map

@@ -5,10 +5,7 @@
 #include "title_screen.h"
 
 #include "champ_select.h"
-#include "menu.h"
 
-/******************* TITLE_SCREEN ***********************************/
-// Init title_screen
 
 void Launcher() {
 	int  red[4]         = {255, 0, 0, 255};
@@ -65,7 +62,7 @@ void openCurtains(Element * curtainLeft) {
 	if (d->isMaxOpen == false) {
 		curtainLeft->x -= 5;
 		curtainRight->x += 5;
-puts("opening Curtains");
+
 	}
 
 	if (curtainLeft->x < -LFEN/2) {
@@ -243,4 +240,3 @@ void closeCurtains(Element * curtainLeft) {
 		ChampSelect();
 	}
 }
-

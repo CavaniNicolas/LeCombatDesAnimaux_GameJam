@@ -11,7 +11,7 @@ void initFight(int idCharacterG, int idCharacterD, int idMap) {
 
 	char s[16] = "assets/map0.jpg";
 	s[10] = idMap+48;
-	createImage(0, 0, LFEN,HFEN, s, ECRAN_FIGHT, PlanDecor);
+	createImage(0, 0, LFEN,HFEN, s, ECRAN_FIGHT, 1);
 
 	Element * characterG = NULL;
 	Element * characterD = NULL;

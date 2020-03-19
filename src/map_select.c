@@ -2,13 +2,11 @@
 #include <SANDAL2/SANDAL2.h>
 #include <string.h>
 #include "structure.h"
-#include "menu.h"
+#include "map_select.h"
 #include "fight.h"
 #include "champ_select.h"
 
 
-/*********************************************** ECRAN_CHOIX_MAP *************************************************************/
-// init
 /*
 void initChoiceMap(int indiceJoueur, int indiceJoueur2, Element * validerPerso) {
 	int white[4] = {255,255,255,255};

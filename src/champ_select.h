@@ -15,21 +15,10 @@ enum PlanChampSelect {
 	PlanStatsGraphsBackground = 71,
 	PlanStatsGraphs = 70,
 
-	PlanOkButton = 49,
+	PlanCharactersVersus = 59,
 
-	PlanTitre = 14,
-	
-	PlanContourNoir = 13,
-	PlanContourBlanc = 12,
-	PlanFondNoir = 11,
-	PlanBtnRetourUp = 10,
-	PlanBtnRetourDown = 9,
-	PlanPersoUp = 8,
-	PlanPersoDown = 7,
-	PlanInfo = 6,
-	PlanInfoModif = 5,
-	PlanBtnValiderUp = 3,
-	PlanBtnValiderDown = 2,
+	PlanOkButton = 50,
+
 };
 
 // structure des 2 pointeurs sur les images afficher pour le Versus
@@ -137,44 +126,6 @@ Element * createValidateInBlock(int, int, int, int);
 void validateCharacterChoice(Element * element, int i);
 
 void createStatsNames(int xBlock, int yBlock, int wBlock, int hBlock);
-
-
-
-
-
-/*
-* Fonction : initChoicePerso
-* Objectif : fonction de lancement du choix des perso
-*/
-void initChoicePerso();
-
-/*
-* Fonction : GenerateInfo
-* Objectif : 
-*/
-void GenerateInfo(int idPerso, Element * txtinfo);
-
-DataValidate * initDataValidate();
-
-void ValiderDown(Element * valider, int i);
-
-void ValiderUp(Element * valider, int i);
-
-DataRetour * initDataRetour();
-
-void RetourDown(Element * retour, int i);
-
-void RetourUp(Element * retour, int i);
-
-DataPerso * initDataPerso(int i);
-
-void UnSelectPerso(Element * perso);
-
-int WhoIsSelectedPerso(Element * valider);
-
-void PersoDown(Element * perso, int i);
-
-void PersoUp(Element * perso, int i);
 
 
 #endif
