@@ -26,11 +26,8 @@ int main() {
 		SDL_Delay(16);
 	}
 
-	//freeCharacters(characterG, characterD);
 	closeAllWindow();
 	closeAllSANDAL2();
-
-
 
 	return 0;
 }
