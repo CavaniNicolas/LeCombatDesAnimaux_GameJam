@@ -17,8 +17,8 @@ int main() {
 	initAllSANDAL2(IMG_INIT_JPG);
 	createWindow(LFEN, HFEN, "Le Combat Des Animaux", 0, black, TITLE_SCREEN);
 
-	//Launcher();
-	ChampSelect();
+	Launcher();
+	//ChampSelect();
 	//MapSelect();
 
 	while (!PollEvent(NULL)) {

@@ -28,7 +28,12 @@ void initCharacter(int idPlayer, int idPerso, Element ** character) {
 				y = groundLevel;
 			}
 
-			(*character) = createImage(x, y, d->width, d->height, filename, ECRAN_FIGHT, 0);
+			//(*character) = createImage(x, y, d->width, d->height, filename, ECRAN_FIGHT, 0);
+			
+			/////////////////////////////////////////////////////////////////////////
+			(*character) = createImage(x, y, d->width, d->height, "assets/sprites/c0.png", ECRAN_FIGHT, 0);
+			setCharacterAnimations(*character);
+			/////////////////////////////////////////////////////////////////////////
 
 			if (idPlayer == JOUEUR_D) {
 				(*character)->flip = SANDAL2_FLIP_HOR;
@@ -38,6 +43,26 @@ void initCharacter(int idPlayer, int idPerso, Element ** character) {
 		}
 	}
 }
+
+
+/////////////////////////////////////////////////////////////////////////
+void setCharacterAnimations(Element * character) {
+	int i=0;
+	addAnimationElement(character, standing);
+
+	for(i=0;i<4;++i)
+		if(addSpriteAnimationElement(character, standing, 70 + 500*i, 50, 300, 350, 12, i))
+			printf("Error adding sprite %d to animation %d\n",i,standing);
+
+	setWaySpriteAnimationElement(character, standing, 1); 
+
+	addAnimationElement(character, moving);
+	for(i=0;i<6;++i)
+		if(addSpriteAnimationElement(character, moving, 70 + 500*i, 550, 300, 350, 8, i))
+			printf("Error adding sprite %d to animation %d\n",i,moving);
+	setWaySpriteAnimationElement(character, moving, 1);
+}
+/////////////////////////////////////////////////////////////////////////
 
 
 DataCharacter_t * initDataCharacter(int idPlayer, int idChosen) {
@@ -218,12 +243,24 @@ void moveCharacter(Element * character) {
 	if (d->left) {
 		if ((character->x)-speed > 0)
 			moveElement(character, -speed, 0);
+
+		setAnimationElement(character, moving); /////////////////////////////////////////////////////////////////////////
 	}
 
-	if (d->right) {
+	else if (d->right) {
 		if ((character->x)-speed < LFEN-(d->width))
 			moveElement(character, speed, 0);
+
+		setAnimationElement(character, moving); /////////////////////////////////////////////////////////////////////////
 	}
+
+/////////////////////////////////////////////////////////////////////////
+	else {
+		setAnimationElement(character, standing);
+	}
+/////////////////////////////////////////////////////////////////////////
+
+
 
 	// si on appuye sur sauter et que on est en l'air
 	// alors deplacer le perso

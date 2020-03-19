@@ -45,6 +45,16 @@ typedef struct DataCharacter {
 void initCharacter(int, int, Element **);
 
 
+/////////////////////////////////////////////////////////////////////////
+enum Animations {
+	standing = 0,
+	moving = 1,
+};
+// set Animation with sprites to the element
+void setCharacterAnimations(Element * character);
+/////////////////////////////////////////////////////////////////////////
+
+
 /* -------------------------------------------------------------------------------- */
 /* initDataCharacter   Initialise les data d'un personnage depuis le fichier data   */
 /*                     "assets/DataCharacters.txt"                                  */
