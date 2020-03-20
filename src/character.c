@@ -50,15 +50,15 @@ void setCharacterAnimations(Element * character) {
 	int i=0;
 	addAnimationElement(character, standing);
 
-	for(i=0;i<4;++i)
-		if(addSpriteAnimationElement(character, standing, 70 + 500*i, 50, 300, 350, 12, i))
+	for(i=0;i<5;++i)
+		if(addSpriteAnimationElement(character, standing, 60 + 500*i, 40, 340, 380, 12, i))
 			printf("Error adding sprite %d to animation %d\n",i,standing);
 
 	setWaySpriteAnimationElement(character, standing, 1); 
 
 	addAnimationElement(character, moving);
 	for(i=0;i<6;++i)
-		if(addSpriteAnimationElement(character, moving, 70 + 500*i, 550, 300, 350, 8, i))
+		if(addSpriteAnimationElement(character, moving, 60 + 500*i, 540, 340, 380, 8, i))
 			printf("Error adding sprite %d to animation %d\n",i,moving);
 	setWaySpriteAnimationElement(character, moving, 1);
 }

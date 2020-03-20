@@ -9,7 +9,7 @@ void initFight(int idCharacterG, int idCharacterD, int idMap) {
 	setDisplayCodeWindow(ECRAN_FIGHT);
 
 
-	char s[16] = "assets/map0.jpg";
+	char s[16] = "assets/map1.jpg";
 	s[10] = idMap+48;
 	createImage(0, 0, LFEN,HFEN, s, ECRAN_FIGHT, 1);
 
