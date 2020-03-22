@@ -58,8 +58,8 @@ void createCharacterAnimations(Element * character) {
 	setWaySpriteAnimationElement(character, moving, 1);
 
 	addAnimationElement(character, jumping);
-	for(i=0; i<5; i++)
-		if(addSpriteAnimationElement(character, jumping, 60 + 500*i, 1050, 340, 380, 8, i))
+	for(i=0; i<8; i++)
+		if(addSpriteAnimationElement(character, jumping, 60 + 500*i, 1050, 340, 380, 3, i))
 			printf("Error adding sprite %d to animation %d\n", i, jumping);
 	setWaySpriteAnimationElement(character, jumping, 1);
 }
@@ -239,6 +239,10 @@ void charactersAnimation(Element * character) {
 
 	if (d->jump) {
 		setAnimationElement(character, jumping);
+		if (d->allowJump == true) {
+			setSpriteAnimationElement(character, 0); /*commence tj lanimation par la premiere sprite*/
+			d->allowJump = false; /*debut du saut, on ne peut plus resauter tant quon a pas atteri et attendu la fin du lag*/
+		}
 
 	} else if (d->left || d->right) {
 		setAnimationElement(character, moving);
@@ -276,6 +280,7 @@ void jumpCharacter(Element * character) {
 	// si autorisation de sauter (au sol ou en l'air)
 	// alors deplacer le perso
 	if (d->jump == true) {
+
 		if (character->y - d->jumpForceTmp + GRAVITY < groundLevel) {
 			character->y -= (d->jumpForceTmp + GRAVITY);
 			d->jumpForceTmp -= GRAVITY;
@@ -287,17 +292,27 @@ void jumpCharacter(Element * character) {
 			character->y = groundLevel;
 			d->jump = false;
 			d->jumpForceTmp = d->jumpForce;
-			d->allowJump = false;
 			d->jumpLagTmp = SDL_GetTicks();
 		}
 	}
 
 	// jumpLag
-	if(d->allowJump == false) {
+	if(d->allowJump == false && d->jump == false) {
 		if ((int)SDL_GetTicks() - d->jumpLagTmp >= d->jumpLag) {
 			d->allowJump = true;
 			puts("jump again");
 		}
 	}
 
+}
+
+
+// retourne le numero de la sprite affichée actuellement
+int getCurrentSprite(Element * character) {
+	int code = 0;
+
+	if (character->animation != NULL && character->animation->current != NULL && character->animation->current->current != NULL) {
+		code = character->animation->current->current->code;
+	}
+	return code;
 }

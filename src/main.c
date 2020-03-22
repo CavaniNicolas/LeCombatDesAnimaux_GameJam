@@ -24,10 +24,10 @@ int main() {
 	//MapSelect();
 	initFight(0, 0, 1);
 
+printf("%d\n", SDL_GetTicks());
 	while (!PollEvent(NULL)) {
 		updateWindow();
 		displayWindow();
-printf("%d\n", SDL_GetTicks());
 		SDL_Delay(16);
 	}
 

@@ -55,6 +55,9 @@ enum Animations {
 void createCharacterAnimations(Element * character);
 
 void charactersAnimation(Element * character);
+
+// retourne le numero de la sprite affichée actuellement
+int getCurrentSprite(Element * character);
 /////////////////////////////////////////////////////////////////////////
 
 
