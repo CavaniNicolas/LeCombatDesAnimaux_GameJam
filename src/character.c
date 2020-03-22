@@ -28,12 +28,8 @@ void initCharacter(int idPlayer, int idPerso, Element ** character) {
 				y = groundLevel;
 			}
 
-			//(*character) = createImage(x, y, d->width, d->height, filename, ECRAN_FIGHT, 0);
-			
-			/////////////////////////////////////////////////////////////////////////
-			(*character) = createImage(x, y, d->width, d->height, "assets/sprites/c0.png", ECRAN_FIGHT, 0);
-			setCharacterAnimations(*character);
-			/////////////////////////////////////////////////////////////////////////
+			(*character) = createImage(x, y, d->width, d->height, filename, ECRAN_FIGHT, 0);
+			createCharacterAnimations(*character);
 
 			if (idPlayer == JOUEUR_D) {
 				(*character)->flip = SANDAL2_FLIP_HOR;
@@ -45,24 +41,28 @@ void initCharacter(int idPlayer, int idPerso, Element ** character) {
 }
 
 
-/////////////////////////////////////////////////////////////////////////
-void setCharacterAnimations(Element * character) {
+void createCharacterAnimations(Element * character) {
 	int i=0;
 	addAnimationElement(character, standing);
 
-	for(i=0;i<5;++i)
-		if(addSpriteAnimationElement(character, standing, 60 + 500*i, 40, 340, 380, 12, i))
-			printf("Error adding sprite %d to animation %d\n",i,standing);
+	for(i=0; i<5; i++)
+		if(addSpriteAnimationElement(character, standing, 60 + 500*i, 40, 340, 380, 10, i))
+			printf("Error adding sprite %d to animation %d\n", i, standing);
 
 	setWaySpriteAnimationElement(character, standing, 1); 
 
 	addAnimationElement(character, moving);
-	for(i=0;i<6;++i)
-		if(addSpriteAnimationElement(character, moving, 60 + 500*i, 540, 340, 380, 8, i))
-			printf("Error adding sprite %d to animation %d\n",i,moving);
+	for(i=0; i<8; i++)
+		if(addSpriteAnimationElement(character, moving, 60 + 500*i, 540, 340, 380, 6, i))
+			printf("Error adding sprite %d to animation %d\n", i, moving);
 	setWaySpriteAnimationElement(character, moving, 1);
+
+	addAnimationElement(character, jumping);
+	for(i=0; i<5; i++)
+		if(addSpriteAnimationElement(character, jumping, 60 + 500*i, 1050, 340, 380, 8, i))
+			printf("Error adding sprite %d to animation %d\n", i, jumping);
+	setWaySpriteAnimationElement(character, jumping, 1);
 }
-/////////////////////////////////////////////////////////////////////////
 
 
 DataCharacter_t * initDataCharacter(int idPlayer, int idChosen) {
@@ -131,8 +131,8 @@ DataCharacter_t * initDataCharacter(int idPlayer, int idChosen) {
 
 int getCharactersFilename(int idPerso, char filename[50]) {
 	int error = 1;
-	DIR * rep = opendir("./assets/characters");
-	char filenameTmp[30] = "c_.png";
+	DIR * rep = opendir("./assets/sprites");
+	char filenameTmp[30] = "s_.png";
 
 	if (rep != NULL) {
 		struct dirent * ent = NULL;
@@ -147,7 +147,7 @@ int getCharactersFilename(int idPerso, char filename[50]) {
 			error = 0;
 		}
 
-		snprintf(filename, 50, "./assets/characters/%s", filenameTmp);
+		snprintf(filename, 50, "./assets/sprites/%s", filenameTmp);
 
 		closedir(rep);
 	} else {
@@ -234,42 +234,53 @@ void moveCharacterOff(Element * character, SDL_Keycode k) {
 }
 
 
+void charactersAnimation(Element * character) {
+	DataCharacter_t * d = character->data;
+
+	if (d->jump) {
+		setAnimationElement(character, jumping);
+
+	} else if (d->left || d->right) {
+		setAnimationElement(character, moving);
+
+	} else {
+		setAnimationElement(character, standing);
+	}
+}
+
+
+
 void moveCharacter(Element * character) {
 	DataCharacter_t * d = character->data;
 
 	double speed = (d->speed)/8;
-	double groundLevel = HFEN-50-(d->height);
 
 	if (d->left) {
 		if ((character->x)-speed > 0)
 			moveElement(character, -speed, 0);
-
-		setAnimationElement(character, moving); /////////////////////////////////////////////////////////////////////////
 	}
 
-	else if (d->right) {
+	if (d->right) {
 		if ((character->x)-speed < LFEN-(d->width))
 			moveElement(character, speed, 0);
-
-		setAnimationElement(character, moving); /////////////////////////////////////////////////////////////////////////
 	}
-
-/////////////////////////////////////////////////////////////////////////
-	else {
-		setAnimationElement(character, standing);
-	}
-/////////////////////////////////////////////////////////////////////////
+}
 
 
+void jumpCharacter(Element * character) {
+	DataCharacter_t * d = character->data;
 
-	// si on appuye sur sauter et que on est en l'air
+	double groundLevel = HFEN-50-(d->height);
+	// ajouter la gravite propre a un perso
+
+	// si autorisation de sauter (au sol ou en l'air)
 	// alors deplacer le perso
 	if (d->jump == true) {
 		if (character->y - d->jumpForceTmp + GRAVITY < groundLevel) {
 			character->y -= (d->jumpForceTmp + GRAVITY);
 			d->jumpForceTmp -= GRAVITY;
 		}
-	// sinon, on appuye sur sauter mais on est plus en l'air
+	// sinon, d->jump==true mais on est plus en l'air
 	// se positionner au niveau du sol
 	// attendre un peu avant de resauter
 		else {
@@ -282,9 +293,8 @@ void moveCharacter(Element * character) {
 	}
 
 	// jumpLag
-	if(d->allowJump == false)
-	{
-		if ((int)SDL_GetTicks() - d->jumpLagTmp > d->jumpLag) {
+	if(d->allowJump == false) {
+		if ((int)SDL_GetTicks() - d->jumpLagTmp >= d->jumpLag) {
 			d->allowJump = true;
 			puts("jump again");
 		}

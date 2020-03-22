@@ -10,13 +10,15 @@ void initFight(int idCharacterG, int idCharacterD, int idMap) {
 
 
 	char s[16] = "assets/map1.jpg";
-	s[10] = idMap+48;
+	//s[10] = idMap+48;
+	
 	createImage(0, 0, LFEN,HFEN, s, ECRAN_FIGHT, 1);
 
 	Element * characterG = NULL;
 	Element * characterD = NULL;
 	initCharacter(JOUEUR_G, idCharacterG, &characterG);
 	initCharacter(JOUEUR_D, idCharacterD, &characterD);
+
 
 	/*Lie les deux personnages entre eux*/
 	addElementToElement(characterG, characterD);
@@ -36,7 +38,9 @@ void initFight(int idCharacterG, int idCharacterD, int idMap) {
 
 void actionCharacters(Element * character) {
 	moveCharacter(character);
+	jumpCharacter(character);
 	collisionCharacters(character);
+	charactersAnimation(character);
 }
 
 

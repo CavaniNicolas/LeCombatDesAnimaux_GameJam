@@ -10,6 +10,8 @@
 
 #include "champ_select.h"
 #include "map_select.h"
+#include "fight.h"
+
 
 int main() {
 	int black[4] = {0,0,0,255};
@@ -17,14 +19,15 @@ int main() {
 	initAllSANDAL2(IMG_INIT_JPG);
 	createWindow(LFEN, HFEN, "Le Combat Des Animaux", 0, black, TITLE_SCREEN);
 
-	Launcher();
+	//Launcher();
 	//ChampSelect();
 	//MapSelect();
+	initFight(0, 0, 1);
 
 	while (!PollEvent(NULL)) {
 		updateWindow();
 		displayWindow();
-
+printf("%d\n", SDL_GetTicks());
 		SDL_Delay(16);
 	}
 

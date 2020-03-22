@@ -49,9 +49,12 @@ void initCharacter(int, int, Element **);
 enum Animations {
 	standing = 0,
 	moving = 1,
+	jumping = 2
 };
 // set Animation with sprites to the element
-void setCharacterAnimations(Element * character);
+void createCharacterAnimations(Element * character);
+
+void charactersAnimation(Element * character);
 /////////////////////////////////////////////////////////////////////////
 
 
@@ -109,5 +112,14 @@ void moveCharacterOff(Element *, SDL_Keycode);
 /* -------------------------------------------------------------------------------- */
 void moveCharacter(Element *);
 
+
+/* -------------------------------------------------------------------------------- */
+/* jumpCharacter   Fait sauter le personnage en fonction du booléen d'autorisation  */
+/*                                                                                  */
+/* En entrée:  character : Element *, personnage                                    */
+/*                                                                                  */
+/* En sortie:  void                                                                 */
+/* -------------------------------------------------------------------------------- */
+void jumpCharacter(Element * character);
 
 #endif
