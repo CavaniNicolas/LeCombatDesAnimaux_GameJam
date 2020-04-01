@@ -6,18 +6,18 @@
 
 
 void initFight(int idCharacterG, int idCharacterD, int idMap) {
-	setDisplayCodeWindow(ECRAN_FIGHT);
+	setDisplayCodeWindow(FIGHT_SCREEN);
 
 
 	char s[16] = "assets/map1.jpg";
 	//s[10] = idMap+48;
 	
-	createImage(0, 0, LFEN,HFEN, s, ECRAN_FIGHT, 1);
+	createImage(0, 0, LFEN,HFEN, s, FIGHT_SCREEN, 1);
 
 	Element * characterG = NULL;
 	Element * characterD = NULL;
-	initCharacter(JOUEUR_G, idCharacterG, &characterG);
-	initCharacter(JOUEUR_D, idCharacterD, &characterD);
+	initCharacter(PLAYER_L, idCharacterG, &characterG);
+	initCharacter(PLAYER_R, idCharacterD, &characterD);
 
 
 	/*Lie les deux personnages entre eux*/
@@ -51,7 +51,7 @@ void collisionCharacters(Element * character) {
 	DataCharacter_t * d = character->data;
 	DataCharacter_t * d2 = character2->data;
 
-	if (d->idPlayer == JOUEUR_G && (character->x + d->width > character2->x)) {
+	if (d->idPlayer == PLAYER_L && (character->x + d->width > character2->x)) {
 		d->allowRight = false;
 		d2->allowLeft = false;
 		d->right = false;
@@ -62,7 +62,7 @@ void collisionCharacters(Element * character) {
 		d2->allowLeft = true;
 	}
 
-	if (d->idPlayer == JOUEUR_D && (character->x < character2->x + d2->width)) {
+	if (d->idPlayer == PLAYER_R && (character->x < character2->x + d2->width)) {
 		d->allowLeft   = false;
 		d2->allowRight = false;
 		d->left   = false;

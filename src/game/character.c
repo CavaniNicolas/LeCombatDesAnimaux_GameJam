@@ -7,31 +7,31 @@
 #include "character.h"
 
 
-void initCharacter(int idPlayer, int idPerso, Element ** character) {
-	DataCharacter_t * d = initDataCharacter(idPlayer, idPerso);
+void initCharacter(int idPlayer, int idChara, Element ** character) {
+	DataCharacter_t * d = initDataCharacter(idPlayer, idChara);
 	double x = 0;
 	double y = 0;
-	char filename[50];
+	char   filename[50];
 	double groundLevel = HFEN-50-(d->height);
 
-	if (!getCharactersFilename(idPerso, filename)) {
+	if (!getCharactersFilename(idChara, filename)) {
 		printf("Error fetching character's filename\n");
 	} else {
 
 		if (d != NULL) {
 
-			if (idPlayer == JOUEUR_G) {
+			if (idPlayer == PLAYER_L) {
 				x = 100;
 				y = groundLevel;
-			} else { // JOUEUR_D
+			} else { // PLAYER_R
 				x = LFEN-100-(d->width);
 				y = groundLevel;
 			}
 
-			(*character) = createImage(x, y, d->width, d->height, filename, ECRAN_FIGHT, 0);
+			(*character) = createImage(x, y, d->width, d->height, filename, FIGHT_SCREEN, 0);
 			createCharacterAnimations(*character);
 
-			if (idPlayer == JOUEUR_D) {
+			if (idPlayer == PLAYER_R) {
 				(*character)->flip = SANDAL2_FLIP_HOR;
 			}
 
@@ -75,8 +75,8 @@ DataCharacter_t * initDataCharacter(int idPlayer, int idChosen) {
 
 		if (file != NULL) {
 
-			int idPerso = -1;
-			char ligne[6];
+			int idChara = -1;
+			char line[6];
 
 			d->idPlayer = idPlayer;
 
@@ -93,33 +93,33 @@ DataCharacter_t * initDataCharacter(int idPlayer, int idChosen) {
 			d->parry1  = false;
 			d->parry2  = false;
 
-			while (!feof(file) && idPerso != idChosen) {
-				fgets(ligne, 6, file);
-				idPerso = atoi(ligne);
+			while (!feof(file) && idChara != idChosen) {
+				fgets(line, 6, file);
+				idChara = atoi(line);
 			}
-			d->idPerso = idPerso;
+			d->idChara = idChara;
 
-			fgets(ligne, 6, file);
-			d->hp = atoi(ligne);
+			fgets(line, 6, file);
+			d->hp = atoi(line);
 
-			fgets(ligne, 6, file);
-			d->strength = atoi(ligne);
+			fgets(line, 6, file);
+			d->strength = atoi(line);
 
-			fgets(ligne, 6, file);
-			d->speed = atoi(ligne);
+			fgets(line, 6, file);
+			d->speed = atoi(line);
 
-			fgets(ligne, 6, file);
-			d->width = atoi(ligne);
+			fgets(line, 6, file);
+			d->width = atoi(line);
 
-			fgets(ligne, 6, file);
-			d->height = atoi(ligne);
+			fgets(line, 6, file);
+			d->height = atoi(line);
 
-			fgets(ligne, 6, file);
-			d->jumpForce = atoi(ligne);
+			fgets(line, 6, file);
+			d->jumpForce = atoi(line);
 			d->jumpForceTmp = d->jumpForce;
 
-			fgets(ligne, 6, file);
-			d->jumpLag = atoi(ligne);
+			fgets(line, 6, file);
+			d->jumpLag = atoi(line);
 		}
 
 		fclose(file);
@@ -129,7 +129,7 @@ DataCharacter_t * initDataCharacter(int idPlayer, int idChosen) {
 }
 
 
-int getCharactersFilename(int idPerso, char filename[50]) {
+int getCharactersFilename(int idChara, char filename[50]) {
 	int error = 1;
 	DIR * rep = opendir("./assets/sprites");
 	char filenameTmp[30] = "s_.png";
@@ -138,7 +138,7 @@ int getCharactersFilename(int idPerso, char filename[50]) {
 		struct dirent * ent = NULL;
 
 		while ((ent = readdir(rep)) != NULL) {
-			if (ent->d_name[1] - 48 == idPerso) {
+			if (ent->d_name[1] - 48 == idChara) {
 				strcpy(filenameTmp, ent->d_name);
 			}
 		}
@@ -161,19 +161,19 @@ void moveCharacterOn(Element * character, SDL_Keycode k) {
 	DataCharacter_t * d = character->data;
 	switch (k) {
 		case 'q':
-			if (d->idPlayer == JOUEUR_G  && d->allowLeft == true) {
+			if (d->idPlayer == PLAYER_L  && d->allowLeft == true) {
  				d->left = true;
 			}
 			break;
 
 		case 'd':
-			if (d->idPlayer == JOUEUR_G && d->allowRight == true) {
+			if (d->idPlayer == PLAYER_L && d->allowRight == true) {
 				d->right = true;
 			}
 			break;
 
 		case 's':
-			if (d->idPlayer == JOUEUR_G) {
+			if (d->idPlayer == PLAYER_L) {
 				if (d->jump == false && d->allowJump == true) {
 					d->jump = true;
 				}
@@ -182,19 +182,19 @@ void moveCharacterOn(Element * character, SDL_Keycode k) {
 
 
 		case 'j':
-			if (d->idPlayer == JOUEUR_D && d->allowLeft == true) {
+			if (d->idPlayer == PLAYER_R && d->allowLeft == true) {
  				d->left = true;
  			}
 			break;
 
 		case 'l':
-			if (d->idPlayer == JOUEUR_D  && d->allowRight == true) {
+			if (d->idPlayer == PLAYER_R  && d->allowRight == true) {
 				d->right = true;
 			}
 			break;
 
 		case 'k':
-			if (d->idPlayer == JOUEUR_D) {
+			if (d->idPlayer == PLAYER_R) {
 				if (d->jump == false && d->allowJump == true) {
 					d->jump = true;
 				}
@@ -207,26 +207,26 @@ void moveCharacterOff(Element * character, SDL_Keycode k) {
 	DataCharacter_t * d = character->data;
 	switch (k) {
 		case 'q':
-			if (d->idPlayer == JOUEUR_G) {
+			if (d->idPlayer == PLAYER_L) {
  				d->left = false;
 			}
 			break;
 
 		case 'd':
-			if (d->idPlayer == JOUEUR_G) {
+			if (d->idPlayer == PLAYER_L) {
 				d->right = false;
 			}
 			break;
 
 
 		case 'j':
-			if (d->idPlayer == JOUEUR_D) {
+			if (d->idPlayer == PLAYER_R) {
  				d->left = false;
  			}
 			break;
 
 		case 'l':
-			if (d->idPlayer == JOUEUR_D) {
+			if (d->idPlayer == PLAYER_R) {
 				d->right = false;
 			}
 			break;

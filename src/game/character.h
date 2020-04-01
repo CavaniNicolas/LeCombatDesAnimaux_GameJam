@@ -3,7 +3,7 @@
 #include <stdbool.h>
 
 typedef struct DataCharacter {
-	int    idPerso;
+	int    idChara;
 	int    hp;
 	int    strength;
 	double speed;
@@ -37,7 +37,7 @@ typedef struct DataCharacter {
 /* initCharacter      Initialise le personnage                                      */
 /*                                                                                  */
 /* En entrée:  idPlayer : int, id du joueur choisissant son perso (gauche ou droite)*/
-/*             idPerso  : int, id du perso selectionné dans le menu                 */
+/*             idChara  : int, id du perso selectionné dans le menu                 */
 /*             character: Element ** , personnage                                   */
 /*                                                                                  */
 /* En sortie:  void                                                                 */
@@ -76,7 +76,7 @@ DataCharacter_t * initDataCharacter(int, int);
 /* -------------------------------------------------------------------------------- */
 /* getCharactersFilename   Récupère le nom du fichier de l'image du perso choisie   */
 /*                                                                                  */
-/* En entrée:  idPerso  : int, perso choisi                                         */
+/* En entrée:  idChara  : int, perso choisi                                         */
 /*             filename : char[40], nom du fichier de l'image du perso choisi       */
 /*                                                                                  */
 /* En sortie:  int, 1 si pas d'erreurs, 0 sinon                                     */
