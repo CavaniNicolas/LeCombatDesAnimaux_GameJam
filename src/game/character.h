@@ -1,3 +1,4 @@
+
 #ifndef CARA_H
 #define CARA_H
 #include <stdbool.h>
@@ -33,6 +34,13 @@ typedef struct DataCharacter {
 }DataCharacter_t;
 
 
+void initFight(int idCharacterG, int idCharacterD, int idMap);
+
+void keyOnActions(Element *, SDL_Keycode);
+void keyOffActions(Element *, SDL_Keycode);
+void actionCharacters(Element * character);
+
+
 /* -------------------------------------------------------------------------------- */
 /* initCharacter      Initialise le personnage                                      */
 /*                                                                                  */
@@ -44,21 +52,6 @@ typedef struct DataCharacter {
 /* -------------------------------------------------------------------------------- */
 void initCharacter(int, int, Element **);
 
-
-/////////////////////////////////////////////////////////////////////////
-enum Animations {
-	standing = 0,
-	moving = 1,
-	jumping = 2
-};
-// set Animation with sprites to the element
-void createCharacterAnimations(Element * character);
-
-void charactersAnimation(Element * character);
-
-// retourne le numero de la sprite affichée actuellement
-int getCurrentSprite(Element * character);
-/////////////////////////////////////////////////////////////////////////
 
 
 /* -------------------------------------------------------------------------------- */
@@ -83,46 +76,5 @@ DataCharacter_t * initDataCharacter(int, int);
 /* -------------------------------------------------------------------------------- */
 int getCharactersFilename(int, char[40]);
 
-
-/* -------------------------------------------------------------------------------- */
-/* moveCharacterOn   Active les booléens autorisant le déplacement                  */
-/*                                                                                  */
-/* En entrée:  character : Element *, personnage                                    */
-/*             k         : SDL_Keycode, touche clavier (pression utilisée)          */
-/*                                                                                  */
-/* En sortie:  void                                                                 */
-/* -------------------------------------------------------------------------------- */
-void moveCharacterOn(Element *, SDL_Keycode);
-
-
-/* -------------------------------------------------------------------------------- */
-/* moveCharacterOff   Desactive les booléens autorisant le déplacement              */
-/*                                                                                  */
-/* En entrée:  character : Element *, personnage                                    */
-/*             k         : SDL_Keycode, touche clavier (relachement utilisé)        */
-/*                                                                                  */
-/* En sortie:  void                                                                 */
-/* -------------------------------------------------------------------------------- */
-void moveCharacterOff(Element *, SDL_Keycode);
-
-
-/* -------------------------------------------------------------------------------- */
-/* moveCharacter     Déplace le personnage en fonction des booléens d'autorisation  */
-/*                                                                                  */
-/* En entrée:  character : Element *, personnage                                    */
-/*                                                                                  */
-/* En sortie:  void                                                                 */
-/* -------------------------------------------------------------------------------- */
-void moveCharacter(Element *);
-
-
-/* -------------------------------------------------------------------------------- */
-/* jumpCharacter   Fait sauter le personnage en fonction du booléen d'autorisation  */
-/*                                                                                  */
-/* En entrée:  character : Element *, personnage                                    */
-/*                                                                                  */
-/* En sortie:  void                                                                 */
-/* -------------------------------------------------------------------------------- */
-void jumpCharacter(Element * character);
 
 #endif

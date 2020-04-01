@@ -10,7 +10,7 @@
 
 #include "menu/champ_select.h"
 #include "menu/map_select.h"
-#include "game/fight.h"
+#include "game/character.h"
 
 
 int main() {
