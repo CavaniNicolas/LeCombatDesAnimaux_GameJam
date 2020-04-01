@@ -2,7 +2,7 @@
 CFLAGS = -Wall -Wextra -g -MMD
 LIB = -lm -lSANDAL2 -lSDL2 -lSDL2_ttf -lSDL2_image
 
-SRC = $(wildcard src/*.c)
+SRC = $(wildcard src/*.c) $(wildcard src/menu/*.c) $(wildcard src/game/*.c)
 OBJ = $(patsubst src/%.c,build/%.o,$(SRC))
 DEP = $(patsubst %.o,%.d,$(OBJ))
 

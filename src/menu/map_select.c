@@ -1,11 +1,11 @@
 
 #include <SANDAL2/SANDAL2.h>
 #include <string.h>
-#include "structure.h"
+#include "../structure.h"
 #include "optimiseDisplay.h"
 #include "map_select.h"
 
-#include "fight.h"
+#include "../game/fight.h"
 
 
 

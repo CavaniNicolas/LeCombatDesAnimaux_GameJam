@@ -2,11 +2,11 @@
 #include <SANDAL2/SANDAL2.h>
 #include <dirent.h>
 #include "optimiseDisplay.h"
-#include "structure.h"
+#include "../structure.h"
 #include "champ_select.h"
 #include "map_select.h"
 
-#include "fight.h" // change this into map_select once its finished
+#include "../game/fight.h" // change this into map_select once its finished
 
 void ChampSelect() {
 	setDisplayCodeWindow(CHAMP_SELECT);

@@ -1,7 +1,7 @@
 
 #include <SANDAL2/SANDAL2.h>
 #include <string.h>
-#include "structure.h"
+#include "../structure.h"
 #include "title_screen.h"
 
 #include "champ_select.h"

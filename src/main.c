@@ -6,11 +6,11 @@
 
 #include <SANDAL2/SANDAL2.h>
 #include "structure.h"
-#include "title_screen.h"
+#include "menu/title_screen.h"
 
-#include "champ_select.h"
-#include "map_select.h"
-#include "fight.h"
+#include "menu/champ_select.h"
+#include "menu/map_select.h"
+#include "game/fight.h"
 
 
 int main() {
