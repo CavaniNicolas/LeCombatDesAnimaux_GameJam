@@ -7,86 +7,40 @@
 
 void moveCharacterOn(Element * character, SDL_Keycode k) {
 	DataCharacter_t * d = character->data;
+	KeyCodes_t * kc = d->keyCodes;
 
-	if (d->idPlayer == PLAYER_L) {
-
-		switch (k) {
-			case 'a':
-				if (d->allowLeft == true) {
-	 				d->left = true;
-				}
-				break;
-
-			case 'e':
-				if (d->allowRight == true) {
-					d->right = true;
-				}
-				break;
-
-			case 'z':
-				if (d->jump == false && d->allowJump == true) {
-					d->jump = true;
-				}
-				break;
+	if (k == kc->left) {
+		if (d->allowLeft == true) {
+				d->left = true;
 		}
 	}
 
-	else { //d->idPlayer == PLAYER_R
-
-		switch (k) {
-			case 'y':
-				if (d->allowLeft == true) {
-	 				d->left = true;
-	 			}
-				break;
-
-			case 'i':
-				if (d->allowRight == true) {
-					d->right = true;
-				}
-				break;
-
-			case 'u':
-				if (d->jump == false && d->allowJump == true) {
-					d->jump = true;
-				}
-				break;
+	else if (k == kc->right) {
+		if (d->allowRight == true) {
+			d->right = true;
 		}
 	}
+
+	else if (k == kc->jump) {
+		if (d->jump == false && d->allowJump == true) {
+			d->jump = true;
+		}
+	}
+
 }
 
 void moveCharacterOff(Element * character, SDL_Keycode k) {
 	DataCharacter_t * d = character->data;
+	KeyCodes_t * kc = d->keyCodes;
 
-	if (d->idPlayer == PLAYER_L) {
+	if (k == kc->left) {
+ 		d->left = false;
+ 	}
 
-		switch (k) {
-			case 'a':
-	 				d->left = false;
-				break;
-
-			case 'e':
-					d->right = false;
-				break;
-		}
+	else if (k == kc->right) {
+		d->right = false;
 	}
 
-	else { //d->idPlayer == PLAYER_R
-
-		switch (k) {
-			case 'y':
-				if (d->idPlayer == PLAYER_R) {
-	 				d->left = false;
-	 			}
-				break;
-
-			case 'i':
-				if (d->idPlayer == PLAYER_R) {
-					d->right = false;
-				}
-				break;
-		}
-	}
 }
 
 

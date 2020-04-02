@@ -3,6 +3,16 @@
 #define CARA_H
 #include <stdbool.h>
 
+typedef struct KeyCodes {
+	SDL_Keycode left;
+	SDL_Keycode right;
+	SDL_Keycode jump;
+	SDL_Keycode attack1;
+	SDL_Keycode attack2;
+	SDL_Keycode parry;
+}KeyCodes_t;
+
+
 typedef struct DataCharacter {
 	int    idChara;
 	int    hp;
@@ -27,10 +37,13 @@ typedef struct DataCharacter {
 	bool   crouch;
 
 	bool   attack1;
+	bool   allowAttack1;
 	bool   attack2;
-	bool   parry1;
-	bool   parry2;
+	bool   allowAttack2;
+	bool   parry;
+	bool   allowParry;
 
+	KeyCodes_t * keyCodes;
 }DataCharacter_t;
 
 
@@ -64,6 +77,9 @@ void initCharacter(int, int, Element **);
 /* En sortie:  DataCharacter_t * :   Pointeur sur la structure Data du perso        */
 /* -------------------------------------------------------------------------------- */
 DataCharacter_t * initDataCharacter(int, int);
+
+
+void initKeyCodes(KeyCodes_t * kd, int idPlayer);
 
 
 /* -------------------------------------------------------------------------------- */

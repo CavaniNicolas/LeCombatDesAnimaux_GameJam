@@ -7,6 +7,7 @@
 #include "character.h"
 #include "movements.h"
 #include "animations.h"
+#include "fight.h"
 
 void initFight(int idCharaLeft, int idCharaRight, int idMap) {
 	setDisplayCodeWindow(FIGHT_SCREEN);
@@ -36,6 +37,33 @@ void initFight(int idCharaLeft, int idCharaRight, int idMap) {
 	setKeyPressedElement(characterR, keyOnActions);
 	setKeyReleasedElement(characterR, keyOffActions);
 	setActionElement(characterR, actionCharacters);
+}
+
+
+void keyOnActions(Element * character, SDL_Keycode k) {
+	DataCharacter_t * d = character->data;
+	KeyCodes_t * kc = d->keyCodes;
+
+	/*Si on appuie sur une touche de déplacement*/
+	if (k == kc->left || k == kc->right || k == kc->jump) {
+		moveCharacterOn(character, k);
+	}
+
+	/*Si on appuie sur une touche d'attaque*/
+	if (k == kc->attack1 || k == kc->attack2 || k == kc->parry) {
+		launchCharacterAttack(character, k);
+	}
+}
+
+
+void keyOffActions(Element * character, SDL_Keycode k) {
+	DataCharacter_t * d = character->data;
+	KeyCodes_t * kc = d->keyCodes;
+
+	/*Si on relache une touche de déplacement*/
+	if (k == kc->left || k == kc->right || k == kc->jump) {
+		moveCharacterOff(character, k);
+	}
 }
 
 
@@ -82,9 +110,13 @@ void initCharacter(int idPlayer, int idChara, Element ** character) {
 
 
 DataCharacter_t * initDataCharacter(int idPlayer, int idChosen) {
-	DataCharacter_t * d = malloc(sizeof(DataCharacter_t));
+	DataCharacter_t * d = (DataCharacter_t *)malloc(sizeof(DataCharacter_t));
+	KeyCodes_t * kc = (KeyCodes_t *)malloc(sizeof(KeyCodes_t));
 
-	if (d != NULL) {
+	if (d != NULL && kc != NULL) {
+
+		initKeyCodes(kc, idPlayer);
+		d->keyCodes = kc;
 
 		FILE * file = NULL;
 		file = fopen("assets/stats/DataCharacters.txt", "r");
@@ -104,10 +136,13 @@ DataCharacter_t * initDataCharacter(int idPlayer, int idChosen) {
 			d->allowJump  = true;
 			d->crouch     = false;
 
-			d->attack1 = false;
-			d->attack2 = false;
-			d->parry1  = false;
-			d->parry2  = false;
+			d->attack1      = false;
+			d->allowAttack1 = true;
+			d->attack2      = false;
+			d->allowAttack2 = true;
+			d->parry        = false;
+			d->allowParry   = true;
+
 
 			while (!feof(file) && idChara != idChosen) {
 				fgets(line, 6, file);
@@ -145,6 +180,27 @@ DataCharacter_t * initDataCharacter(int idPlayer, int idChosen) {
 }
 
 
+void initKeyCodes(KeyCodes_t * kc, int idPlayer) {
+
+	if (idPlayer == PLAYER_L) {
+		kc->left    = 'a';
+		kc->right   = 'e';
+		kc->jump    = 'z';
+		kc->attack1 = 's';
+		kc->attack2 = 'f';
+		kc->parry   = 'd';
+
+	} else { //idPlayer == PLAYER_R
+		kc->left    = 'y';
+		kc->right   = 'i';
+		kc->jump    = 'u';
+		kc->attack1 = 'j';
+		kc->attack2 = 'l';
+		kc->parry   = 'k';
+	}
+}
+
+
 int getCharactersFilename(int idChara, char filename[50]) {
 	int error = 1;
 	DIR * rep = opendir("./assets/sprites");
@@ -172,15 +228,3 @@ int getCharactersFilename(int idChara, char filename[50]) {
 	return error;
 }
 
-
-void keyOnActions(Element * character, SDL_Keycode k) {
-	if (k == 'a' || k == 'z' || k == 'e' || k == 'y' || k == 'u' || k == 'i') {
-		moveCharacterOn(character, k);
-	}
-}
-
-void keyOffActions(Element * character, SDL_Keycode k) {
-	if (k == 'a' || k == 'z' || k == 'e' || k == 'y' || k == 'u' || k == 'i') {
-		moveCharacterOff(character, k);
-	}
-}
