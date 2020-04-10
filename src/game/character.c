@@ -153,13 +153,15 @@ DataCharacter_t * initDataCharacter(int idPlayer, int idChosen) {
 			d->idChara = idChara;
 
 			fgets(line, 6, file);
-			d->hp = atoi(line);
+			d->hpCte = atoi(line);
+			d->hp = d->hpCte;
 
 			fgets(line, 6, file);
-			d->strength = atoi(line);
+			d->strengthCte = atoi(line);
 
 			fgets(line, 6, file);
-			d->speed = atoi(line);
+			d->speedCte = atoi(line);
+			d->speed = d->speedCte;
 
 			fgets(line, 6, file);
 			d->width = atoi(line);
@@ -168,11 +170,11 @@ DataCharacter_t * initDataCharacter(int idPlayer, int idChosen) {
 			d->height = atoi(line);
 
 			fgets(line, 6, file);
-			d->jumpForce = atoi(line);
-			d->jumpForceTmp = d->jumpForce;
+			d->jumpForceCte = atoi(line);
+			d->jumpForceTmp = d->jumpForceCte;
 
 			fgets(line, 6, file);
-			d->jumpLag = atoi(line);
+			d->jumpLagCte = atoi(line);
 		}
 
 		fclose(file);

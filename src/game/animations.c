@@ -27,13 +27,13 @@ void createCharacterAnimations(Element * character) {
 
 	addAnimationElement(character, attacking1);
 	for(i=0; i<8; i++)
-		if(addSpriteAnimationElement(character, attacking1, 60 + 500*i, 1550, 340, 380, 10, i))
+		if(addSpriteAnimationElement(character, attacking1, 60 + 500*i, 1550, 340, 380, 6, i))
 			printf("Error adding sprite %d to animation %d\n", i, attacking1);
 	setWaySpriteAnimationElement(character, attacking1, 1);
 
 	addAnimationElement(character, parrying);
 	for(i=0; i<8; i++)
-		if(addSpriteAnimationElement(character, parrying, 60 + 500*i, 2050, 340, 380, 10, i))
+		if(addSpriteAnimationElement(character, parrying, 60 + 500*i, 2050, 340, 380, 4, i))
 			printf("Error adding sprite %d to animation %d\n", i, parrying);
 	setWaySpriteAnimationElement(character, parrying, 1);
 

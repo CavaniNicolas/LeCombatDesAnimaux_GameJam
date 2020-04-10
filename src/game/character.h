@@ -15,14 +15,17 @@ typedef struct KeyCodes {
 
 typedef struct DataCharacter {
 	int    idChara;
-	int    hp;
-	int    strength;
-	double speed;
-	int    jumpLag;
-
 	int    width;
 	int    height;
-	int    jumpForce;
+
+	int    hpCte;
+	int    strengthCte;
+	double speedCte;
+	int    jumpForceCte;
+	int    jumpLagCte;
+
+	int    hp;
+	int    speed;
 	int    jumpForceTmp;
 	int    jumpLagTmp;
 

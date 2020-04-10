@@ -52,7 +52,7 @@ void moveCharacterOff(Element * character, SDL_Keycode k) {
 void moveCharacter(Element * character) {
 	DataCharacter_t * d = character->data;
 
-	double speed = (d->speed)/8;
+	double speed = d->speed;
 
 	if (d->left) {
 		if ((character->x)-speed > 0)
@@ -86,16 +86,18 @@ void jumpCharacter(Element * character) {
 		else {
 			character->y = groundLevel;
 			d->jump = false;
-			d->jumpForceTmp = d->jumpForce;
+			d->jumpForceTmp = d->jumpForceCte;
 			d->jumpLagTmp = SDL_GetTicks();
+			d->speed = d->speedCte * 0.5;
 		}
 	}
 
-	// jumpLag
+	// jump Lag
 	if(d->allowJump == false && d->jump == false) {
-		if ((int)SDL_GetTicks() - d->jumpLagTmp >= d->jumpLag) {
+		if ((int)SDL_GetTicks() - d->jumpLagTmp >= d->jumpLagCte) {
 			d->allowJump = true;
 			d->allowAttacks = true;
+			d->speed = d->speedCte;
 			puts("jump lag end");
 		}
 	}
