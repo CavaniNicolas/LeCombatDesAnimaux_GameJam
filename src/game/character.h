@@ -36,12 +36,12 @@ typedef struct DataCharacter {
 	bool   allowJump;
 	bool   crouch;
 
+	bool   attacks;
+	bool   allowAttacks;
+
 	bool   attack1;
-	bool   allowAttack1;
 	bool   attack2;
-	bool   allowAttack2;
 	bool   parry;
-	bool   allowParry;
 
 	KeyCodes_t * keyCodes;
 }DataCharacter_t;

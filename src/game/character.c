@@ -14,6 +14,7 @@ void initFight(int idCharaLeft, int idCharaRight, int idMap) {
 
 
 	char s[16] = "assets/map1.jpg";
+	(void) idMap;
 	//s[10] = idMap+48;
 	
 	createImage(0, 0, LFEN,HFEN, s, FIGHT_SCREEN, 1);
@@ -44,15 +45,16 @@ void keyOnActions(Element * character, SDL_Keycode k) {
 	DataCharacter_t * d = character->data;
 	KeyCodes_t * kc = d->keyCodes;
 
-	/*Si on appuie sur une touche de déplacement*/
-	if (k == kc->left || k == kc->right || k == kc->jump) {
-		moveCharacterOn(character, k);
-	}
-
 	/*Si on appuie sur une touche d'attaque*/
 	if (k == kc->attack1 || k == kc->attack2 || k == kc->parry) {
 		launchCharacterAttack(character, k);
 	}
+
+	/*Si on appuie sur une touche de déplacement*/
+	else if (k == kc->left || k == kc->right || k == kc->jump) {
+		moveCharacterOn(character, k);
+	}
+
 }
 
 
@@ -136,12 +138,12 @@ DataCharacter_t * initDataCharacter(int idPlayer, int idChosen) {
 			d->allowJump  = true;
 			d->crouch     = false;
 
+			d->attacks      = false;
+			d->allowAttacks = true;
+
 			d->attack1      = false;
-			d->allowAttack1 = true;
 			d->attack2      = false;
-			d->allowAttack2 = true;
 			d->parry        = false;
-			d->allowParry   = true;
 
 
 			while (!feof(file) && idChara != idChosen) {

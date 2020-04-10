@@ -9,25 +9,30 @@ void moveCharacterOn(Element * character, SDL_Keycode k) {
 	DataCharacter_t * d = character->data;
 	KeyCodes_t * kc = d->keyCodes;
 
-	if (k == kc->left) {
-		if (d->allowLeft == true) {
-				d->left = true;
-		}
-	}
+	if (d->attacks == false) {
 
-	else if (k == kc->right) {
-		if (d->allowRight == true) {
-			d->right = true;
+		if (k == kc->left) {
+			if (d->allowLeft == true) {
+					d->left = true;
+			}
 		}
-	}
 
-	else if (k == kc->jump) {
-		if (d->jump == false && d->allowJump == true) {
-			d->jump = true;
+		else if (k == kc->right) {
+			if (d->allowRight == true) {
+				d->right = true;
+			}
+		}
+
+		else if (k == kc->jump) {
+			if (d->jump == false && d->allowJump == true) {
+				d->jump = true;
+				d->allowAttacks = false;
+			}
 		}
 	}
 
 }
+
 
 void moveCharacterOff(Element * character, SDL_Keycode k) {
 	DataCharacter_t * d = character->data;
@@ -90,7 +95,8 @@ void jumpCharacter(Element * character) {
 	if(d->allowJump == false && d->jump == false) {
 		if ((int)SDL_GetTicks() - d->jumpLagTmp >= d->jumpLag) {
 			d->allowJump = true;
-			puts("jump again");
+			d->allowAttacks = true;
+			puts("jump lag end");
 		}
 	}
 
