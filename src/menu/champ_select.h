@@ -110,6 +110,19 @@ StatsCharacterMax_t * getCharacterStatsMaxInFile();
 void charactersValidation(Element * okButton);
 
 
+
+// champ Grid
+typedef struct charaGrid_t{
+	int xInit;
+	int wBlock;
+}charaGrid_t;
+
+// creer la grille de selection de characters, avec le fond qui change de couleur
+void createCharacterGrid(int marge, int wCharBlock, int hBlock);
+// fonction action, qui deplace le fond de la grille pour la faire changer de couleur
+void changeGridColor(Element * charaGrid);
+
+
 // menu stats
 Element * createValidateInBlock(int, int, int, int);
 void validateCharacterChoice(Element * element, int i);

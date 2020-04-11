@@ -20,9 +20,9 @@ int main() {
 	createWindow(LFEN, HFEN, "Le Combat Des Animaux", 0, black, TITLE_SCREEN);
 
 	//Launcher();
-	//ChampSelect();
+	ChampSelect();
 	//MapSelect();
-	initFight(0, 0, 1);
+	//initFight(0, 0, 1);
 
 printf("%d\n", SDL_GetTicks());
 	while (!PollEvent(NULL)) {

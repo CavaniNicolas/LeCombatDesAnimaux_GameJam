@@ -17,7 +17,8 @@ void ChampSelect() {
 
 void generateAllDisplays() {
 	int white[4] = {255, 255, 255, 255};
-	int black[4] = {0, 0, 0, 255};
+	//int black[4] = {0, 0, 0, 255};
+	int grey[4] = {0, 0, 0, 200};
 
 	int marge      = 0.05 * HFEN;
 
@@ -28,24 +29,24 @@ void generateAllDisplays() {
 
 	int wCharBlock = 0.6 * LFEN - 4 * marge;
 
-	createImage(0, 0, LFEN, HFEN, "assets/map0.jpg", CHAMP_SELECT, PlanBackgroundCS);
+	createImage(0, 0, LFEN, HFEN, "assets/CHAMP_SELECT/back1.png", CHAMP_SELECT, PlanBackgroundCS);
 
 	// Block d'info à droite
 	createBlock(xStatBlock, marge, wStatBlock, hBlock, white, CHAMP_SELECT, PlanBlock); // Contour blanc du block
-	createBlock(xStatBlock+2, marge+2, wStatBlock-4, hBlock-4, black, CHAMP_SELECT, PlanBlock-1); // Block noir
+	createBlock(xStatBlock+2, marge+2, wStatBlock-4, hBlock-4, grey, CHAMP_SELECT, PlanBlock-1); // Block gris
 	createBlock(xStatBlock, marge+0.4*hBlock, wStatBlock, 2, white, CHAMP_SELECT, PlanBlock-1); // Ligne séparatrice dans le block
 
 	// Button OK
-	//createValidateInBlock(xStatBlock, marge, wStatBlock, hBlock);
+	// createValidateInBlock(xStatBlock, marge, wStatBlock, hBlock);
 
 	int yGraphBlock = marge+0.4*hBlock;
 	// Stats Texts
 	createStatsNames(xStatBlock, yGraphBlock, wStatBlock/2, 0.6*hBlock);
 
 	// Characters and statsGraphs
-	createBlock(marge, marge, wCharBlock, hBlock, white, CHAMP_SELECT, PlanChampSelect); // Contour blanc du block
-	createBlock(marge+2, marge+2, wCharBlock-4, hBlock-4, black, CHAMP_SELECT, PlanChampSelect); // Block noir
-
+	// champ Grid
+	createCharacterGrid(marge, wCharBlock, hBlock);
+	// Characters, (pointing on) statsGraphs...
 	int nbChara = 4; float fillPercent = 0.8; int nbLines = 0; int nbColumns = 0; int sizeSideIm = 0;
 	if (0 == checkIfnbCharaIsCorrect(nbChara)) {
 		createFieldsChampSelectInBlock(marge+2, marge+2, wCharBlock-4, hBlock-4, nbChara, fillPercent, &nbLines, &nbColumns, &sizeSideIm, xStatBlock, marge, wStatBlock, hBlock);
@@ -93,6 +94,49 @@ void createFieldsChampSelectInBlock(int xBlock, int yBlock, int wBlock, int hBlo
 	displayBlocksInOptimizedPosition(xBlock, yBlock, wBlock, hBlock, nbChara, *nbLines, *nbColumns, *sizeSideIm, xGraph, yGraph, wGraph, hGraph);
 
 }
+
+
+// creer la grille de selection de characters, avec le fond qui change de couleur
+void createCharacterGrid(int marge, int wCharBlock, int hBlock) {
+	int white[4] = {255, 255, 255, 255};
+	int black[4] = {0, 0, 0, 255};
+
+	Element * charaGrid = createImage(0, marge+2, LFEN * 6, hBlock-4, "assets/CHAMP_SELECT/back_character_grid.png", CHAMP_SELECT, PlanBackgroundCS+2); // fond coloré animé
+
+	charaGrid_t * d = (charaGrid_t *)malloc(sizeof(charaGrid_t));
+	if (charaGrid != NULL && d != NULL) {
+		d->xInit = marge + 2;
+		d->wBlock = wCharBlock;
+		charaGrid->data = d;
+		setActionElement(charaGrid, changeGridColor);
+		
+		// Contour blanc du block
+		createBlock(marge, marge, 2, hBlock, white, CHAMP_SELECT, PlanChampSelect+1);          // bande gauche
+		createBlock(marge+wCharBlock, marge, 2, hBlock, white, CHAMP_SELECT, PlanChampSelect+1); // bande droite
+		createBlock(marge, marge, wCharBlock, 2, white, CHAMP_SELECT, PlanChampSelect+1); // bande haut
+		createBlock(marge, marge+hBlock-2, wCharBlock, 2, white, CHAMP_SELECT, PlanChampSelect+1); // bande bas
+
+	} else {
+		free(charaGrid);
+		free(d);
+		createBlock(marge, marge, wCharBlock, hBlock, white, CHAMP_SELECT, PlanChampSelect); // Contour blanc du block
+		createBlock(marge+2, marge+2, wCharBlock-4, hBlock-4, black, CHAMP_SELECT, PlanChampSelect); // Block noir
+	}
+}
+
+// fonction action qui change la couleur de fond de la champ grid (en la deplacant)
+void changeGridColor(Element * charaGrid) {
+	charaGrid_t * d = charaGrid->data;
+	int max = d->xInit + d->wBlock - charaGrid->width;
+
+	if (charaGrid->x <= max) {
+		charaGrid->x = d->xInit;
+
+	} else {
+		charaGrid->x -= 10;
+	}
+}
+
 
 
 // affiche les blocs une fois quon connait le nombre de lignes et colonnes souhaitées
@@ -212,6 +256,13 @@ VersusImages_t * initVersusImages(int xBlock, int yBlock, int wBlock, int hBlock
 		versusImages->rightChara = createImage(xBlock + wImage, yBlock, wImage, hBlock, "assets/empty.png", CHAMP_SELECT, PlanCharactersVersus);
 		versusImages->rightChara->flip = SANDAL2_FLIP_HOR;
 	}
+
+	int wLightning = wBlock / 4;
+	int wVS = wLightning * 2;
+	int hVS = hBlock / 3;
+
+	createImage(xBlock+wImage-(wLightning/2), yBlock, wLightning, hBlock, "assets/CHAMP_SELECT/lightning.png", CHAMP_SELECT, PlanCharactersVersus+1);
+	createImage(xBlock+wImage-(wVS/2), yBlock+(hBlock/2)-(hVS/2), wVS, hVS, "assets/CHAMP_SELECT/vs.png", CHAMP_SELECT, PlanCharactersVersus-1);
 
 	return versusImages;
 }
