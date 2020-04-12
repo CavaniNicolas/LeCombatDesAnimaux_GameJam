@@ -13,8 +13,11 @@ void initFight(int idCharaLeft, int idCharaRight, int idMap) {
 	(void) idMap;
 	//s[10] = idMap+48;
 	
-	createImage(0, 0, LFEN,HFEN, s, FIGHT_SCREEN, 1);
+	createImage(0, 0, LFEN,HFEN, s, FIGHT_SCREEN, PlanBackgroundF);
 
+	initHealthBars();
+		updateWindow();
+		displayWindow();
 	Element * characterL = NULL;
 	Element * characterR = NULL;
 	initCharacter(PLAYER_L, idCharaLeft, &characterL);
@@ -35,3 +38,18 @@ void initFight(int idCharaLeft, int idCharaRight, int idMap) {
 	setKeyReleasedElement(characterR, keyOffActions);
 	setActionElement(characterR, actionCharacters);
 }
+
+
+void initHealthBars() {
+	int white[4] = {255, 255, 255, 255};
+
+	int marge = 0.05 * LFEN;
+	int xBarRight = LFEN / 2 + marge;
+	int wBar = 0.4 * LFEN;
+	int hBar = 0.05 * HFEN;
+
+	createBlock(marge, marge/2, wBar, hBar, white, FIGHT_SCREEN, PlanHealthBars); // Contour blanc du block
+	createBlock(xBarRight, marge/2, wBar, hBar, white, FIGHT_SCREEN, PlanHealthBars); // Contour blanc du block
+}
+
+

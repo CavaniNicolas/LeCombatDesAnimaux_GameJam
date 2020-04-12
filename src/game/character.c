@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <dirent.h>
 #include "../structure.h"
+#include "fight.h"
 #include "character.h"
 #include "animations.h"
 #include "movements.h"
@@ -67,7 +68,7 @@ void initCharacter(int idPlayer, int idChara, Element ** character) {
 				y = groundLevel;
 			}
 
-			(*character) = createImage(x, y, d->width, d->height, filename, FIGHT_SCREEN, 0);
+			(*character) = createImage(x, y, d->width, d->height, filename, FIGHT_SCREEN, PlanCharacters);
 			createCharacterAnimations(*character);
 
 			if (idPlayer == PLAYER_R) {
