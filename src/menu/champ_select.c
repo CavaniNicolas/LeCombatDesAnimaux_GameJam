@@ -6,7 +6,7 @@
 #include "champ_select.h"
 #include "map_select.h"
 
-#include "../game/character.h" // change this into map_select once its finished
+#include "../game/fight.h" // change this into map_select once its finished
 
 void ChampSelect() {
 	setDisplayCodeWindow(CHAMP_SELECT);

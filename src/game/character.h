@@ -50,8 +50,6 @@ typedef struct DataCharacter {
 }DataCharacter_t;
 
 
-void initFight(int idCharacterG, int idCharacterD, int idMap);
-
 void keyOnActions(Element *, SDL_Keycode);
 void keyOffActions(Element *, SDL_Keycode);
 void actionCharacters(Element * character);
