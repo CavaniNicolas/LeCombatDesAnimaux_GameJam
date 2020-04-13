@@ -84,11 +84,16 @@ void initCharacter(int idPlayer, int idChara, Element ** character) {
 DataCharacter_t * initDataCharacter(int idPlayer, int idChosen) {
 	DataCharacter_t * d = (DataCharacter_t *)malloc(sizeof(DataCharacter_t));
 	KeyCodes_t * kc = (KeyCodes_t *)malloc(sizeof(KeyCodes_t));
+	HealthBar_t * hb = (HealthBar_t *)malloc(sizeof(HealthBar_t));
 
-	if (d != NULL && kc != NULL) {
+	if (d != NULL && kc != NULL && hb != NULL) {
 
 		initKeyCodes(kc, idPlayer);
 		d->keyCodes = kc;
+
+		d->winNum = 0;
+		initHealthBar(hb, idPlayer);
+		d->healthBar = hb;
 
 		FILE * file = NULL;
 		file = fopen("assets/stats/DataCharacters.txt", "r");
@@ -171,6 +176,50 @@ void initKeyCodes(KeyCodes_t * kc, int idPlayer) {
 		kc->attack1 = 'j';
 		kc->attack2 = 'l';
 		kc->parry   = 'k';
+	}
+}
+
+
+void initHealthBar(HealthBar_t * hb, int idPlayer) {
+	int white[4] = {255, 255, 255, 255};
+	int red[4] = {255, 0, 0, 255};
+	int orange[4] = {255, 100, 0, 255};
+	int blue[4] = {0, 0, 255, 255};
+
+	int marge = 0.05 * LFEN;
+	int yBar = marge/2;
+	int xBarRight = LFEN / 2 + marge;
+	int wBar = 0.4 * LFEN;
+	int hBar = 0.05 * HFEN;
+
+	int sideBubble = 0.8*hBar;
+	int yBubble = yBar+hBar+1;
+
+	Element * healthBar = NULL;
+	Element * bubble1 = NULL;
+	Element * bubble2 = NULL;
+
+	if (idPlayer == PLAYER_L) { //Left
+		createBlock(marge, yBar, wBar, hBar, white, FIGHT_SCREEN, PlanHealthBars); // Contour blanc du block Left
+		healthBar = createBlock(marge+2, yBar+2, wBar-4, hBar-4, red, FIGHT_SCREEN, PlanHealthBars-1); // contenu rouge du block Left
+		createBlock(marge-hBar, yBar, hBar, hBar, orange, FIGHT_SCREEN, PlanHealthBars-1); //Logo Perso Left
+
+		bubble1 = createBlock(marge+wBar-2.5*sideBubble, yBubble, sideBubble, sideBubble, blue, FIGHT_SCREEN, PlanHealthBars-1); //Bubble1Left du BO3
+		bubble2 = createBlock(marge+wBar-sideBubble, yBubble, sideBubble, sideBubble, blue, FIGHT_SCREEN, PlanHealthBars-1); //Bubble2Left du BO3
+
+	} else { //Right
+		createBlock(xBarRight, yBar, wBar, hBar, white, FIGHT_SCREEN, PlanHealthBars); // Contour blanc du block Right
+		healthBar = createBlock(xBarRight+2, yBar+2, wBar-4, hBar-4, red, FIGHT_SCREEN, PlanHealthBars-1); // contenu rouge du block Right
+		createBlock(xBarRight+wBar, yBar, hBar, hBar, orange, FIGHT_SCREEN, PlanHealthBars-1); //Logo Perso Right
+
+		bubble1 = createBlock(xBarRight, yBubble, sideBubble, sideBubble, blue, FIGHT_SCREEN, PlanHealthBars-1); //Bubble1Right du BO3
+		bubble2 = createBlock(xBarRight+1.5*sideBubble, yBubble, sideBubble, sideBubble, blue, FIGHT_SCREEN, PlanHealthBars-1); //Bubble2Right du BO3
+	}
+
+	if (healthBar != NULL && bubble1 != NULL && bubble2 != NULL) {
+		hb->healthBar = healthBar;
+		hb->bubble1 = bubble1;
+		hb->bubble2 = bubble2;
 	}
 }
 

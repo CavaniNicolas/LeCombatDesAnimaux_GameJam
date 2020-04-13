@@ -3,6 +3,13 @@
 #define CARA_H
 #include <stdbool.h>
 
+typedef struct HealthBar_t {
+	Element * healthBar;
+	Element * bubble1;
+	Element * bubble2;
+}HealthBar_t;
+
+
 typedef struct KeyCodes {
 	SDL_Keycode left;
 	SDL_Keycode right;
@@ -46,6 +53,9 @@ typedef struct DataCharacter {
 	bool   attack2;
 	bool   parry;
 
+	HealthBar_t * healthBar;
+	int winNum;
+
 	KeyCodes_t * keyCodes;
 }DataCharacter_t;
 
@@ -80,7 +90,11 @@ void initCharacter(int, int, Element **);
 DataCharacter_t * initDataCharacter(int, int);
 
 
+//associe les touches claviers au bon personnage
 void initKeyCodes(KeyCodes_t * kd, int idPlayer);
+
+// affiche les barres de vie initiales
+void initHealthBar(HealthBar_t * hb, int idPlayer);
 
 
 /* -------------------------------------------------------------------------------- */
