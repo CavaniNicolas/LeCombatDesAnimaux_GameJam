@@ -5,14 +5,14 @@
 #include "attacks.h"
 
 
-void launchCharacterAttack(Element * character, SDL_Keycode k) {
+void launchCharacterAttack(Element * character) {
 	DataCharacter_t * d = character->data;
-	KeyCodes_t * kc = d->keyCodes;
+	KeyPressed_t * kp = d->keyPressed;
 
 	if (d->allowAttacks == true) {
 		d->attacks = true;
 
-		if (k == kc->attack1) {
+		if (kp->attack1_P) {
 			d->attack1 = true;
 
 			// pas le droit de se deplacer lors de ce mouvement
@@ -24,7 +24,7 @@ void launchCharacterAttack(Element * character, SDL_Keycode k) {
 			printf("P%d : attack1\n", d->idPlayer);
 		}
 
-		else if (k == kc->attack2) {
+		else if (kp->attack2_P) {
 			d->attack2 = true;
 
 			// pas le droit de se deplacer lors de ce mouvement
@@ -36,7 +36,7 @@ void launchCharacterAttack(Element * character, SDL_Keycode k) {
 			printf("P%d : attack2\n", d->idPlayer);
 		}
 
-		else if (k == kc->parry) {
+		else if (kp->parry_P) {
 			d->parry = true;
 
 			// pas le droit de se deplacer lors de ce mouvement

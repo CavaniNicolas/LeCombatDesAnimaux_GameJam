@@ -5,25 +5,30 @@
 #include "movements.h"
 
 
-void moveCharacterOn(Element * character, SDL_Keycode k) {
+void moveCharacterOn(Element * character) {
 	DataCharacter_t * d = character->data;
-	KeyCodes_t * kc = d->keyCodes;
+	KeyPressed_t * kp = d->keyPressed;
 
 	if (d->attacks == false) {
 
-		if (k == kc->left) {
+		if (kp->left_P) {
 			if (d->allowLeft == true) {
-					d->left = true;
+				d->left = true;
 			}
 		}
 
-		else if (k == kc->right) {
+		if (kp->right_P) {
 			if (d->allowRight == true) {
 				d->right = true;
 			}
 		}
 
-		else if (k == kc->jump) {
+		if (kp->left_P && kp->right_P) {
+			d->left = false;
+			d->right = false;
+		}
+
+		if (kp->jump_P) {
 			if (d->jump == false && d->allowJump == true) {
 				d->jump = true;
 				d->allowAttacks = false;
@@ -34,15 +39,15 @@ void moveCharacterOn(Element * character, SDL_Keycode k) {
 }
 
 
-void moveCharacterOff(Element * character, SDL_Keycode k) {
+void moveCharacterOff(Element * character) {
 	DataCharacter_t * d = character->data;
-	KeyCodes_t * kc = d->keyCodes;
+	KeyPressed_t * kp = d->keyPressed;
 
-	if (k == kc->left) {
- 		d->left = false;
- 	}
+	if (kp->left_P == false) {
+		d->left = false;
+	}
 
-	else if (k == kc->right) {
+	if (kp->right_P == false) {
 		d->right = false;
 	}
 
@@ -55,13 +60,19 @@ void moveCharacter(Element * character) {
 	double speed = d->speed;
 
 	if (d->left) {
-		if ((character->x)-speed > 0)
+		if ((character->x)-speed > 0) {
 			moveElement(character, -speed, 0);
+		} else {
+			d->left = false;
+		}
 	}
 
 	if (d->right) {
-		if ((character->x)-speed < LFEN-(d->width))
+		if ((character->x)-speed < LFEN-(d->width)) {
 			moveElement(character, speed, 0);
+		} else {
+			d->left = false;
+		}
 	}
 }
 

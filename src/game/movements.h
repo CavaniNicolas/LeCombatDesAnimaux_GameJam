@@ -7,22 +7,20 @@
 /* moveCharacterOn   Active les booléens autorisant le déplacement                  */
 /*                                                                                  */
 /* En entrée:  character : Element *, personnage                                    */
-/*             k         : SDL_Keycode, touche clavier (pression utilisée)          */
 /*                                                                                  */
 /* En sortie:  void                                                                 */
 /* -------------------------------------------------------------------------------- */
-void moveCharacterOn(Element *, SDL_Keycode);
+void moveCharacterOn(Element *);
 
 
 /* -------------------------------------------------------------------------------- */
 /* moveCharacterOff   Desactive les booléens autorisant le déplacement              */
 /*                                                                                  */
 /* En entrée:  character : Element *, personnage                                    */
-/*             k         : SDL_Keycode, touche clavier (relachement utilisé)        */
 /*                                                                                  */
 /* En sortie:  void                                                                 */
 /* -------------------------------------------------------------------------------- */
-void moveCharacterOff(Element *, SDL_Keycode);
+void moveCharacterOff(Element *);
 
 
 /* -------------------------------------------------------------------------------- */

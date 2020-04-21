@@ -11,30 +11,88 @@
 #include "attacks.h"
 
 
-void keyOnActions(Element * character, SDL_Keycode k) {
+void keyPressed(Element * character, SDL_Keycode k) {
 	DataCharacter_t * d = character->data;
 	KeyCodes_t * kc = d->keyCodes;
+	KeyPressed_t * kp = d->keyPressed;
 
 	/*Si on appuie sur une touche d'attaque*/
-	if (k == kc->attack1 || k == kc->attack2 || k == kc->parry) {
-		launchCharacterAttack(character, k);
+	if (k == kc->attack1) {
+		kp->attack1_P = true;
+	}
+	if (k == kc->attack2) {
+		kp->attack2_P = true;
+	}
+	if (k == kc->parry) {
+		kp->parry_P = true;
 	}
 
 	/*Si on appuie sur une touche de déplacement*/
-	else if (k == kc->left || k == kc->right || k == kc->jump) {
-		moveCharacterOn(character, k);
+	if (k == kc->left) {
+		kp->left_P = true;
+	}
+	if (k == kc->right) {
+		kp->right_P = true;
+	}
+	if (k == kc->jump) {
+		kp->jump_P = true;
+	}
+}
+
+
+void keyUnpressed(Element * character, SDL_Keycode k) {
+	DataCharacter_t * d = character->data;
+	KeyCodes_t * kc = d->keyCodes;
+	KeyPressed_t * kp = d->keyPressed;
+
+	/*Si on relache une touche d'attaque*/
+	if (k == kc->attack1) {
+		kp->attack1_P = false;
+	}
+	if (k == kc->attack2) {
+		kp->attack2_P = false;
+	}
+	if (k == kc->parry) {
+		kp->parry_P = false;
+	}
+
+	/*Si on relache une touche de déplacement*/
+	if (k == kc->left) {
+		kp->left_P = false;
+	}
+	if (k == kc->right) {
+		kp->right_P = false;
+	}
+	if (k == kc->jump) {
+		kp->jump_P = false;
+	}
+}
+
+
+void keyOnActions(Element * character) {
+	DataCharacter_t * d = character->data;
+	KeyPressed_t * kp = d->keyPressed;
+
+	/*Si on appuie sur une touche d'attaque*/
+	if (kp->attack1_P || kp->attack2_P || kp->parry_P) {
+		launchCharacterAttack(character);
+	}
+
+	/*Si on appuie sur une touche de déplacement*/
+	else if (kp->left_P || kp->right_P || kp->jump_P) {
+		moveCharacterOn(character);
 	}
 
 }
 
 
-void keyOffActions(Element * character, SDL_Keycode k) {
+void keyOffActions(Element * character) {
 	DataCharacter_t * d = character->data;
-	KeyCodes_t * kc = d->keyCodes;
+	KeyPressed_t * kp = d->keyPressed;
 
-	/*Si on relache une touche de déplacement*/
-	if (k == kc->left || k == kc->right || k == kc->jump) {
-		moveCharacterOff(character, k);
+	//Si on relache une touche de déplacement
+	if (kp->left_P == false || kp->right_P == false) {
+		moveCharacterOff(character);
 	}
 }
 
@@ -44,6 +102,8 @@ void actionCharacters(Element * character) {
 	jumpCharacter(character);
 	collisionCharacters(character);
 	charactersAnimation(character);
+	keyOnActions(character);
+	keyOffActions(character);
 }
 
 
@@ -85,6 +145,7 @@ DataCharacter_t * initDataCharacter(int idPlayer, int idChosen) {
 	DataCharacter_t * d = (DataCharacter_t *)malloc(sizeof(DataCharacter_t));
 	KeyCodes_t * kc = (KeyCodes_t *)malloc(sizeof(KeyCodes_t));
 	HealthBar_t * hb = (HealthBar_t *)malloc(sizeof(HealthBar_t));
+	KeyPressed_t * kp = (KeyPressed_t *)malloc(sizeof(KeyPressed_t));
 
 	if (d != NULL && kc != NULL && hb != NULL) {
 
@@ -94,6 +155,9 @@ DataCharacter_t * initDataCharacter(int idPlayer, int idChosen) {
 		d->winNum = 0;
 		initHealthBar(hb, idPlayer);
 		d->healthBar = hb;
+
+		initKeyPressed(kp);
+		d->keyPressed = kp;
 
 		FILE * file = NULL;
 		file = fopen("assets/stats/DataCharacters.txt", "r");
@@ -105,13 +169,13 @@ DataCharacter_t * initDataCharacter(int idPlayer, int idChosen) {
 
 			d->idPlayer = idPlayer;
 
-			d->left       = false;
-			d->allowLeft  = false;
-			d->right      = false;
-			d->allowRight = false;
-			d->jump       = false;
-			d->allowJump  = true;
-			d->crouch     = false;
+			d->left         = false;
+			d->allowLeft    = false;
+			d->right        = false;
+			d->allowRight   = false;
+			d->jump         = false;
+			d->allowJump    = true;
+			d->crouch       = false;
 
 			d->attacks      = false;
 			d->allowAttacks = true;
@@ -177,6 +241,16 @@ void initKeyCodes(KeyCodes_t * kc, int idPlayer) {
 		kc->attack2 = 'l';
 		kc->parry   = 'k';
 	}
+}
+
+
+void initKeyPressed(KeyPressed_t * kp) {
+	kp->left_P    = false;
+	kp->right_P   = false;
+	kp->jump_P    = false;
+	kp->attack1_P = false;
+	kp->parry_P   = false;
+	kp->attack2_P = false;
 }
 
 

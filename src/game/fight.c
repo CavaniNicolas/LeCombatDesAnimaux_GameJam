@@ -27,13 +27,13 @@ void initFight(int idCharaLeft, int idCharaRight, int idMap) {
 
 
 	// Fonctions à appeler lors de l'appuie / le relachement d'une touche / les actions à effectuer
-	setKeyPressedElement(characterL, keyOnActions);
-	setKeyReleasedElement(characterL, keyOffActions);
+	setKeyPressedElement(characterL, keyPressed);
+	setKeyReleasedElement(characterL, keyUnpressed);
 	setActionElement(characterL, actionCharacters);
 
 	// Fonctions à appeler lors de l'appuie / le relachement d'une touche / les actions à effectuer
-	setKeyPressedElement(characterR, keyOnActions);
-	setKeyReleasedElement(characterR, keyOffActions);
+	setKeyPressedElement(characterR, keyPressed);
+	setKeyReleasedElement(characterR, keyUnpressed);
 	setActionElement(characterR, actionCharacters);
 
 }

@@ -3,7 +3,7 @@
 #define CARA_H
 #include <stdbool.h>
 
-typedef struct HealthBar_t {
+typedef struct HealthBar {
 	Element * healthBar;
 	Element * bubble1;
 	Element * bubble2;
@@ -19,6 +19,14 @@ typedef struct KeyCodes {
 	SDL_Keycode parry;
 }KeyCodes_t;
 
+typedef struct KeyPressed {
+	bool left_P;
+	bool right_P;
+	bool jump_P;
+	bool attack1_P;
+	bool parry_P;
+	bool attack2_P;
+}KeyPressed_t;
 
 typedef struct DataCharacter {
 	int    idChara;
@@ -53,15 +61,38 @@ typedef struct DataCharacter {
 	bool   attack2;
 	bool   parry;
 
+	KeyPressed_t * keyPressed;
+
 	HealthBar_t * healthBar;
 	int winNum;
 
 	KeyCodes_t * keyCodes;
 }DataCharacter_t;
 
+/* ------------------------------------------------------------------------- */
+/* keyPressed                                                                */
+/*       Active les booléens de pression en fonction de la touche appuyée    */
+/*                                                                           */
+/* En entrée:  character : Element *, personnage                             */
+/*             k         : SDL_Keycode, touche clavier (pression utilisée)   */
+/*                                                                           */
+/* En sortie:  void                                                          */
+/* ------------------------------------------------------------------------- */
+void keyPressed(Element *, SDL_Keycode);
 
-void keyOnActions(Element *, SDL_Keycode);
-void keyOffActions(Element *, SDL_Keycode);
+/* -------------------------------------------------------------------------------- */
+/* keyUnpressed Desactive les booléens de pression en fonction de la touche relachée*/
+/*                                                                                  */
+/* En entrée:  character : Element *, personnage                                    */
+/*             k         : SDL_Keycode, touche clavier (relachement utilisé)        */
+/*                                                                                  */
+/* En sortie:  void                                                                 */
+/* -------------------------------------------------------------------------------- */
+void keyUnpressed(Element *, SDL_Keycode);
+
+
+void keyOnActions(Element *);
+void keyOffActions(Element *);
 void actionCharacters(Element * character);
 
 
@@ -92,6 +123,9 @@ DataCharacter_t * initDataCharacter(int, int);
 
 //associe les touches claviers au bon personnage
 void initKeyCodes(KeyCodes_t * kd, int idPlayer);
+
+//init les KeyPressed a false
+void initKeyPressed(KeyPressed_t * kp);
 
 // affiche les barres de vie initiales
 void initHealthBar(HealthBar_t * hb, int idPlayer);
