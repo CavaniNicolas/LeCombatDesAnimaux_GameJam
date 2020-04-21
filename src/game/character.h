@@ -64,8 +64,9 @@ typedef struct KeyPressed {
 /* -------------------------------------------------------------------------- */
 typedef struct DataCharacter {
 	int    idChara;
-	double width;
-	double height;
+	int width;
+	int height;
+	int hitboxSize;
 
 	int    hpCte;
 	int    strengthCte;

@@ -205,26 +205,37 @@ void getStatsInFile(FILE * file, DataCharacter_t * d, int idChosen) {
 	fgets(line, 6, file);
 	d->hpCte = atoi(line);
 	d->hp = d->hpCte;
+//printf("hp %d\n", d->hp);
 
 	fgets(line, 6, file);
 	d->strengthCte = atoi(line);
+//printf("strength %d\n", d->strengthCte);
 
 	fgets(line, 6, file);
 	d->speedCte = atoi(line);
 	d->speed = d->speedCte;
+//printf("speed %d\n", d->speed);
 
 	fgets(line, 6, file);
-	d->height = HFEN * atof(line);
+	d->height = (HFEN * atof(line));
+//printf("height %d\n", d->height);
 
 	fgets(line, 6, file);
-	d->width = d->height * atof(line);
+	d->width = (d->height * atof(line));
+//printf("width %d\n", d->width);
+
+	fgets(line, 6, file);
+	d->hitboxSize = (d->width * atof(line) / 100);
+//printf("hitbox %d\n", d->hitboxSize);
 
 	fgets(line, 6, file);
 	d->jumpForceCte = atoi(line);
 	d->jumpForceTmp = d->jumpForceCte;
+//printf("jumpForce %d\n", d->jumpForceCte);
 
 	fgets(line, 6, file);
 	d->jumpLagCte = atoi(line);
+//printf("jumpLag %d\n", d->jumpLagCte);
 }
 
 
