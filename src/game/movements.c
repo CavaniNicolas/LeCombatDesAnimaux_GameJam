@@ -123,7 +123,7 @@ void collisionCharacters(Element * character) {
 	DataCharacter_t * d = character->data;
 	DataCharacter_t * d2 = character2->data;
 
-	if (d->idPlayer == PLAYER_L && (character->x + d->width > character2->x)) {
+	if (d->idPlayer == PLAYER_L && (character->x + d->width - 25 > character2->x + 25)) {
 		d->allowRight = false;
 		d2->allowLeft = false;
 		d->right = false;
@@ -134,7 +134,7 @@ void collisionCharacters(Element * character) {
 		d2->allowLeft = true;
 	}
 
-	if (d->idPlayer == PLAYER_R && (character->x < character2->x + d2->width)) {
+	if (d->idPlayer == PLAYER_R && (character->x + 25 < character2->x + d2->width - 25)) {
 		d->allowLeft   = false;
 		d2->allowRight = false;
 		d->left   = false;

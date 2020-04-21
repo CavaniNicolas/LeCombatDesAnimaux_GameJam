@@ -146,8 +146,9 @@ DataCharacter_t * initDataCharacter(int idPlayer, int idChosen) {
 	KeyCodes_t * kc = (KeyCodes_t *)malloc(sizeof(KeyCodes_t));
 	HealthBar_t * hb = (HealthBar_t *)malloc(sizeof(HealthBar_t));
 	KeyPressed_t * kp = (KeyPressed_t *)malloc(sizeof(KeyPressed_t));
+	FILE * file = fopen("assets/stats/DataCharacters.txt", "r");
 
-	if (d != NULL && kc != NULL && hb != NULL) {
+	if (d != NULL && kc != NULL && kp != NULL && hb != NULL && file != NULL) {
 
 		initKeyCodes(kc, idPlayer);
 		d->keyCodes = kc;
@@ -159,67 +160,71 @@ DataCharacter_t * initDataCharacter(int idPlayer, int idChosen) {
 		initKeyPressed(kp);
 		d->keyPressed = kp;
 
-		FILE * file = NULL;
-		file = fopen("assets/stats/DataCharacters.txt", "r");
 
-		if (file != NULL) {
+		getStatsInFile(file, d, idChosen);
 
-			int idChara = -1;
-			char line[6];
+		d->idPlayer = idPlayer;
 
-			d->idPlayer = idPlayer;
+		d->left         = false;
+		d->allowLeft    = false;
+		d->right        = false;
+		d->allowRight   = false;
+		d->jump         = false;
+		d->allowJump    = true;
+		d->crouch       = false;
 
-			d->left         = false;
-			d->allowLeft    = false;
-			d->right        = false;
-			d->allowRight   = false;
-			d->jump         = false;
-			d->allowJump    = true;
-			d->crouch       = false;
+		d->attacks      = false;
+		d->allowAttacks = true;
 
-			d->attacks      = false;
-			d->allowAttacks = true;
+		d->attack1      = false;
+		d->attack2      = false;
+		d->parry        = false;
 
-			d->attack1      = false;
-			d->attack2      = false;
-			d->parry        = false;
-
-
-			while (!feof(file) && idChara != idChosen) {
-				fgets(line, 6, file);
-				idChara = atoi(line);
-			}
-			d->idChara = idChara;
-
-			fgets(line, 6, file);
-			d->hpCte = atoi(line);
-			d->hp = d->hpCte;
-
-			fgets(line, 6, file);
-			d->strengthCte = atoi(line);
-
-			fgets(line, 6, file);
-			d->speedCte = atoi(line);
-			d->speed = d->speedCte;
-
-			fgets(line, 6, file);
-			d->width = atoi(line);
-
-			fgets(line, 6, file);
-			d->height = atoi(line);
-
-			fgets(line, 6, file);
-			d->jumpForceCte = atoi(line);
-			d->jumpForceTmp = d->jumpForceCte;
-
-			fgets(line, 6, file);
-			d->jumpLagCte = atoi(line);
-		}
-
-		fclose(file);
+	} else {
+		free(d);
+		free(kc);
+		free(kp);
+		free(hb);
 	}
 
+	fclose(file);
 	return d;
+}
+
+
+void getStatsInFile(FILE * file, DataCharacter_t * d, int idChosen) {
+	int idChara = -1;
+	char line[6];
+
+	while (!feof(file) && idChara != idChosen) {
+		fgets(line, 6, file);
+		idChara = atoi(line);
+	}
+	d->idChara = idChara;
+
+	fgets(line, 6, file);
+	d->hpCte = atoi(line);
+	d->hp = d->hpCte;
+
+	fgets(line, 6, file);
+	d->strengthCte = atoi(line);
+
+	fgets(line, 6, file);
+	d->speedCte = atoi(line);
+	d->speed = d->speedCte;
+
+	fgets(line, 6, file);
+	d->height = HFEN * atof(line);
+
+	fgets(line, 6, file);
+	d->width = d->height * atof(line);
+
+	fgets(line, 6, file);
+	d->jumpForceCte = atoi(line);
+	d->jumpForceTmp = d->jumpForceCte;
+
+	fgets(line, 6, file);
+	d->jumpLagCte = atoi(line);
 }
 
 

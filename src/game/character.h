@@ -64,8 +64,8 @@ typedef struct KeyPressed {
 /* -------------------------------------------------------------------------- */
 typedef struct DataCharacter {
 	int    idChara;
-	int    width;
-	int    height;
+	double width;
+	double height;
 
 	int    hpCte;
 	int    strengthCte;
@@ -175,20 +175,32 @@ void actionCharacters(Element * character);
 void initCharacter(int, int, Element **);
 
 
-
 /* -------------------------------------------------------------------------- */
 /* initDataCharacter                                                          */
-/*                                                                            */
 /*       Initialise les data d'un personnage depuis le fichier data           */
-/*       "assets/DataCharacters.txt"                                          */
+/*       "assets/DataCharacters.txt" (valeurs numériques et booléens)         */
 /*                                                                            */
-/* En entrée: idPlayer (int) : id du joueur choisissant son perso            */
-/*                             (gauche ou droite)                            */
-/*            idChosen (int) : id du perso selectionné dans le menu          */
+/* En entrée: idPlayer (int) : id du joueur choisissant son perso             */
+/*                             (gauche ou droite)                             */
+/*            idChosen (int) : id du perso selectionné dans le menu           */
 /*                                                                            */
-/* En sortie: d (DataCharacter_t *) : Pointeur sur la structure Data du perso*/
+/* En sortie: d (DataCharacter_t *) : Pointeur sur la structure Data du perso */
 /* -------------------------------------------------------------------------- */
 DataCharacter_t * initDataCharacter(int, int);
+
+
+/* -------------------------------------------------------------------------- */
+/* getStatsInFile                                                             */
+/*       Récupère les data d'un personnage depuis le fichier data             */
+/*       "assets/DataCharacters.txt"                                          */
+/*                                                                            */
+/* En entrée: file (FILE *)         : fichier data ouvert                     */
+/*            d (DataCharacter_t *) : pointeur sur la structure des données   */
+/*            idChosen (int)        : id du perso selectionné dans le menu    */
+/*                                                                            */
+/* En sortie: (void)                                                          */
+/* -------------------------------------------------------------------------- */
+void getStatsInFile(FILE * file, DataCharacter_t * d, int idChosen);
 
 
 /* -------------------------------------------------------------------------- */

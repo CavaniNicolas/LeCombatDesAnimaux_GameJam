@@ -7,6 +7,7 @@ BUGS :
 	- fonctions d'optimisation des blocks sur certaines fenetres et certains nombres de blocks a afficher
 
 A FAIRE :
+	- changer le format du fichier stats en une ligne par perso (avec des fscanf)
 	- transitions fin de CHAMP_SELECT
 	- MAP_SELECT
 	- menu, selection personnelle des touches
