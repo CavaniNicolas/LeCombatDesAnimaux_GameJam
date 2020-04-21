@@ -1,0 +1,17 @@
+IMPORTANT :
+	- Attacks, perte de vie
+	- mort, manche remportée, 2 manches gagnantes, fin de partie.
+	- dessiner d'autres perso
+
+BUGS :
+	-
+
+A FAIRE :
+	- transitions fin de CHAMP_SELECT
+	- MAP_SELECT
+	- menu, selection personnelle des touches
+
+AMELIORATIONS FUTURES :
+	- Sauvegarde des touches personnelles enregistrées
+	- Jouer contre un ordi
+	- Sauvegarde des skins debloqués
