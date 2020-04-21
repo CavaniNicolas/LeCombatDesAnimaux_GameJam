@@ -2,6 +2,7 @@
 #include <SANDAL2/SANDAL2.h>
 #include <stdio.h>
 #include "animations.h"
+#include "character.h"
 
 
 void createCharacterAnimations(Element * character) {
@@ -101,8 +102,6 @@ void endAnimationActions(Element * character, int code) {
 }
 
 
-
-// retourne le numero de la sprite affichée actuellement
 int getCurrentSprite(Element * character) {
 	int code = 0;
 

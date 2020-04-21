@@ -1,10 +1,21 @@
-
+/* -------------------------------------------------------------------------- */
+/* Nom du fichier : animations.h                                              */
+/* Objectifs : Déclarations des fonctions pour les animations                 */
+/* Fonctions :                                                                */
+/*  - createCharacterAnimations                                               */
+/*  - charactersAnimation                                                     */
+/*  - endAnimationActions                                                     */
+/*  - getCurrentSprite                                                        */
+/* -------------------------------------------------------------------------- */
 
 #ifndef ANIM_H
 #define ANIM_H
-#include <stdbool.h>
-#include "character.h"
 
+
+/* -------------------------------------------------------------------------- */
+/* enum Animations                                                            */
+/*       Enumeration des codes des animations                                 */
+/* -------------------------------------------------------------------------- */
 enum Animations {
 	standing = 0,
 	moving = 1,
@@ -13,17 +24,51 @@ enum Animations {
 	parrying = 4,
 	attacking2 = 5
 };
-// set Animation with sprites to the element
+
+
+/* -------------------------------------------------------------------------- */
+/* createCharacterAnimations                                                  */
+/*       Creer les différentes animations du personnage                       */
+/*                                                                            */
+/* En entrée: character (Element *) : personnage                              */
+/*                                                                            */
+/* En sortie: void                                                            */
+/* -------------------------------------------------------------------------- */
 void createCharacterAnimations(Element * character);
 
+
+/* -------------------------------------------------------------------------- */
+/* charactersAnimation                                                        */
+/*       Lance la bonne animation à l'écran en fonction des actions           */
+/*                                                                            */
+/* En entrée: character (Element *) : personnage                              */
+/*                                                                            */
+/* En sortie: void                                                            */
+/* -------------------------------------------------------------------------- */
 void charactersAnimation(Element * character);
 
 
-// setting the behavior when an animation end
+/* -------------------------------------------------------------------------- */
+/* endAnimationActions                                                        */
+/*       Actions à effectuer lorsqu'une animation se termine                  */
+/*                                                                            */
+/* En entrée: character (Element *) : personnage                              */
+/*            code (int)            : code de l'animation qui se termine      */
+/*                                                                            */
+/* En sortie: void                                                            */
+/* -------------------------------------------------------------------------- */
 void endAnimationActions(Element * character, int code);
 
 
-// retourne le numero de la sprite affichée actuellement
+/* -------------------------------------------------------------------------- */
+/* getCurrentSprite                                                           */
+/*       Retourne le numero de la sprite affichée actuellement                */
+/*                                                                            */
+/* En entrée: character (Element *) : personnage                              */
+/*                                                                            */
+/* En sortie: void                                                            */
+/* -------------------------------------------------------------------------- */
 int getCurrentSprite(Element * character);
+
 
 #endif

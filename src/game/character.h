@@ -1,6 +1,7 @@
 /* -------------------------------------------------------------------------- */
 /* Nom du fichier : character.h                                               */
-/* Objectifs : Déclarations des fonctions pour le personnage                  */
+/* Objectifs : Déclarations des fonctions pour le personnage, son             */
+/*             initialisation et les fonctions/actions qui lui sont associées */
 /* Fonctions :                                                                */
 /*  -                                             */
 /*  -                                             */
