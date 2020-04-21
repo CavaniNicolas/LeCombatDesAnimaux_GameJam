@@ -257,8 +257,10 @@ void initKeyPressed(KeyPressed_t * kp) {
 void initHealthBar(HealthBar_t * hb, int idPlayer) {
 	int white[4] = {255, 255, 255, 255};
 	int red[4] = {255, 0, 0, 255};
-	int orange[4] = {255, 100, 0, 255};
+	//int orange[4] = {255, 100, 0, 255};
 	int blue[4] = {0, 0, 255, 255};
+
+	char filename[40] = "assets/characters/logos/logo0.png";
 
 	int marge = 0.05 * LFEN;
 	int yBar = marge/2;
@@ -276,7 +278,8 @@ void initHealthBar(HealthBar_t * hb, int idPlayer) {
 	if (idPlayer == PLAYER_L) { //Left
 		createBlock(marge, yBar, wBar, hBar, white, FIGHT_SCREEN, PlanHealthBars); // Contour blanc du block Left
 		healthBar = createBlock(marge+2, yBar+2, wBar-4, hBar-4, red, FIGHT_SCREEN, PlanHealthBars-1); // contenu rouge du block Left
-		createBlock(marge-hBar, yBar, hBar, hBar, orange, FIGHT_SCREEN, PlanHealthBars-1); //Logo Perso Left
+		//createBlock(marge-hBar, yBar, hBar, hBar, orange, FIGHT_SCREEN, PlanHealthBars-1); //Logo Perso Left
+		createImage(marge-hBar, yBar, hBar, hBar, filename, FIGHT_SCREEN, PlanHealthBars-1); //Logo Perso Left
 
 		bubble1 = createBlock(marge+wBar-2.5*sideBubble, yBubble, sideBubble, sideBubble, blue, FIGHT_SCREEN, PlanHealthBars-1); //Bubble1Left du BO3
 		bubble2 = createBlock(marge+wBar-sideBubble, yBubble, sideBubble, sideBubble, blue, FIGHT_SCREEN, PlanHealthBars-1); //Bubble2Left du BO3
@@ -284,7 +287,9 @@ void initHealthBar(HealthBar_t * hb, int idPlayer) {
 	} else { //Right
 		createBlock(xBarRight, yBar, wBar, hBar, white, FIGHT_SCREEN, PlanHealthBars); // Contour blanc du block Right
 		healthBar = createBlock(xBarRight+2, yBar+2, wBar-4, hBar-4, red, FIGHT_SCREEN, PlanHealthBars-1); // contenu rouge du block Right
-		createBlock(xBarRight+wBar, yBar, hBar, hBar, orange, FIGHT_SCREEN, PlanHealthBars-1); //Logo Perso Right
+		//createBlock(xBarRight+wBar, yBar, hBar, hBar, orange, FIGHT_SCREEN, PlanHealthBars-1); //Logo Perso Right
+		Element * logoRight = createImage(xBarRight+wBar, yBar, hBar, hBar, filename, FIGHT_SCREEN, PlanHealthBars-1); //Logo Perso Right
+		logoRight->flip = SANDAL2_FLIP_HOR;
 
 		bubble1 = createBlock(xBarRight, yBubble, sideBubble, sideBubble, blue, FIGHT_SCREEN, PlanHealthBars-1); //Bubble1Right du BO3
 		bubble2 = createBlock(xBarRight+1.5*sideBubble, yBubble, sideBubble, sideBubble, blue, FIGHT_SCREEN, PlanHealthBars-1); //Bubble2Right du BO3
