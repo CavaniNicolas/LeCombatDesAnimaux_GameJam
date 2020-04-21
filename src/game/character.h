@@ -25,6 +25,7 @@
 /*       bubble2   : pointeur sur la bulle de victoire 2                      */
 /* -------------------------------------------------------------------------- */
 typedef struct HealthBar {
+	int       wBarMax;
 	Element * healthBar;
 	Element * bubble1;
 	Element * bubble2;
@@ -64,9 +65,9 @@ typedef struct KeyPressed {
 /* -------------------------------------------------------------------------- */
 typedef struct DataCharacter {
 	int    idChara;
-	int width;
-	int height;
-	int hitboxSize;
+	int    width;
+	int    height;
+	int    hitboxSize;
 
 	int    hpCte;
 	int    strengthCte;
@@ -75,6 +76,7 @@ typedef struct DataCharacter {
 	int    jumpLagCte;
 
 	int    hp;
+	int    strength;
 	int    speed;
 	int    jumpForceTmp;
 	int    jumpLagTmp;
@@ -95,6 +97,9 @@ typedef struct DataCharacter {
 	bool   attack1;
 	bool   attack2;
 	bool   parry;
+
+	bool   inRange; // n'est modifié que lors d'une attaque
+	bool   dead;
 
 	KeyPressed_t * keyPressed;
 

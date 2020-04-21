@@ -22,4 +22,38 @@
 void launchCharacterAttack(Element * character);
 
 
+/* -------------------------------------------------------------------------- */
+/* isCharacterInRange                                                         */
+/*       Modifie le booléen inRange si les deux personnages sont à porté      */
+/*       pour s'attaquer                                                      */
+/*                                                                            */
+/* En entrée: character (Element *) : personnage                              */
+/*                                                                            */
+/* En sortie: void                                                            */
+/* -------------------------------------------------------------------------- */
+void isCharacterInRange(Element * character);
+
+
+/* -------------------------------------------------------------------------- */
+/* damageOpponent                                                             */
+/*       Inflige des dégats à l'adversaire si une attaque à porté est lancée  */
+/*                                                                            */
+/* En entrée: characterAttacking (Element *) : personnage qui attaque         */
+/*                                                                            */
+/* En sortie: void                                                            */
+/* -------------------------------------------------------------------------- */
+void damageOpponent(Element * characterAttacking);
+
+
+/* -------------------------------------------------------------------------- */
+/* resizeHealthBar                                                            */
+/*       Redimmensionne la barre de PV après s'être pris un coup              */
+/*                                                                            */
+/* En entrée: character (Element *) : personnage qui est bléssé               */
+/*                                                                            */
+/* En sortie: void                                                            */
+/* -------------------------------------------------------------------------- */
+void resizeHealthBar(Element * character);
+
+
 #endif

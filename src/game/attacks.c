@@ -47,6 +47,63 @@ void launchCharacterAttack(Element * character) {
 			d->right = false;
 			printf("P%d : parry\n", d->idPlayer);
 		}
+	damageOpponent(character);
+	}
+}
+
+
+void isCharacterInRange(Element * character) {
+	initIteratorElement(character);
+	Element * character2 = nextIteratorElement(character);
+
+	DataCharacter_t * d = character->data;
+	DataCharacter_t * d2 = character2->data;
+
+	if ((d->idPlayer == PLAYER_L && (character->x + d->width > character2->x)) || 
+		(d->idPlayer == PLAYER_R && (character->x < character2->x + d2->width))) {
+		d->inRange = true;
+		d2->inRange = true;
+	} else {
+		d->inRange = false;
+		d2->inRange = false;
 	}
 
+}
+
+
+void damageOpponent(Element * characterAttacking) {
+	initIteratorElement(characterAttacking);
+	Element * character2 = nextIteratorElement(characterAttacking);
+
+	DataCharacter_t * d = characterAttacking->data;
+	DataCharacter_t * d2 = character2->data;
+
+	isCharacterInRange(characterAttacking);
+printf("%d\n", d->inRange);
+
+	if (d->inRange) {
+		if (d2->parry) {
+			d2->hp = d2->hp - d->strengthCte * 0.4;
+
+		} else {
+			d2->hp = d2->hp - d->strength;
+		}
+	}
+
+	resizeHealthBar(character2);
+}
+
+
+void resizeHealthBar(Element * character) {
+	DataCharacter_t * d = character->data;
+	HealthBar_t * hb = d->healthBar;
+
+	if (d->hp > 0) {
+		hb->healthBar->width = (d->hp * hb->wBarMax / d->hpCte) - 4;
+
+	} else {
+		hb->healthBar->width = 0;
+		d->dead = true;
+		printf("Joueur %d a perdu\n", d->idPlayer);
+	}
 }

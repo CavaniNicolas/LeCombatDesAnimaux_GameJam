@@ -180,6 +180,9 @@ DataCharacter_t * initDataCharacter(int idPlayer, int idChosen) {
 		d->attack2      = false;
 		d->parry        = false;
 
+		d->inRange      = false;
+		d->dead         = false;
+
 	} else {
 		free(d);
 		free(kc);
@@ -209,6 +212,7 @@ void getStatsInFile(FILE * file, DataCharacter_t * d, int idChosen) {
 
 	fgets(line, 6, file);
 	d->strengthCte = atoi(line);
+	d->strength = d->strengthCte;
 //printf("strength %d\n", d->strengthCte);
 
 	fgets(line, 6, file);
@@ -312,6 +316,7 @@ void initHealthBar(HealthBar_t * hb, int idPlayer) {
 	}
 
 	if (healthBar != NULL && bubble1 != NULL && bubble2 != NULL) {
+		hb->wBarMax = wBar-4;
 		hb->healthBar = healthBar;
 		hb->bubble1 = bubble1;
 		hb->bubble2 = bubble2;
