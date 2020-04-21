@@ -4,14 +4,17 @@ IMPORTANT :
 	- dessiner d'autres perso
 
 BUGS :
-	-
+	- fonctions d'optimisation des blocks sur certaines fenetres et certains nombres de blocks a afficher
 
 A FAIRE :
 	- transitions fin de CHAMP_SELECT
 	- MAP_SELECT
 	- menu, selection personnelle des touches
 
+	- coder la fonction d'optimisation des blocks avec le programme linéaire
+
 AMELIORATIONS FUTURES :
+	- ajouter des sons
 	- Sauvegarde des touches personnelles enregistrées
 	- Jouer contre un ordi
 	- Sauvegarde des skins debloqués
