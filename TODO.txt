@@ -19,3 +19,4 @@ AMELIORATIONS FUTURES :
 	- Sauvegarde des touches personnelles enregistrées
 	- Jouer contre un ordi
 	- Sauvegarde des skins debloqués
+	- Apprendre a gerer 2 threads pour charger le perso 1 lors de la selection du perso 2 pour reduire le temps d'attente avant la partie
