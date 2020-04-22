@@ -38,6 +38,17 @@ void createCharacterAnimations(Element * character) {
 			printf("Error adding sprite %d to animation %d\n", i, parrying);
 	setWaySpriteAnimationElement(character, parrying, 1);
 
+	addAnimationElement(character, attacking2);
+	for(i=0; i<8; i++)
+		if(addSpriteAnimationElement(character, attacking2, 60 + 500*i, 2550, 340, 380, 6, i))
+			printf("Error adding sprite %d to animation %d\n", i, attacking2);
+	setWaySpriteAnimationElement(character, attacking2, 1);
+
+	addAnimationElement(character, dying_reviving);
+	for(i=0; i<8; i++)
+		if(addSpriteAnimationElement(character, dying_reviving, 60 + 500*i, 3050, 340, 380, 16, i))
+			printf("Error adding sprite %d to animation %d\n", i, dying_reviving);
+	setWaySpriteAnimationElement(character, dying_reviving, 1);
 
 	/* setting the behavior when an animation end */
 	setEndSpriteElement(character, endAnimationActions);
@@ -62,7 +73,7 @@ void charactersAnimation(Element * character) {
 
 		if (d->allowAttacks == true) {
 			setSpriteAnimationElement(character, 0); /*commence tj lanimation par la premiere sprite*/
-			d->allowAttacks = false; /*debut du saut, on ne peut plus resauter tant quon a pas atteri et attendu la fin du lag*/
+			d->allowAttacks = false; /*debut de l'attaque, on ne peut plus re attaquer tant quon a pas fini l'animation*/
 		}
 
 	} else if (d->parry) {
@@ -70,7 +81,32 @@ void charactersAnimation(Element * character) {
 
 		if (d->allowAttacks == true) {
 			setSpriteAnimationElement(character, 0); /*commence tj lanimation par la premiere sprite*/
-			d->allowAttacks = false; /*debut du saut, on ne peut plus resauter tant quon a pas atteri et attendu la fin du lag*/
+			d->allowAttacks = false; /*debut de l'attaque, on ne peut plus re attaquer tant quon a pas fini l'animation*/
+		}
+
+	} else if (d->attack2) {
+		setAnimationElement(character, attacking2);
+
+		if (d->allowAttacks == true) {
+			setSpriteAnimationElement(character, 0); /*commence tj lanimation par la premiere sprite*/
+			d->allowAttacks = false; /*debut de l'attaque, on ne peut plus re attaquer tant quon a pas fini l'animation*/
+		}
+
+	} else if (d->dyingReviving && d->hp <= 0) {
+		setAnimationElement(character, dying_reviving);
+
+		if (d->dieReviveBeg == false) {
+			setSpriteAnimationElement(character, 0); /*commence tj lanimation par la premiere sprite*/
+			d->dieReviveBeg = true; /*on meurt qu'une fois...*/
+		}
+
+	} else if (d->dyingReviving  && d->hp > 0){
+		setAnimationElement(character, dying_reviving);
+
+		if (d->dieReviveBeg == true) {
+			setWaySpriteAnimationElement(character, dying_reviving, -1);
+			setSpriteAnimationElement(character, 7); /*commence tj lanimation par la derniere sprite*/
+			d->dieReviveBeg = false; /*On ressucite qu'une fois aussi faut croire...*/
 		}
 
 	} else {
@@ -81,6 +117,7 @@ void charactersAnimation(Element * character) {
 
 void endAnimationActions(Element * character, int code) {
 	DataCharacter_t * d = character->data;
+	DataCommon_t * dc = d->dataCommon;
 
 	if (code == attacking1 || code == parrying || code == attacking2) {
 		setAnimationElement(character, standing);
@@ -98,6 +135,17 @@ void endAnimationActions(Element * character, int code) {
 		d->attack1 = false;
 		d->parry = false;
 		d->attack2 = false;
+	}
+
+	if (code == dying_reviving && d->hp <= 0) {
+		setSpriteAnimationElement(character, 7);
+		setWaySpriteAnimationElement(character, dying_reviving, 0);
+		d->dead = true;
+		dc->deadTimer = SDL_GetTicks();
+	}
+
+	if (code == dying_reviving && d->hp > 0) {
+		d->dyingReviving = false;
 	}
 }
 

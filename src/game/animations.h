@@ -22,7 +22,8 @@ enum Animations {
 	jumping = 2,
 	attacking1 = 3,
 	parrying = 4,
-	attacking2 = 5
+	attacking2 = 5,
+	dying_reviving = 6
 };
 
 

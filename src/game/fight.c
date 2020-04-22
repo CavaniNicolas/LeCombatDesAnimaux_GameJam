@@ -2,6 +2,8 @@
 #include <SANDAL2/SANDAL2.h>
 #include "../structure.h"
 #include "character.h"
+#include "animations.h"
+#include "movements.h"
 #include "fight.h"
 
 
@@ -50,9 +52,7 @@ void endRound(Element * characterLost) {
 
 	DataCommon_t * dc = d->dataCommon;
 
-	dc->deadTimer = SDL_GetTicks();
-
-	if (d->dead) {
+	if (d->dyingReviving) {
 		dc->allowAll = false;
 		d2->winNum += 1;
 		setActionElement(characterLost, actionRoundTransitions);
@@ -65,6 +65,25 @@ void endRound(Element * characterLost) {
 
 void actionRoundTransitions(Element * character) {
 	toggleAllowMovements(character);
+	moveCharacter(character);
+	charactersAnimation(character);
+	waitDeath(character);
+}
+
+
+void waitDeath(Element * character) {
+	DataCharacter_t * d = character->data;
+	DataCommon_t * dc = d->dataCommon;
+
+	if (d->dead == true) {
+		if ((int)SDL_GetTicks() - dc->deadTimer >= dc->deadTimerCte) {
+			d->dead = false;
+			d->hp = d->hpCte;
+
+			printf("getTicks %d, deadTimer %d, deadTimerCte %d\n", (int)SDL_GetTicks(), dc->deadTimer, dc->deadTimerCte);
+			puts("lets Revive Soon");
+		}
+	}
 }
 
 
@@ -82,11 +101,15 @@ void toggleAllowMovements(Element * character) {
 		d->allowRight = false;
 		d->allowJump = false;
 		d->allowAttacks = false;
+		d->left = false;
+		d->right = false;
 
 		d2->allowLeft = false;
 		d2->allowRight = false;
 		d2->allowJump = false;
 		d2->allowAttacks = false;
+		d2->left = false;
+		d2->right = false;
 
 	} else {
 		d->allowLeft = true;
@@ -98,5 +121,8 @@ void toggleAllowMovements(Element * character) {
 		d2->allowRight = true;
 		d2->allowJump = true;
 		d2->allowAttacks = true;
+
+		setActionElement(character, actionCharacters);
+		setActionElement(character2, actionCharacters);
 	}
 }

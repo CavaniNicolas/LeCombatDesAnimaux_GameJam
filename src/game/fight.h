@@ -46,6 +46,10 @@ void endRound(Element * characterLost);
 
 void actionRoundTransitions(Element * character);
 
+void waitDeath(Element * character);
+
+
+
 void toggleAllowMovements(Element * character);
 
 

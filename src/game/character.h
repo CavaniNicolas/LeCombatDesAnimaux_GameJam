@@ -110,8 +110,11 @@ typedef struct DataCharacter {
 
 	bool   inRange; // n'est modifié que lors d'une attaque
 	
-	DataCommon_t * dataCommon;
+	bool   dyingReviving;
+	bool   dieReviveBeg;
 	bool   dead;
+
+	DataCommon_t * dataCommon;
 
 	KeyPressed_t * keyPressed;
 

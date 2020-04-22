@@ -14,12 +14,16 @@ void moveCharacterOn(Element * character) {
 		if (kp->left_P) {
 			if (d->allowLeft == true) {
 				d->left = true;
+			} else {
+				d->left = false;
 			}
 		}
 
 		if (kp->right_P) {
 			if (d->allowRight == true) {
 				d->right = true;
+			} else {
+				d->right = false;
 			}
 		}
 
@@ -104,7 +108,7 @@ void jumpCharacter(Element * character) {
 	}
 
 	// jump Lag
-	if(d->allowJump == false && d->jump == false) {
+	if (d->allowJump == false && d->jump == false) {
 		if ((int)SDL_GetTicks() - d->jumpLagTmp >= d->jumpLagCte) {
 			d->allowJump = true;
 			d->allowAttacks = true;

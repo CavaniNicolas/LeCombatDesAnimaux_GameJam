@@ -181,7 +181,10 @@ DataCharacter_t * initDataCharacter(int idPlayer, int idChosen) {
 		d->parry        = false;
 
 		d->inRange      = false;
-		d->dead         = false;
+
+		d->dyingReviving = false;
+		d->dieReviveBeg  = false;
+		d->dead          = false;
 
 	} else {
 		free(d);
