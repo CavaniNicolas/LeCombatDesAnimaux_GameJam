@@ -195,6 +195,29 @@ DataCharacter_t * initDataCharacter(int idPlayer, int idChosen) {
 }
 
 
+void initCommonData(Element * characterL) {
+	initIteratorElement(characterL);
+	Element * characterR = nextIteratorElement(characterL);
+
+	DataCharacter_t * d = characterL->data;
+	DataCharacter_t * d2 = characterR->data;
+
+	DataCommon_t * dc = (DataCommon_t *)malloc(sizeof(DataCommon_t));
+
+	if (dc != NULL) {
+		dc->allowAll = true;
+		dc->deadTimerCte = 2000;
+		dc->deadTimer = 0;
+
+		d->dataCommon = dc;
+		d2->dataCommon = dc;
+
+	} /*else {
+		freeAllData(characterL);
+	}*/
+}
+
+
 void getStatsInFile(FILE * file, DataCharacter_t * d, int idChosen) {
 	int idChara = -1;
 	char line[6];

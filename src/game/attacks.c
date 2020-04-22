@@ -3,6 +3,7 @@
 #include "../structure.h"
 #include "character.h"
 #include "attacks.h"
+#include "fight.h"
 
 
 void launchCharacterAttack(Element * character) {
@@ -73,10 +74,10 @@ void isCharacterInRange(Element * character) {
 
 void damageOpponent(Element * characterAttacking) {
 	initIteratorElement(characterAttacking);
-	Element * character2 = nextIteratorElement(characterAttacking);
+	Element * characterHurt = nextIteratorElement(characterAttacking);
 
 	DataCharacter_t * d = characterAttacking->data;
-	DataCharacter_t * d2 = character2->data;
+	DataCharacter_t * d2 = characterHurt->data;
 
 	isCharacterInRange(characterAttacking);
 printf("%d\n", d->inRange);
@@ -90,7 +91,13 @@ printf("%d\n", d->inRange);
 		}
 	}
 
-	resizeHealthBar(character2);
+	resizeHealthBar(characterHurt);
+
+	if (d2->hp <= 0) {
+		d2->dead = true;
+		printf("Joueur %d a perdu\n", d->idPlayer);
+		endRound(characterHurt);
+	}
 }
 
 
@@ -103,36 +110,5 @@ void resizeHealthBar(Element * characterHurt) {
 
 	} else {
 		hb->healthBar->width = 0;
-		d->dead = true;
-		printf("Joueur %d a perdu\n", d->idPlayer);
-		endRound(characterHurt);
 	}
-}
-
-
-void endRound(Element * characterLost) {
-	initIteratorElement(characterLost);
-	Element * character2 = nextIteratorElement(characterLost);
-
-	DataCharacter_t * d = characterLost->data;
-	DataCharacter_t * d2 = character2->data;
-
-	int deadTimer = SDL_GetTicks();
-
-	if (d->dead) {
-		d->allowLeft = false;
-		d->allowRight = false;
-		d->allowJump = false;
-		d->allowAttacks = false;
-
-		d2->allowLeft = false;
-		d2->allowRight = false;
-		d2->allowJump = false;
-		d2->allowAttacks = false;
-
-		while (SDL_GetTicks() - deadTimer) {
-			
-		}
-	}
-
 }

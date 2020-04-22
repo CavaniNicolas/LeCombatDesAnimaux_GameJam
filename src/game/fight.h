@@ -3,6 +3,7 @@
 /* Objectifs : Déclarations des fonctions pour le jeu en général              */
 /* Fonctions :                                                                */
 /*  - initFight                                                               */
+/*  - endRound                                                                */
 /* -------------------------------------------------------------------------- */
 
 #ifndef FIGHT_H
@@ -29,6 +30,28 @@ enum PlanFight {
 /* En sortie: void                                                            */
 /* -------------------------------------------------------------------------- */
 void initFight(int idCharacterG, int idCharacterD, int idMap);
+
+
+/* -------------------------------------------------------------------------- */
+/* endRound                                                                   */
+/*       Action à faire lorsqu'un round se termine                            */
+/*                                                                            */
+/* En entrée: characterLost (Element *) : personnage qui a perdu le round     */
+/*                                                                            */
+/* En sortie: void                                                            */
+/* -------------------------------------------------------------------------- */
+void endRound(Element * characterLost);
+
+
+
+void actionRoundTransitions(Element * character);
+
+void toggleAllowMovements(Element * character);
+
+
+
+// a ajouter dans lentete when done
+//void freeAllData(Element * characterL);
 
 
 #endif

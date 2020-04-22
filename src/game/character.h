@@ -19,7 +19,7 @@
 #include <stdbool.h>
 
 /* -------------------------------------------------------------------------- */
-/* struct HealthBar (typedef HealthBar_t)                                     */
+/* struct HealthBar (typedef HealthBar_t)     refered as hb                   */
 /*       healthBar : pointeur sur la barre de vie                             */
 /*       bubble1   : pointeur sur la bulle de victoire 1                      */
 /*       bubble2   : pointeur sur la bulle de victoire 2                      */
@@ -32,7 +32,7 @@ typedef struct HealthBar {
 }HealthBar_t;
 
 /* -------------------------------------------------------------------------- */
-/* struct KeyCodes (typedef KeyCodes_t)                                       */
+/* struct KeyCodes (typedef KeyCodes_t)     refered as kc                     */
 /*       left, right, jump, attack1, attack2, parry                           */
 /* -------------------------------------------------------------------------- */
 typedef struct KeyCodes {
@@ -45,7 +45,7 @@ typedef struct KeyCodes {
 }KeyCodes_t;
 
 /* -------------------------------------------------------------------------- */
-/* struct KeyPressed (typedef KeyPressed_t)                                   */
+/* struct KeyPressed (typedef KeyPressed_t)     refered as kp                 */
 /*  - Booléens, true si la touche est appuyée false si elle est relachée      */
 /*       left_P, right_P, jump_P, attack1_P, attack2_P, parry_P               */
 /* -------------------------------------------------------------------------- */
@@ -59,7 +59,17 @@ typedef struct KeyPressed {
 }KeyPressed_t;
 
 /* -------------------------------------------------------------------------- */
-/* struct DataCharacter (typedef DataCharacter_t)                             */
+/* struct DataCommon (typedef DataCommon_t)     refered as dc                 */
+/*                                                                            */
+/* -------------------------------------------------------------------------- */
+typedef struct DataCommon {
+	bool allowAll;
+	int  deadTimerCte;
+	int  deadTimer;
+}DataCommon_t;
+
+/* -------------------------------------------------------------------------- */
+/* struct DataCharacter (typedef DataCharacter_t)     refered as d or d2      */
 /*  - accessible depuis l'element character->data                             */
 /*    regroupe toutes les données d'un personnage                             */
 /* -------------------------------------------------------------------------- */
@@ -99,6 +109,8 @@ typedef struct DataCharacter {
 	bool   parry;
 
 	bool   inRange; // n'est modifié que lors d'une attaque
+	
+	DataCommon_t * dataCommon;
 	bool   dead;
 
 	KeyPressed_t * keyPressed;
@@ -193,6 +205,17 @@ void initCharacter(int, int, Element **);
 /* En sortie: d (DataCharacter_t *) : Pointeur sur la structure Data du perso */
 /* -------------------------------------------------------------------------- */
 DataCharacter_t * initDataCharacter(int, int);
+
+
+/* -------------------------------------------------------------------------- */
+/* initCommonData                                                             */
+/*       Initialise la structure commune et l'insere dans les DataCharacter_t */
+/*                                                                            */
+/* En entrée: characterL (Element *) : personnage                             */
+/*                                                                            */
+/* En sortie: (void)                                                          */
+/* -------------------------------------------------------------------------- */
+void initCommonData(Element * characterL);
 
 
 /* -------------------------------------------------------------------------- */
