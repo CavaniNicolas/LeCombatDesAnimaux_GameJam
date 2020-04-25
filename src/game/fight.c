@@ -111,9 +111,6 @@ void resetHealthBar(Element * character) {
 
 		} else if (hb->healthBar->width != hb->wBarMax) {
 			addW = 1;
-
-		} else {
-			dc->resetHPBar = false;
 		}
 	}
 }
@@ -173,6 +170,8 @@ void toggleAllowMovements(Element * character) {
 		d2->allowJump = true;
 		d2->allowAttacks = true;
 
+		dc->resetHPBar = false;
+		dc->resetPos = false;
 		setActionElement(character, actionCharacters);
 		setActionElement(character2, actionCharacters);
 	}
