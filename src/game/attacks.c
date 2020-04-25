@@ -80,7 +80,7 @@ printf("%d\n", d->inRange);
 		}
 	}
 
-	resizeHealthBar(characterHurt);
+	showHealthBar(characterHurt);
 
 	if (d2->hp <= 0) {
 		d2->dyingReviving = true;
@@ -90,7 +90,7 @@ printf("%d\n", d->inRange);
 }
 
 
-void resizeHealthBar(Element * characterHurt) {
+void showHealthBar(Element * characterHurt) {
 	DataCharacter_t * d = characterHurt->data;
 	HealthBar_t * hb = d->healthBar;
 
@@ -99,5 +99,18 @@ void resizeHealthBar(Element * characterHurt) {
 
 	} else {
 		hb->healthBar->width = 0;
+	}
+}
+
+
+void adaptHealthBar(Element * character) {
+	DataCharacter_t * d = character->data;
+	HealthBar_t * hb = d->healthBar;
+
+	if (hb->damageBar->width > hb->healthBar->width) {
+		hb->damageBar->width -= 4;
+
+	} else {
+		hb->damageBar->width = hb->healthBar->width;
 	}
 }

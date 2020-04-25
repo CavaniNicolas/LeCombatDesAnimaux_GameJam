@@ -21,12 +21,14 @@
 /* -------------------------------------------------------------------------- */
 /* struct HealthBar (typedef HealthBar_t)     refered as hb                   */
 /*       healthBar : pointeur sur la barre de vie                             */
+/*       damageBar : pointeur sur la barre de dégats (fond foncé quand bléssé)*/
 /*       bubble1   : pointeur sur la bulle de victoire 1                      */
 /*       bubble2   : pointeur sur la bulle de victoire 2                      */
 /* -------------------------------------------------------------------------- */
 typedef struct HealthBar {
 	int       wBarMax;
 	Element * healthBar;
+	Element * damageBar;
 	Element * bubble1;
 	Element * bubble2;
 }HealthBar_t;
@@ -66,6 +68,8 @@ typedef struct DataCommon {
 	bool allowAll;
 	int  deadTimerCte;
 	int  deadTimer;
+	bool resetHPBar;
+	bool resetPos;
 }DataCommon_t;
 
 /* -------------------------------------------------------------------------- */
@@ -84,6 +88,9 @@ typedef struct DataCharacter {
 	double speedCte;
 	int    jumpForceCte;
 	int    jumpLagCte;
+
+	int    xInit;
+	int    yInit;
 
 	int    hp;
 	int    strength;

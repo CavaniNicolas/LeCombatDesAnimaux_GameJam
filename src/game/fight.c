@@ -4,6 +4,7 @@
 #include "character.h"
 #include "animations.h"
 #include "movements.h"
+#include "attacks.h"
 #include "fight.h"
 
 
@@ -57,7 +58,10 @@ void endRound(Element * characterLost) {
 		d2->winNum += 1;
 		setActionElement(characterLost, actionRoundTransitions);
 		setActionElement(characterWin, actionRoundTransitions);
-
+		d->left = false;
+		d->right = false;
+		d2->left = false;
+		d2->right = false;
 	}
 
 }
@@ -67,15 +71,21 @@ void actionRoundTransitions(Element * character) {
 	toggleAllowMovements(character);
 	moveCharacter(character);
 	charactersAnimation(character);
-	waitDeath(character);
+	resurrect(character);
+	adaptHealthBar(character);
+	resetHealthBar(character);
+	resetPosition(character);
 }
 
 
-void waitDeath(Element * character) {
+void resurrect(Element * character) {
 	DataCharacter_t * d = character->data;
 	DataCommon_t * dc = d->dataCommon;
 
 	if (d->dead == true) {
+		dc->resetHPBar = true;
+
+		// attente
 		if ((int)SDL_GetTicks() - dc->deadTimer >= dc->deadTimerCte) {
 			d->dead = false;
 			d->hp = d->hpCte;
@@ -83,6 +93,51 @@ void waitDeath(Element * character) {
 			printf("getTicks %d, deadTimer %d, deadTimerCte %d\n", (int)SDL_GetTicks(), dc->deadTimer, dc->deadTimerCte);
 			puts("lets Revive Soon");
 		}
+	}
+}
+
+
+void resetHealthBar(Element * character) {
+	DataCharacter_t * d = character->data;
+	HealthBar_t * hb = d->healthBar;
+	DataCommon_t * dc = d->dataCommon;
+
+	int addW = 2;
+	if (dc->resetHPBar == true) {
+
+		if (hb->healthBar->width <= hb->wBarMax - addW) {
+			hb->healthBar->width += addW;
+			hb->damageBar->width = hb->healthBar->width;
+
+		} else if (hb->healthBar->width != hb->wBarMax) {
+			addW = 1;
+
+		} else {
+			dc->resetHPBar = false;
+		}
+	}
+}
+
+
+void resetPosition(Element * character) {
+	DataCharacter_t * d = character->data;
+	DataCommon_t * dc = d->dataCommon;
+
+	if (dc->resetPos == true) {
+
+		if (character->x < d->xInit) {
+			d->right = true;
+			d->left = false;
+
+		} else if (character->x > d->xInit) {
+			d->left = true;
+			d->right = false;
+
+		} else {
+			d->right = false;
+			d->right = false;
+		}
+
 	}
 }
 
@@ -101,15 +156,11 @@ void toggleAllowMovements(Element * character) {
 		d->allowRight = false;
 		d->allowJump = false;
 		d->allowAttacks = false;
-		d->left = false;
-		d->right = false;
 
 		d2->allowLeft = false;
 		d2->allowRight = false;
 		d2->allowJump = false;
 		d2->allowAttacks = false;
-		d2->left = false;
-		d2->right = false;
 
 	} else {
 		d->allowLeft = true;

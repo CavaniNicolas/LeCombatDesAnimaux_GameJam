@@ -141,6 +141,7 @@ void endAnimationActions(Element * character, int code) {
 
 	if (code == dying_reviving && d->hp > 0) {
 		d->dyingReviving = false;
+		dc->resetPos = true;
 	}
 }
 

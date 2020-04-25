@@ -104,15 +104,13 @@ void actionCharacters(Element * character) {
 	charactersAnimation(character);
 	keyOnActions(character);
 	keyOffActions(character);
+	adaptHealthBar(character);
 }
 
 
 void initCharacter(int idPlayer, int idChara, Element ** character) {
 	DataCharacter_t * d = initDataCharacter(idPlayer, idChara);
-	double x = 0;
-	double y = 0;
 	char   filename[50];
-	double groundLevel = HFEN-50-(d->height);
 
 	if (!getCharactersFilename(idChara, filename)) {
 		printf("Error fetching character's filename\n");
@@ -120,15 +118,7 @@ void initCharacter(int idPlayer, int idChara, Element ** character) {
 
 		if (d != NULL) {
 
-			if (idPlayer == PLAYER_L) {
-				x = 100;
-				y = groundLevel;
-			} else { // PLAYER_R
-				x = LFEN-100-(d->width);
-				y = groundLevel;
-			}
-
-			(*character) = createImage(x, y, d->width, d->height, filename, FIGHT_SCREEN, PlanCharacters);
+			(*character) = createImage(d->xInit, d->yInit, d->width, d->height, filename, FIGHT_SCREEN, PlanCharacters);
 			createCharacterAnimations(*character);
 
 			if (idPlayer == PLAYER_R) {
@@ -148,6 +138,8 @@ DataCharacter_t * initDataCharacter(int idPlayer, int idChosen) {
 	KeyPressed_t * kp = (KeyPressed_t *)malloc(sizeof(KeyPressed_t));
 	FILE * file = fopen("assets/stats/DataCharacters.txt", "r");
 
+	int groundLevel = 0;
+
 	if (d != NULL && kc != NULL && kp != NULL && hb != NULL && file != NULL) {
 
 		initKeyCodes(kc, idPlayer);
@@ -164,6 +156,14 @@ DataCharacter_t * initDataCharacter(int idPlayer, int idChosen) {
 		getStatsInFile(file, d, idChosen);
 
 		d->idPlayer = idPlayer;
+
+		groundLevel = HFEN - 50 - (d->height);
+		if (idPlayer == PLAYER_L) {
+			d->xInit = 0.1*LFEN;
+		} else { // PLAYER_R
+			d->xInit = LFEN - 0.1*LFEN - (d->width);
+		}
+		d->yInit = groundLevel;
 
 		d->left         = false;
 		d->allowLeft    = false;
@@ -211,6 +211,8 @@ void initCommonData(Element * characterL) {
 		dc->allowAll = true;
 		dc->deadTimerCte = 2000;
 		dc->deadTimer = 0;
+		dc->resetHPBar = false;
+		dc->resetPos = false;
 
 		d->dataCommon = dc;
 		d2->dataCommon = dc;
@@ -303,6 +305,7 @@ void initKeyPressed(KeyPressed_t * kp) {
 void initHealthBar(HealthBar_t * hb, int idPlayer) {
 	int white[4] = {255, 255, 255, 255};
 	int red[4] = {255, 0, 0, 255};
+	int darkRed[4] = {120, 15, 0, 255};
 	//int orange[4] = {255, 100, 0, 255};
 	int blue[4] = {0, 0, 255, 255};
 
@@ -318,12 +321,15 @@ void initHealthBar(HealthBar_t * hb, int idPlayer) {
 	int yBubble = yBar+hBar+1;
 
 	Element * healthBar = NULL;
+	Element * damageBar = NULL;
 	Element * bubble1 = NULL;
 	Element * bubble2 = NULL;
 
 	if (idPlayer == PLAYER_L) { //Left
 		createBlock(marge, yBar, wBar, hBar, white, FIGHT_SCREEN, PlanHealthBars); // Contour blanc du block Left
-		healthBar = createBlock(marge+2, yBar+2, wBar-4, hBar-4, red, FIGHT_SCREEN, PlanHealthBars-1); // contenu rouge du block Left
+		healthBar = createBlock(marge+2, yBar+2, wBar-4, hBar-4, red, FIGHT_SCREEN, PlanHealthBars-5); // contenu rouge du block Left
+		damageBar = createBlock(marge+2, yBar+2, wBar-4, hBar-4, darkRed, FIGHT_SCREEN, PlanHealthBars-4); // contenu rouge foncé du block Left
+
 		//createBlock(marge-hBar, yBar, hBar, hBar, orange, FIGHT_SCREEN, PlanHealthBars-1); //Logo Perso Left
 		createImage(marge-hBar, yBar, hBar, hBar, filename, FIGHT_SCREEN, PlanHealthBars-1); //Logo Perso Left
 
@@ -332,7 +338,9 @@ void initHealthBar(HealthBar_t * hb, int idPlayer) {
 
 	} else { //Right
 		createBlock(xBarRight, yBar, wBar, hBar, white, FIGHT_SCREEN, PlanHealthBars); // Contour blanc du block Right
-		healthBar = createBlock(xBarRight+2, yBar+2, wBar-4, hBar-4, red, FIGHT_SCREEN, PlanHealthBars-1); // contenu rouge du block Right
+		healthBar = createBlock(xBarRight+2, yBar+2, wBar-4, hBar-4, red, FIGHT_SCREEN, PlanHealthBars-5); // contenu rouge du block Right
+		damageBar = createBlock(xBarRight+2, yBar+2, wBar-4, hBar-4, darkRed, FIGHT_SCREEN, PlanHealthBars-4); // contenu rouge du block Right
+
 		//createBlock(xBarRight+wBar, yBar, hBar, hBar, orange, FIGHT_SCREEN, PlanHealthBars-1); //Logo Perso Right
 		Element * logoRight = createImage(xBarRight+wBar, yBar, hBar, hBar, filename, FIGHT_SCREEN, PlanHealthBars-1); //Logo Perso Right
 		logoRight->flip = SANDAL2_FLIP_HOR;
@@ -344,6 +352,7 @@ void initHealthBar(HealthBar_t * hb, int idPlayer) {
 	if (healthBar != NULL && bubble1 != NULL && bubble2 != NULL) {
 		hb->wBarMax = wBar-4;
 		hb->healthBar = healthBar;
+		hb->damageBar = damageBar;
 		hb->bubble1 = bubble1;
 		hb->bubble2 = bubble2;
 	}

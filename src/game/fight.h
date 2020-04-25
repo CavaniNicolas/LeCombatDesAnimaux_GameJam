@@ -8,6 +8,7 @@
 
 #ifndef FIGHT_H
 #define FIGHT_H
+#include "character.h"
 
 enum PlanFight {
 	PlanBackgroundF = 99,
@@ -46,8 +47,11 @@ void endRound(Element * characterLost);
 
 void actionRoundTransitions(Element * character);
 
-void waitDeath(Element * character);
+void resurrect(Element * character);
 
+void resetHealthBar(Element * character);
+
+void resetPosition(Element * character);
 
 
 void toggleAllowMovements(Element * character);

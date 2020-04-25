@@ -46,14 +46,15 @@ void damageOpponent(Element * characterAttacking);
 
 
 /* -------------------------------------------------------------------------- */
-/* resizeHealthBar                                                            */
+/* showHealthBar                                                              */
 /*       Redimmensionne la barre de PV après s'être pris un coup              */
 /*                                                                            */
 /* En entrée: characterHurt (Element *) : personnage qui est bléssé           */
 /*                                                                            */
 /* En sortie: void                                                            */
 /* -------------------------------------------------------------------------- */
-void resizeHealthBar(Element * characterHurt);
+void showHealthBar(Element * characterHurt);
 
+void adaptHealthBar(Element * character);
 
 #endif
