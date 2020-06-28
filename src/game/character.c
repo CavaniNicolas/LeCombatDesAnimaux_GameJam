@@ -182,6 +182,8 @@ DataCharacter_t * initDataCharacter(int idPlayer, int idChosen) {
 
 		d->inRange      = false;
 
+		d->isPosReset   = false;
+
 		d->dyingReviving = false;
 		d->dieReviveBeg  = false;
 		d->dead          = false;

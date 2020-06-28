@@ -78,9 +78,9 @@ printf("%d\n", d->inRange);
 		} else {
 			d2->hp = d2->hp - d->strength;
 		}
+		showHealthBar(characterHurt);
 	}
 
-	showHealthBar(characterHurt);
 
 	if (d2->hp <= 0) {
 		d2->dyingReviving = true;

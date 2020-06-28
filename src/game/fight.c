@@ -56,6 +56,9 @@ void endRound(Element * characterLost) {
 	if (d->dyingReviving) {
 		dc->allowAll = false;
 		d2->winNum += 1;
+
+		showVictory(characterWin);
+
 		setActionElement(characterLost, actionRoundTransitions);
 		setActionElement(characterWin, actionRoundTransitions);
 		d->left = false;
@@ -79,7 +82,11 @@ void actionRoundTransitions(Element * character) {
 
 
 void resurrect(Element * character) {
+	initIteratorElement(character);
+	Element * character2 = nextIteratorElement(character);
+
 	DataCharacter_t * d = character->data;
+	DataCharacter_t * d2 = character2->data;
 	DataCommon_t * dc = d->dataCommon;
 
 	if (d->dead == true) {
@@ -89,6 +96,7 @@ void resurrect(Element * character) {
 		if ((int)SDL_GetTicks() - dc->deadTimer >= dc->deadTimerCte) {
 			d->dead = false;
 			d->hp = d->hpCte;
+			d2->hp = d2->hpCte;
 
 			printf("getTicks %d, deadTimer %d, deadTimerCte %d\n", (int)SDL_GetTicks(), dc->deadTimer, dc->deadTimerCte);
 			puts("lets Revive Soon");
@@ -117,7 +125,11 @@ void resetHealthBar(Element * character) {
 
 
 void resetPosition(Element * character) {
+	initIteratorElement(character);
+	Element * character2 = nextIteratorElement(character);
+
 	DataCharacter_t * d = character->data;
+	DataCharacter_t * d2 = character2->data;
 	DataCommon_t * dc = d->dataCommon;
 
 	if (dc->resetPos == true) {
@@ -133,8 +145,19 @@ void resetPosition(Element * character) {
 		} else {
 			d->right = false;
 			d->right = false;
+			d->isPosReset = true;
 		}
 
+	}
+
+	if (d->isPosReset == true && d2->isPosReset == true) {
+		d->isPosReset = false;
+		d2->isPosReset = false;
+		dc->resetPos = false;
+		dc->allowAll = true;
+
+
+		printf("hp0 : %d/%d, hp1 : %d/%d\n", d->hp, d->hpCte, d2->hp, d2->hpCte);
 	}
 }
 
@@ -160,6 +183,8 @@ void toggleAllowMovements(Element * character) {
 		d2->allowAttacks = false;
 
 	} else {
+		setActionElement(character, actionCharacters);
+		setActionElement(character2, actionCharacters);
 		d->allowLeft = true;
 		d->allowRight = true;
 		d->allowJump = true;
@@ -172,7 +197,27 @@ void toggleAllowMovements(Element * character) {
 
 		dc->resetHPBar = false;
 		dc->resetPos = false;
-		setActionElement(character, actionCharacters);
-		setActionElement(character2, actionCharacters);
 	}
+}
+
+
+void showVictory(Element * characterWin) {
+	DataCharacter_t * d = characterWin->data;
+	HealthBar_t * hb = d->healthBar;
+
+	int orange[4] = {255, 100, 0, 255};
+
+	int x = 0;
+	int y = hb->bubble1->y;
+	int sideBubble = hb->bubble1->width;
+	int marge = 0.1 * sideBubble;
+
+	if (d->winNum == 1) {
+		x = hb->bubble1->x;
+	} else if (d->winNum == 2) {
+		x = hb->bubble2->x;
+	}
+
+	createBlock(x+marge, y+marge, sideBubble-2*marge, sideBubble-2*marge, orange, FIGHT_SCREEN, PlanHealthBars-2);
+
 }

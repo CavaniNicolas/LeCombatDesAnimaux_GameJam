@@ -57,6 +57,8 @@ void resetPosition(Element * character);
 void toggleAllowMovements(Element * character);
 
 
+void showVictory(Element * characterWin);
+
 
 // a ajouter dans lentete when done
 //void freeAllData(Element * characterL);

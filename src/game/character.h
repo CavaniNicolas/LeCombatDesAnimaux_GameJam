@@ -117,6 +117,8 @@ typedef struct DataCharacter {
 
 	bool   inRange; // n'est modifié que lors d'une attaque
 	
+	bool   isPosReset;
+
 	bool   dyingReviving;
 	bool   dieReviveBeg;
 	bool   dead;
