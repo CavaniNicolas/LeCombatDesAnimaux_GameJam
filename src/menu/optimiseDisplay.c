@@ -6,26 +6,30 @@
 
 //modifie (optimise) les valeurs de lines et columns si elles sont = 0.
 void setOptimizedLinesAndColumns(int wBlock, int hBlock, int nbObj, float fillPercent, int * nbLines, int * nbColumns, int * sizeSideIm) {
-	if (*nbColumns > 0 && *nbLines > 0) {
-		printf("Ne pas entrer à la fois nbColumns et nbLines > 0\n"\
-			   "(Ne pas appliquer de contraintes sur les deux paramètres en même temps)\n"\
-			   "Mettre 0 pour une optimisation automatique d'une ou des deux variables\n");
-		optimizeNumberOfLinesColumns(wBlock, hBlock, nbObj, fillPercent, nbLines, nbColumns, sizeSideIm);
-
-	} else {
-
-		if (*nbColumns > 0) {
-
-			setSecondVariable(*nbColumns, nbLines, sizeSideIm, nbObj, fillPercent, wBlock, hBlock);
-
-		} else if (*nbLines > 0){
-
-			setSecondVariable(*nbLines, nbColumns, sizeSideIm, nbObj, fillPercent, wBlock, hBlock);
+	if (nbObj > 0) {
+		if (*nbColumns > 0 && *nbLines > 0) {
+			printf("Ne pas entrer à la fois nbColumns et nbLines > 0\n"\
+				   "(Ne pas appliquer de contraintes sur les deux paramètres en même temps)\n"\
+				   "Mettre 0 pour une optimisation automatique d'une ou des deux variables\n");
+			optimizeNumberOfLinesColumns(wBlock, hBlock, nbObj, fillPercent, nbLines, nbColumns, sizeSideIm);
 
 		} else {
-			optimizeNumberOfLinesColumns(wBlock, hBlock, nbObj, fillPercent, nbLines, nbColumns, sizeSideIm);
-		}
 
+			if (*nbColumns > 0) {
+
+				setSecondVariable(*nbColumns, nbLines, sizeSideIm, nbObj, fillPercent, wBlock, hBlock);
+
+			} else if (*nbLines > 0){
+
+				setSecondVariable(*nbLines, nbColumns, sizeSideIm, nbObj, fillPercent, wBlock, hBlock);
+
+			} else {
+				optimizeNumberOfLinesColumns(wBlock, hBlock, nbObj, fillPercent, nbLines, nbColumns, sizeSideIm);
+			}
+
+		}
+	} else {
+		printf("Nombre d'objets a afficher negatifs ... Impossible\n");
 	}
 }
 
@@ -57,28 +61,23 @@ void optimizeNumberOfLinesColumns(int wBlock, int hBlock, int nbObj, float fillP
 	int sImY = 0;
 
 	int sImNouv = 0;
-	int ecartSImNouv = 0;
 
 	int sImAncien = 0;
-	int ecartSImAncien = (hBlock > wBlock)? hBlock : wBlock;; //max entre hBlock et hBlock
 
 	while (good == 0) {
+
 		sImX = fillPercent * wBlock / *nbColumns;
 		sImY = fillPercent * hBlock / *nbLines;
 		sImNouv = (sImX < sImY)? sImX : sImY;
-		ecartSImNouv = abs(sImX - sImY);
 
-		if (ecartSImNouv > ecartSImAncien) {
+		if (sImNouv < sImAncien) {
 			good = 1;
 
-			// on remet les bonnes valeurs de ligne et de colonne correspondantes aux bonnes valeurs de sizeSideIm
+			// on remet la bonne valeur de colonnes correspondante a literation precedente (donc la bonne valeur de sizeSideIm)
 			(*nbColumns)++;
-			(*nbLines)--;
-
 
 		} else {
 			sImAncien = sImNouv;
-			ecartSImAncien = ecartSImNouv;
 			(*nbColumns)--;
 		}
 
@@ -87,19 +86,18 @@ void optimizeNumberOfLinesColumns(int wBlock, int hBlock, int nbObj, float fillP
 			good = 1;
 			(*nbColumns)++;
 		}
-		if (*nbLines == 0) {
-			good = 1;
-			(*nbLines)++;
-		}
-		if (*nbColumns * *nbLines < nbObj) {
-			(*nbLines)++;
+
+		*nbLines = nbObj / *nbColumns;
+		if (nbObj % *nbColumns != 0) {
+			(*nbLines) ++;
 		}
 	}
+
 	*sizeSideIm = sImAncien;
 
 	printf("colonne = %d, ligne = %d, sizeSideIm = %d\n", *nbColumns, *nbLines, *sizeSideIm);
-
 }
+
 
 // calcul la distance a placer entre deux objets
 int spaceBetweenObjects(int nbLines, int sizeSideObj, int wBlock) {
