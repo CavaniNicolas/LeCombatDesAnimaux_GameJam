@@ -8,11 +8,11 @@ DEP = $(patsubst %.o,%.d,$(OBJ))
 
 .PHONY: all
 all: bin/executable
+	@echo "executer avec ./bin/executable"
 
 bin/executable: $(OBJ)
 	@mkdir -p $(@D)
 	cc -o $@ $^ $(LIB)
-	@echo "executer avec ./bin/executable"
 
 build/%.o: src/%.c
 	@mkdir -p $(@D)
