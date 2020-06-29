@@ -17,6 +17,7 @@ enum PlanFight {
 
 	PlanCharacters = 79,
 
+	PlanRestartButtons = 59,
 };
 
 
@@ -61,7 +62,6 @@ void showVictory(Element * characterWin);
 
 
 // a ajouter dans lentete when done
-//void freeAllData(Element * characterL);
 
 
 #endif

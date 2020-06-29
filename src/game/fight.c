@@ -6,6 +6,7 @@
 #include "movements.h"
 #include "attacks.h"
 #include "fight.h"
+#include "restart.h"
 
 
 void initFight(int idCharaLeft, int idCharaRight, int idMap) {
@@ -78,6 +79,7 @@ void actionRoundTransitions(Element * character) {
 	adaptHealthBar(character);
 	resetHealthBar(character);
 	resetPosition(character);
+	isGameFinished(character);
 }
 
 
@@ -134,6 +136,13 @@ void resetPosition(Element * character) {
 
 	if (dc->resetPos == true) {
 
+		// if (character->x > d->xInit - 1 && character->x < d->xInit + 1) {
+		// 	d->right = false;
+		// 	d->right = false;
+		// 	d->isPosReset = true;
+
+		// } else {
+
 		if (character->x < d->xInit) {
 			d->right = true;
 			d->left = false;
@@ -147,15 +156,20 @@ void resetPosition(Element * character) {
 			d->right = false;
 			d->isPosReset = true;
 		}
-
+//}
 	}
 
 	if (d->isPosReset == true && d2->isPosReset == true) {
-		d->isPosReset = false;
-		d2->isPosReset = false;
 		dc->resetPos = false;
-		dc->allowAll = true;
 
+		if (dc->endGame == true) {
+			restartGameScreen(character);
+
+		} else {
+			d->isPosReset = false;
+			d2->isPosReset = false;
+			dc->allowAll = true;
+		}
 
 		printf("hp0 : %d/%d, hp1 : %d/%d\n", d->hp, d->hpCte, d2->hp, d2->hpCte);
 	}
@@ -221,3 +235,4 @@ void showVictory(Element * characterWin) {
 	createBlock(x+marge, y+marge, sideBubble-2*marge, sideBubble-2*marge, orange, FIGHT_SCREEN, PlanHealthBars-2);
 
 }
+

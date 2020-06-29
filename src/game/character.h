@@ -70,6 +70,8 @@ typedef struct DataCommon {
 	int  deadTimer;
 	bool resetHPBar;
 	bool resetPos;
+	bool endGame;
+	int restartChoice;
 }DataCommon_t;
 
 /* -------------------------------------------------------------------------- */

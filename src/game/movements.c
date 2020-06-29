@@ -66,6 +66,7 @@ void moveCharacter(Element * character) {
 	if (d->left) {
 		if ((character->x)-speed > 0) {
 			moveElement(character, -speed, 0);
+			printf("LEEEFT\n");
 		} else {
 			d->left = false;
 		}
@@ -74,6 +75,7 @@ void moveCharacter(Element * character) {
 	if (d->right) {
 		if ((character->x)-speed < LFEN-(d->width)) {
 			moveElement(character, speed, 0);
+			printf("RIIGHT\n");
 		} else {
 			d->left = false;
 		}

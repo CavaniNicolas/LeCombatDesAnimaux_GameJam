@@ -215,6 +215,9 @@ void initCommonData(Element * characterL) {
 		dc->deadTimer = 0;
 		dc->resetHPBar = false;
 		dc->resetPos = false;
+		dc->endGame = false;
+
+		dc->restartChoice = 0;
 
 		d->dataCommon = dc;
 		d2->dataCommon = dc;
